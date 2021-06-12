@@ -1,16 +1,12 @@
 package ua.com.foxminded.university.entities;
 
+import lombok.Data;
+import lombok.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.*;
-
-@AllArgsConstructor
-@RequiredArgsConstructor
-@ToString
-@Getter @Setter
-@EqualsAndHashCode
-
+@Data
 public class Faculty {
     private int id;
     @NonNull

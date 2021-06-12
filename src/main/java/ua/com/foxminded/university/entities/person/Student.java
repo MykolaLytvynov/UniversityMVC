@@ -1,20 +1,13 @@
 package ua.com.foxminded.university.entities.person;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 import ua.com.foxminded.university.entities.Group;
 
-public class Student extends Person{
+@Data
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class Student extends Person {
     private Group group;
-
-    public Student(int id, String name, String lastName, Group group) {
-        super(id, name, lastName);
-        this.group = group;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
 }

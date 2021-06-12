@@ -1,17 +1,13 @@
 package ua.com.foxminded.university.entities;
 
+import lombok.Data;
+import lombok.NonNull;
 import ua.com.foxminded.university.entities.person.Student;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
-@ToString
-@Getter @Setter
-@EqualsAndHashCode
-
+@Data
 public class Group {
     private int id;
     @NonNull

@@ -1,9 +1,8 @@
 package ua.com.foxminded.university;
 
-import ua.com.foxminded.university.entities.ClassRoom;
-import ua.com.foxminded.university.entities.Faculty;
-import ua.com.foxminded.university.entities.Lesson;
+import ua.com.foxminded.university.entities.*;
 import ua.com.foxminded.university.entities.person.Employee;
+import ua.com.foxminded.university.entities.person.Student;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,5 +12,6 @@ public class University {
     private List<Employee> employees = new ArrayList<>();
     private List<Lesson> timetable = new ArrayList<>();
     private List<ClassRoom> classRooms = new ArrayList<>();
+
 
 }

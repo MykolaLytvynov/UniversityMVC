@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS classRoom;
+
+CREATE TABLE classRoom (
+    id SERIAL PRIMARY KEY,
+    name CHARACTER (25) NOT NULL UNIQUE,
+    description CHARACTER (100)
+)

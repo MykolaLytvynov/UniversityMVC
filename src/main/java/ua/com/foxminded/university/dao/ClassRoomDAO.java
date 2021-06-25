@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ua.com.foxminded.university.dao.mapper.ClassRoomMapper;
 import ua.com.foxminded.university.entities.ClassRoom;
 
 import java.sql.Connection;
@@ -13,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
@@ -22,6 +22,7 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
     private static final String SAVE_CLASS_ROOM = "INSERT INTO classRoom (name, description) VALUES (?, ?)";
     private static final String FIND_ALL = "SELECT * FROM classRoom";
     private static final String FIND_BY_ID = "SELECT * FROM classRoom WHERE id = ?";
+    private static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM classRoom WHERE id = ?";
     private static final String COUNT = "SELECT COUNT(id) FROM classRoom";
     private static final String DELETE_CLASS_ROOM = "DELETE FROM classRoom WHERE id = ?";
     private static final String DELETE_ALL = "DELETE FROM classRoom";
@@ -40,13 +41,13 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
         jdbcTemplate.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(SAVE_CLASS_ROOM, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, classRoom.getName());
-                ps.setString(2, classRoom.getDescription());
+                ps.setString(1, classRoom.getName().trim());
+                ps.setString(2, classRoom.getDescription().trim());
                 return ps;
             }
         }, keyHolder);
 
-        classRoom.setId((int)keyHolder.getKeys().get("id"));
+        classRoom.setId((int) keyHolder.getKeys().get("id"));
         return classRoom;
     }
 
@@ -58,13 +59,8 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
 
     @Override
     public boolean existsById(Integer id) {
-        ClassRoom classRoom = jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new ClassRoomMapper())
-                .stream().findAny().orElse(null);
-        if (classRoom != null) {
-            return true;
-        }
-        ;
-        return false;
+        Integer count = jdbcTemplate.queryForObject(EXISTS_BY_ID, Integer.class, id);
+        return count > 0;
     }
 
     @Override

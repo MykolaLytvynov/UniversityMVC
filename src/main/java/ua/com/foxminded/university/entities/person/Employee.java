@@ -11,5 +11,5 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class Employee extends Person {
     private String position;
-    private int salary;
+    private Integer salary;
 }

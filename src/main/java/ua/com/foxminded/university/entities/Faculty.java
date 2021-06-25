@@ -8,9 +8,11 @@ import java.util.List;
 
 @Data
 public class Faculty {
-    private int id;
+    private Integer id;
     @NonNull
     private String name;
+    @NonNull
+    private String description;
     private List<Course> courses = new ArrayList<>();
 
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class Lesson {
-    private int id;
+    private Integer id;
     @NonNull
     private Subject subject;
     @NonNull
@@ -17,7 +17,7 @@ public class Lesson {
     @NonNull
     private LocalDateTime localDateTime;
     @NonNull
-    private int duration;
+    private Integer duration;
     @NonNull
     private ClassRoom classRoom;
     @NonNull

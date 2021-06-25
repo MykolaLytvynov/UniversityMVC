@@ -1,44 +1,38 @@
 package ua.com.foxminded.university.dao;
 
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import ua.com.foxminded.university.configuration.ApplicationConfig;
+import ua.com.foxminded.university.dao.mapper.ClassRoomMapper;
 import ua.com.foxminded.university.entities.ClassRoom;
 
-import javax.sql.DataSource;
 
-import java.util.ArrayList;
+import javax.sql.DataSource;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClassRoomDAOTest {
+    private ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
 
-    private final String driver = "org.h2.Driver";
-    private final String urlDbForTest = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
-    private final String userNameDbForTest = "sa";
-    private final String password = "";
+
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
-    private ClassRoomDAO classRoomDAO = new ClassRoomDAO(jdbcTemplate);
+//    private JdbcTemplate jdbcTemplate;
 
+
+    private ClassRoomDAO classRoomDAO = new ClassRoomDAO(jdbcTemplate);
 
     private static final String DELETE_TABLE = "DROP TABLE IF EXISTS classRoom";
     private static final String CREATE_TABLE = "CREATE TABLE classRoom (id SERIAL PRIMARY KEY, name CHARACTER(25) NOT NULL UNIQUE, description CHARACTER (100))";
 
 
     public ClassRoomDAOTest() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-
-        dataSource.setDriverClassName(driver);
-        dataSource.setUrl(urlDbForTest);
-        dataSource.setUsername(userNameDbForTest);
-        dataSource.setPassword(password);
-
-        jdbcTemplate.setDataSource(dataSource);
+        jdbcTemplate.setDataSource((DataSource) context.getBean("dataSourceForTest"));
+//        jdbcTemplate = context.getBean("jdbcTemplateForTest", JdbcTemplate.class);
     }
 
 
@@ -50,7 +44,7 @@ class ClassRoomDAOTest {
 
 
     @Test
-    @DisplayName("Save classroom in Bd")
+    @DisplayName("Save class room in Bd")
     void saveShouldSaveClassRoomInBd() {
         ClassRoom expected = new ClassRoom("one", "oneDescription");
         expected.setId(1);
@@ -63,7 +57,7 @@ class ClassRoomDAOTest {
     }
 
     @Test
-    @DisplayName("Save Null instead of classroom in Bd")
+    @DisplayName("Save Null instead of class room in Bd")
     void saveShouldReturnExceptionWhenEnterNull() {
         assertThrows(RuntimeException.class, () -> classRoomDAO.save(null));
     }
@@ -83,48 +77,46 @@ class ClassRoomDAOTest {
     @Test
     @DisplayName("Find by non-existing id")
     void findByIdShouldReturnNullWhenEnterNonExistingClassRoom() {
-        ClassRoom expected = jdbcTemplate.query("SELECT * FROM classRoom WHERE id = 123", new ClassRoomMapper())
+        ClassRoom expectedResult = null;
+        ClassRoom realResult = jdbcTemplate.query("SELECT * FROM classRoom WHERE id = 123", new ClassRoomMapper())
                 .stream().findAny().orElse(null);
 
-        ClassRoom result = classRoomDAO.findById(123);
+        ClassRoom actualResult = classRoomDAO.findById(123);
 
-        assertEquals(expected, result);
+        assertEquals(expectedResult, actualResult);
+        assertEquals(realResult, actualResult);
     }
 
 
     @Test
     @DisplayName("Exists by id")
-    void existsByIdShouldTrueWhenEnterExistsClassRoom() {
-        jdbcTemplate.update("INSERT INTO classRoom (id, name, description) VALUES (1, 'classroom1', 'about1')");
-        ClassRoom classRoom = jdbcTemplate.query("SELECT * FROM classRoom WHERE id = 1", new ClassRoomMapper())
-                .stream().findAny().orElse(null);
-        boolean expected = true;
-        if (classRoom == null) {
-            expected = false;
-        }
+    void existsByIdShouldReturnTrueWhenEnterExistsClassRoom() {
+        boolean expectedResult = true;
+        jdbcTemplate.update("INSERT INTO classRoom (id, name, description) VALUES ('3', 'Class3', 'Class33')");
+        int count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM classRoom WHERE id = 3", Integer.class);
+        boolean realResult = count > 0;
 
-        boolean result = classRoomDAO.existsById(1);
+        boolean actualResult = classRoomDAO.existsById(3);
 
-        assertEquals(expected, result);
+        assertEquals(expectedResult, actualResult);
+        assertEquals(realResult, actualResult);
     }
 
     @Test
     @DisplayName("Does not Exists by id")
-    void existsByIdShouldTrueWhenEnterDoesNotExistsClassRoom() {
-        ClassRoom classRoom = jdbcTemplate.query("SELECT * FROM classRoom WHERE id = 123", new ClassRoomMapper())
-                .stream().findAny().orElse(null);
-        boolean expected = true;
-        if (classRoom == null) {
-            expected = false;
-        }
+    void existsByIdShouldReturnFalseWhenEnterDoesNotExistsClassRoom() {
+        boolean expectedResult = false;
+        int count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM classRoom WHERE id = 32", Integer.class);
+        boolean realResult = count > 0;
 
-        boolean result = classRoomDAO.existsById(1);
+        boolean actualResult = classRoomDAO.existsById(32);
 
-        assertEquals(expected, result);
+        assertEquals(expectedResult, actualResult);
+        assertEquals(realResult, actualResult);
     }
 
     @Test
-    @DisplayName("Find All Classrooms")
+    @DisplayName("Find All Class rooms")
     void findAllShouldReturnAllClassRooms() {
         jdbcTemplate.update("INSERT INTO classRoom (id, name, description) VALUES (1, 'ClassRoom1', 'AboutClassRoom1')");
         jdbcTemplate.update("INSERT INTO classRoom (id, name, description) VALUES (2, 'ClassRoom2', 'AboutClassRoom2')");
@@ -137,7 +129,7 @@ class ClassRoomDAOTest {
     }
 
     @Test
-    @DisplayName("Count Classrooms")
+    @DisplayName("Count Class rooms")
     void countShouldReturnCountClassRooms() {
         int expectedResult = 3;
         jdbcTemplate.update("INSERT INTO classRoom (id, name, description) VALUES (1, 'ClassRoom1', 'AboutClassRoom1')");
@@ -152,7 +144,7 @@ class ClassRoomDAOTest {
     }
 
     @Test
-    @DisplayName("Delete one classroom by id")
+    @DisplayName("Delete one class room by id")
     void deleteByIdShouldDeleteOneClassRoomById() {
         jdbcTemplate.update("INSERT INTO classRoom (id, name, description) VALUES (3, 'ClassRoom3', 'AboutClassRoom3')");
         ClassRoom expected = null;
@@ -165,7 +157,7 @@ class ClassRoomDAOTest {
     }
 
     @Test
-    @DisplayName("Delete one classroom when specifying a class room")
+    @DisplayName("Delete one class room when specifying a class room")
     void deleteShouldDeleteOneClassRoomWhenSpecifyingClassRoom() {
         ClassRoom expected = null;
         jdbcTemplate.update("INSERT INTO classRoom (id, name, description) VALUES (3, 'ClassRoom3', 'AboutClassRoom3')");
@@ -180,7 +172,7 @@ class ClassRoomDAOTest {
     }
 
     @Test
-    @DisplayName("Delete all classrooms")
+    @DisplayName("Delete all class rooms")
     void deleteAllShouldDeleteAllClassRooms() {
         int expected = 0;
         jdbcTemplate.update("INSERT INTO classRoom (id, name, description) VALUES (1, 'ClassRoom1', 'AboutClassRoom1')");

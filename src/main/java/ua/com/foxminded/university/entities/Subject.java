@@ -6,7 +6,7 @@ import ua.com.foxminded.university.entities.person.Teacher;
 
 @Data
 public class Subject {
-    private int id;
+    private Integer id;
     @NonNull
     private String name;
     @NonNull
@@ -14,5 +14,5 @@ public class Subject {
     @NonNull
     private Teacher teacher;
     @NonNull
-    private int amountLessons;
+    private Integer amountLessons;
 }

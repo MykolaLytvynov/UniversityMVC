@@ -5,7 +5,7 @@ import lombok.NonNull;
 
 @Data
 public class ClassRoom {
-    private int id;
+    private Integer id;
     @NonNull
     private String name;
     @NonNull

@@ -59,7 +59,9 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
     public Faculty findById(Integer id) {
         return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new FacultyMapper())
                 .stream()
-                .peek(f -> f.setCourses(getCoursesOneFaculty(id)))
+                .peek(faculty -> faculty.setCourses(getCoursesOneFaculty(id)))
+                .peek(faculty -> faculty.setName(faculty.getName().trim()))
+                .peek(faculty -> faculty.setDescription(faculty.getDescription().trim()))
                 .findAny()
                 .orElse(null);
     }
@@ -75,6 +77,8 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
         return jdbcTemplate.query(FIND_ALL, new FacultyMapper())
                 .stream()
                 .peek(faculty -> faculty.setCourses(getCoursesOneFaculty(faculty.getId())))
+                .peek(faculty -> faculty.setName(faculty.getName().trim()))
+                .peek(faculty -> faculty.setDescription(faculty.getDescription().trim()))
                 .collect(Collectors.toList());
     }
 

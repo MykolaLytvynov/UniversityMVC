@@ -57,22 +57,19 @@ CREATE TABLE subjects (
     FOREIGN KEY (employeeId) REFERENCES employees (id) ON DELETE SET NULL
 );
 
-
-
-
 CREATE TABLE lessons (
     id SERIAL PRIMARY KEY,
-    subjectId int,
---    localDate
---?
---?
---?
---?
+    subjectId int NOT NULL,
+    dateTime TIMESTAMP NOT NULL,
+    duration int NOT NULL,
+    classRoomId int NOT NULL,
+    FOREIGN KEY (subjectId) REFERENCES subjects (id) ON DELETE SET NULL,
+    FOREIGN KEY (classRoomId) REFERENCES classRoom (id) ON DELETE SET NULL
 );
 
 CREATE TABLE groupsLessons (
     idGroup int NOT NULL,
     idLesson int NOT NULL,
-    FOREIGN KEY (idGroup) REFERENCES groups (id) DELETE ON CASCADE
-    FOREIGN KEY (idLesson) REFERENCES lessons (id) DELETE ON CASCADE
+    FOREIGN KEY (idGroup) REFERENCES groups (id) ON DELETE CASCADE,
+    FOREIGN KEY (idLesson) REFERENCES lessons (id) ON DELETE CASCADE
 );

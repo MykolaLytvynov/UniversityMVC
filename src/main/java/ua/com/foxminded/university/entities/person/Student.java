@@ -11,5 +11,5 @@ import ua.com.foxminded.university.entities.Group;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Student extends Person {
-    private Group group;
+    private Integer groupId;
 }

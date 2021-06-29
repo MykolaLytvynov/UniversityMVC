@@ -11,15 +11,12 @@ import java.util.List;
 public class Lesson {
     private Integer id;
     @NonNull
-    private Subject subject;
+    private Integer subjectId;
     @NonNull
-    private Teacher teacher;
-    @NonNull
-    private LocalDateTime localDateTime;
+    private LocalDateTime dateTime;
     @NonNull
     private Integer duration;
     @NonNull
-    private ClassRoom classRoom;
-    @NonNull
+    private Integer classRoomId;
     private List<Group> lessonForGroups;
 }

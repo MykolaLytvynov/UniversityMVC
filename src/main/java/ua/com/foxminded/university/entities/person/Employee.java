@@ -2,6 +2,7 @@ package ua.com.foxminded.university.entities.person;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -10,6 +11,8 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Employee extends Person {
-    private String position;
+    @NonNull
+    private Integer positionId;
+    @NonNull
     private Integer salary;
 }

@@ -11,8 +11,7 @@ public class Subject {
     private String name;
     @NonNull
     private String description;
-    @NonNull
-    private Teacher teacher;
+    private Integer teacherId;
     @NonNull
     private Integer amountLessons;
 }

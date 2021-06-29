@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
@@ -54,7 +55,11 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
     @Override
     public ClassRoom findById(Integer id) {
         return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new ClassRoomMapper())
-                .stream().findAny().orElse(null);
+                .stream()
+                .peek(classRoom -> classRoom.setName(classRoom.getName().trim()))
+                .peek(classRoom -> classRoom.setDescription(classRoom.getDescription().trim()))
+                .findAny()
+                .orElse(null);
     }
 
     @Override
@@ -65,7 +70,11 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
 
     @Override
     public List<ClassRoom> findAll() {
-        return jdbcTemplate.query(FIND_ALL, new ClassRoomMapper());
+        return jdbcTemplate.query(FIND_ALL, new ClassRoomMapper())
+                .stream()
+                .peek(classRoom -> classRoom.setName(classRoom.getName().trim()))
+                .peek(classRoom -> classRoom.setDescription(classRoom.getDescription().trim()))
+                .collect(Collectors.toList());
     }
 
     @Override

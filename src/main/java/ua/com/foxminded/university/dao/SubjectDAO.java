@@ -60,8 +60,6 @@ public class SubjectDAO implements CrudOperations<Subject, Integer>{
     public Subject findById(Integer id) {
         return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new SubjectMapper())
                 .stream()
-                .peek(subject -> subject.setName(subject.getName().trim()))
-                .peek(subject -> subject.setDescription(subject.getDescription().trim()))
                 .findAny()
                 .orElse(null);
 
@@ -75,11 +73,7 @@ public class SubjectDAO implements CrudOperations<Subject, Integer>{
 
     @Override
     public List<Subject> findAll() {
-        return jdbcTemplate.query(FIND_ALL, new SubjectMapper())
-                .stream()
-                .peek(subject -> subject.setName(subject.getName().trim()))
-                .peek(subject -> subject.setDescription(subject.getDescription().trim()))
-                .collect(Collectors.toList());
+        return jdbcTemplate.query(FIND_ALL, new SubjectMapper());
     }
 
     @Override
@@ -108,10 +102,6 @@ public class SubjectDAO implements CrudOperations<Subject, Integer>{
     }
 
     public List<Subject> getAllSubjectsOneTeacher(Integer teacherId) {
-        return jdbcTemplate.query(GET_ALL_SUBJECTS_ONE_TEACHER, new Object[]{teacherId}, new SubjectMapper())
-                .stream()
-                .peek(subject -> subject.setName(subject.getName().trim()))
-                .peek(subject -> subject.setDescription(subject.getDescription().trim()))
-                .collect(Collectors.toList());
+        return jdbcTemplate.query(GET_ALL_SUBJECTS_ONE_TEACHER, new Object[]{teacherId}, new SubjectMapper());
     }
 }

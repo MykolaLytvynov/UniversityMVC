@@ -104,11 +104,7 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
     }
 
     public List<Student> getStudentsOneGroup (Integer id) {
-        return jdbcTemplate.query(GET_STUDENTS_ONE_GROUP, new Object[]{id}, new StudentMapper())
-                .stream()
-                .peek(student -> student.setName(student.getName().trim()))
-                .peek(student -> student.setLastName(student.getLastName().trim()))
-                .collect(Collectors.toList());
+        return jdbcTemplate.query(GET_STUDENTS_ONE_GROUP, new Object[]{id}, new StudentMapper());
     }
 
 }

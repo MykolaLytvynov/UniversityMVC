@@ -57,8 +57,6 @@ public class StudentDAO implements CrudOperations<Student, Integer>{
     public Student findById(Integer id) {
         return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new StudentMapper())
                 .stream()
-                .peek(student -> student.setName(student.getName().trim()))
-                .peek(student -> student.setLastName(student.getLastName().trim()))
                 .findAny()
                 .orElse(null);
     }
@@ -71,11 +69,7 @@ public class StudentDAO implements CrudOperations<Student, Integer>{
 
     @Override
     public List<Student> findAll() {
-        return jdbcTemplate.query(FIND_ALL, new StudentMapper())
-                .stream()
-                .peek(student -> student.setName(student.getName().trim()))
-                .peek(student -> student.setLastName(student.getLastName().trim()))
-                .collect(Collectors.toList());
+        return jdbcTemplate.query(FIND_ALL, new StudentMapper());
     }
 
     @Override

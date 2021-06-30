@@ -45,8 +45,8 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
         jdbcTemplate.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(SAVE_FACULTY, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, faculty.getName().trim());
-                ps.setString(2, faculty.getDescription().trim());
+                ps.setString(1, faculty.getName());
+                ps.setString(2, faculty.getDescription());
                 return ps;
             }
         }, keyHolder);
@@ -60,8 +60,6 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
         return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new FacultyMapper())
                 .stream()
                 .peek(faculty -> faculty.setCourses(getCoursesOneFaculty(id)))
-                .peek(faculty -> faculty.setName(faculty.getName().trim()))
-                .peek(faculty -> faculty.setDescription(faculty.getDescription().trim()))
                 .findAny()
                 .orElse(null);
     }
@@ -77,8 +75,6 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
         return jdbcTemplate.query(FIND_ALL, new FacultyMapper())
                 .stream()
                 .peek(faculty -> faculty.setCourses(getCoursesOneFaculty(faculty.getId())))
-                .peek(faculty -> faculty.setName(faculty.getName().trim()))
-                .peek(faculty -> faculty.setDescription(faculty.getDescription().trim()))
                 .collect(Collectors.toList());
     }
 

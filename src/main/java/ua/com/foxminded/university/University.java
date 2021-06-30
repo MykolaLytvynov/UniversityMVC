@@ -1,6 +1,9 @@
 package ua.com.foxminded.university;
 
-import ua.com.foxminded.university.dao.ClassRoomDAO;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ua.com.foxminded.university.configuration.ApplicationConfig;
+import ua.com.foxminded.university.dao.*;
 import ua.com.foxminded.university.entities.*;
 import ua.com.foxminded.university.entities.person.Employee;
 import ua.com.foxminded.university.entities.person.Student;
@@ -18,8 +21,6 @@ public class University {
     private List<ClassRoom> classRooms = new ArrayList<>();
 
     public static void main(String[] args) {
-
-        ContextHolder contextHolder = ContextHolder.connectorBuilder();
 
     }
 }

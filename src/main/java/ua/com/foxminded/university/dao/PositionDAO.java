@@ -54,7 +54,6 @@ public class PositionDAO implements CrudOperations<Position, Integer>{
     public Position findById(Integer id) {
         return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new PositionMapper())
                 .stream()
-                .peek(position -> position.setName(position.getName().trim()))
                 .findAny()
                 .orElse(null);
     }
@@ -67,10 +66,7 @@ public class PositionDAO implements CrudOperations<Position, Integer>{
 
     @Override
     public List<Position> findAll() {
-        return jdbcTemplate.query(FIND_ALL, new PositionMapper())
-                .stream()
-                .peek(position -> position.setName(position.getName().trim()))
-                .collect(Collectors.toList());
+        return jdbcTemplate.query(FIND_ALL, new PositionMapper());
     }
 
     @Override

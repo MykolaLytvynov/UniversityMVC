@@ -42,8 +42,8 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
         jdbcTemplate.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(SAVE_CLASS_ROOM, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, classRoom.getName().trim());
-                ps.setString(2, classRoom.getDescription().trim());
+                ps.setString(1, classRoom.getName());
+                ps.setString(2, classRoom.getDescription());
                 return ps;
             }
         }, keyHolder);
@@ -56,8 +56,6 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
     public ClassRoom findById(Integer id) {
         return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new ClassRoomMapper())
                 .stream()
-                .peek(classRoom -> classRoom.setName(classRoom.getName().trim()))
-                .peek(classRoom -> classRoom.setDescription(classRoom.getDescription().trim()))
                 .findAny()
                 .orElse(null);
     }
@@ -70,11 +68,7 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
 
     @Override
     public List<ClassRoom> findAll() {
-        return jdbcTemplate.query(FIND_ALL, new ClassRoomMapper())
-                .stream()
-                .peek(classRoom -> classRoom.setName(classRoom.getName().trim()))
-                .peek(classRoom -> classRoom.setDescription(classRoom.getDescription().trim()))
-                .collect(Collectors.toList());
+        return jdbcTemplate.query(FIND_ALL, new ClassRoomMapper());
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class EmployeeDAO implements CrudOperations<Employee, Integer>{
+public class EmployeeDAO implements CrudOperations<Employee, Integer> {
     private JdbcTemplate jdbcTemplate;
 
     public static final String SAVE_EMPLOYEE = "INSERT INTO employees (name, lastName, positionId, salary) VALUES (?, ?, ?, ?)";
@@ -51,7 +51,7 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer>{
                 return ps;
             }
         }, keyHolder);
-        employee.setId((int)keyHolder.getKeys().get("id"));
+        employee.setId((int) keyHolder.getKeys().get("id"));
         return employee;
     }
 
@@ -59,8 +59,6 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer>{
     public Employee findById(Integer id) {
         return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new EmployeeMapper())
                 .stream()
-                .peek(employee -> employee.setName(employee.getName().trim()))
-                .peek(employee -> employee.setLastName(employee.getLastName().trim()))
                 .findAny()
                 .orElse(null);
     }
@@ -73,11 +71,7 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer>{
 
     @Override
     public List<Employee> findAll() {
-        return jdbcTemplate.query(FIND_ALL, new EmployeeMapper())
-                .stream()
-                .peek(employee -> employee.setName(employee.getName().trim()))
-                .peek(employee -> employee.setLastName(employee.getLastName().trim()))
-                .collect(Collectors.toList());
+        return jdbcTemplate.query(FIND_ALL, new EmployeeMapper());
     }
 
     @Override
@@ -100,11 +94,7 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer>{
         jdbcTemplate.update(DELETE_ALL);
     }
 
-    public List<Employee> getAllEmploeesOnePosition (Integer positionId) {
-        return jdbcTemplate.query(GET_ALL_EMPLOEES_ONE_POSITION, new Object[]{positionId}, new EmployeeMapper())
-                .stream()
-                .peek(employee -> employee.setName(employee.getName().trim()))
-                .peek(employee -> employee.setLastName(employee.getLastName().trim()))
-                .collect(Collectors.toList());
+    public List<Employee> getAllEmploeesOnePosition(Integer positionId) {
+        return jdbcTemplate.query(GET_ALL_EMPLOEES_ONE_POSITION, new Object[]{positionId}, new EmployeeMapper());
     }
 }

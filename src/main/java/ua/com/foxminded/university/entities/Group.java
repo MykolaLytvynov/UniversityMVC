@@ -9,9 +9,9 @@ import java.util.List;
 
 @Data
 public class Group {
-    private int id;
+    private Integer id;
     @NonNull
-    private int nummerGroup;
+    private Integer nummerGroup;
     private List<Student> students = new ArrayList<>();
 
 }

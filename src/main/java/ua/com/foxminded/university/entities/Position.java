@@ -4,10 +4,8 @@ import lombok.Data;
 import lombok.NonNull;
 
 @Data
-public class ClassRoom {
+public class Position {
     private Integer id;
     @NonNull
     private String name;
-    @NonNull
-    private String description;
 }

@@ -9,17 +9,14 @@ import java.util.List;
 
 @Data
 public class Lesson {
-    private int id;
+    private Integer id;
     @NonNull
-    private Subject subject;
+    private Integer subjectId;
     @NonNull
-    private Teacher teacher;
+    private LocalDateTime dateTime;
     @NonNull
-    private LocalDateTime localDateTime;
+    private Integer duration;
     @NonNull
-    private int duration;
-    @NonNull
-    private ClassRoom classRoom;
-    @NonNull
+    private Integer classRoomId;
     private List<Group> lessonForGroups;
 }

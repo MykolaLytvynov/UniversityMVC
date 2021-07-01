@@ -6,12 +6,12 @@ import ua.com.foxminded.university.entities.person.Teacher;
 
 @Data
 public class Subject {
-    private int id;
+    private Integer id;
+    @NonNull
     private String name;
     @NonNull
     private String description;
+    private Integer teacherId;
     @NonNull
-    private Teacher teacher;
-    @NonNull
-    private int amountLessons;
+    private Integer amountLessons;
 }

@@ -6,7 +6,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 public class Person {
-    private int id;
+    private Integer id;
     private String name;
     private String lastName;
 }

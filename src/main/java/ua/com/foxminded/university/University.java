@@ -7,6 +7,8 @@ import ua.com.foxminded.university.dao.*;
 import ua.com.foxminded.university.entities.*;
 import ua.com.foxminded.university.entities.person.Employee;
 import ua.com.foxminded.university.entities.person.Student;
+import ua.com.foxminded.university.service.ClassRoomService;
+import ua.com.foxminded.university.service.CourseService;
 
 
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ public class University {
     private List<ClassRoom> classRooms = new ArrayList<>();
 
     public static void main(String[] args) {
-
+        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+        context.getBean("classRoomService", ClassRoomService.class).findAll().stream().forEach(System.out::println);
     }
 }

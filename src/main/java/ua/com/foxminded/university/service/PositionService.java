@@ -20,7 +20,7 @@ public class PositionService {
     }
 
     public Position findById(Integer id) {
-        return Optional.ofNullable(positionDAO.findById(id)).orElseThrow(() -> new NotFoundException("Position not found by id = " + id));
+        return positionDAO.findById(id).orElseThrow(() -> new NotFoundException("Position not found by id = " + id));
     }
 
     public boolean existsById(Integer id) {

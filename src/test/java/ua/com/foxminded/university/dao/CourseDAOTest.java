@@ -18,6 +18,7 @@ import javax.sql.DataSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,7 +89,7 @@ class CourseDAOTest {
         groupList.add(group);
         expected.setGroups(groupList);
 
-        Course result = courseDAO.findById(3);
+        Course result = courseDAO.findById(3).orElse(null);
 
         assertEquals(result, expected);
     }
@@ -100,7 +101,7 @@ class CourseDAOTest {
         Course realResult = jdbcTemplate.query("SELECT * FROM courses WHERE id = 33", new CourseMapper())
                 .stream().findAny().orElse(null);
 
-        Course actualResult = courseDAO.findById(33);
+        Course actualResult = courseDAO.findById(33).orElse(null);
 
         assertEquals(expectedResult, actualResult);
         assertEquals(realResult, actualResult);

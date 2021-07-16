@@ -13,6 +13,7 @@ import ua.com.foxminded.university.entities.ClassRoom;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,7 +70,7 @@ class ClassRoomDAOTest {
         ClassRoom expected = jdbcTemplate.query("SELECT * FROM classRoom WHERE id = 12", new ClassRoomMapper())
                 .stream().findAny().orElse(null);
 
-        ClassRoom result = classRoomDAO.findById(12);
+        ClassRoom result = classRoomDAO.findById(12).orElse(null);
 
         assertEquals(expected, result);
     }
@@ -81,7 +82,7 @@ class ClassRoomDAOTest {
         ClassRoom realResult = jdbcTemplate.query("SELECT * FROM classRoom WHERE id = 123", new ClassRoomMapper())
                 .stream().findAny().orElse(null);
 
-        ClassRoom actualResult = classRoomDAO.findById(123);
+        ClassRoom actualResult = classRoomDAO.findById(123).orElse(null);
 
         assertEquals(expectedResult, actualResult);
         assertEquals(realResult, actualResult);

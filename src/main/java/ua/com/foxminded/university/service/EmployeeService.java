@@ -20,7 +20,7 @@ public class EmployeeService {
     }
 
     public Employee findById(Integer id) {
-        return Optional.ofNullable(employeeDAO.findById(id)).orElseThrow(() -> new NotFoundException("Employee not found by id = " + id));
+        return employeeDAO.findById(id).orElseThrow(() -> new NotFoundException("Employee not found by id = " + id));
     }
 
     public boolean existsById(Integer id) {

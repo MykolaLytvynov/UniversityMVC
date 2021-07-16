@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class LessonDAO implements CrudOperations<Lesson, Integer> {
@@ -58,11 +59,11 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
     }
 
     @Override
-    public Lesson findById(Integer id) {
-        return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new LessonMapper())
+    public Optional<Lesson> findById(Integer id) {
+        return Optional.ofNullable(jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new LessonMapper())
                 .stream()
                 .findAny()
-                .orElse(null);
+                .orElse(null));
     }
 
     @Override

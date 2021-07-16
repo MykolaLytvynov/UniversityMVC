@@ -21,7 +21,7 @@ public class SubjectService {
     }
 
     public Subject findById(Integer id) {
-        return Optional.ofNullable(subjectDAO.findById(id)).orElseThrow(() -> new NotFoundException("Subject not found by id = " + id));
+        return subjectDAO.findById(id).orElseThrow(() -> new NotFoundException("Subject not found by id = " + id));
     }
 
     public boolean existsById(Integer id) {

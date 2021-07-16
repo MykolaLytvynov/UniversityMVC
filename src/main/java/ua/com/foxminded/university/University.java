@@ -24,6 +24,8 @@ public class University {
 
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
-        context.getBean("classRoomService", ClassRoomService.class).findAll().stream().forEach(System.out::println);
+//        context.getBean("classRoomService", ClassRoomService.class).findAll().stream().forEach(System.out::println);
+
+        context.getBean("classRoomService", ClassRoomService.class).deleteById(4);
     }
 }

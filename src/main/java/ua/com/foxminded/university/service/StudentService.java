@@ -20,7 +20,7 @@ public class StudentService {
     }
 
     public Student findById(Integer id) {
-        return Optional.ofNullable(studentDAO.findById(id)).orElseThrow(() -> new NotFoundException("Student not found by id = " + id));
+        return studentDAO.findById(id).orElseThrow(() -> new NotFoundException("Student not found by id = " + id));
     }
 
     public boolean existsById(Integer id) {

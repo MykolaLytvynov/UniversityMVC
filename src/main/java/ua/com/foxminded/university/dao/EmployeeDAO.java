@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -56,11 +57,11 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer> {
     }
 
     @Override
-    public Employee findById(Integer id) {
-        return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new EmployeeMapper())
+    public Optional<Employee> findById(Integer id) {
+        return Optional.ofNullable(jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new EmployeeMapper())
                 .stream()
                 .findAny()
-                .orElse(null);
+                .orElse(null));
     }
 
     @Override

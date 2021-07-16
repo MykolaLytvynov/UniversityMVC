@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -80,7 +81,7 @@ class FacultyDAOTest {
         courseList.add(course);
         expected.setCourses(courseList);
 
-        Faculty result = facultyDAO.findById(3);
+        Faculty result = facultyDAO.findById(3).orElse(null);
 
         assertEquals(expected, result);
     }
@@ -93,7 +94,7 @@ class FacultyDAOTest {
         Faculty realResult = jdbcTemplate.query("SELECT * FROM faculties WHERE id = 33", new FacultyMapper())
                 .stream().findAny().orElse(null);
 
-        Faculty actualResult = facultyDAO.findById(33);
+        Faculty actualResult = facultyDAO.findById(33).orElse(null);
 
         assertEquals(expectedResult, actualResult);
         assertEquals(realResult, actualResult);

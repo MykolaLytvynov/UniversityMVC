@@ -19,7 +19,7 @@ public class ClassRoomService {
     }
 
     public ClassRoom findById(Integer id) {
-        return Optional.ofNullable(classRoomDAO.findById(id)).orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
+        return classRoomDAO.findById(id).orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
     }
 
     public boolean existsById(Integer id) {

@@ -22,7 +22,7 @@ public class CourseService {
     }
 
     public Course findById(Integer id) {
-        return Optional.ofNullable(courseDAO.findById(id)).orElseThrow(() -> new NotFoundException("Course not found by id = " + id));
+        return courseDAO.findById(id).orElseThrow(() -> new NotFoundException("Course not found by id = " + id));
     }
 
     public boolean existsById(Integer id) {

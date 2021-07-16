@@ -24,7 +24,7 @@ public class FacultyService {
     }
 
     public Faculty findById(Integer id) {
-        return Optional.ofNullable(facultyDAO.findById(id)).orElseThrow(() -> new NotFoundException("Faculty not found by id = " + id));
+        return facultyDAO.findById(id).orElseThrow(() -> new NotFoundException("Faculty not found by id = " + id));
     }
 
     public boolean existsById(Integer id) {

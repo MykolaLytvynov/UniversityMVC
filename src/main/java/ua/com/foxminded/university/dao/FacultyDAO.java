@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -56,12 +57,12 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
     }
 
     @Override
-    public Faculty findById(Integer id) {
-        return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new FacultyMapper())
+    public Optional<Faculty> findById(Integer id) {
+        return Optional.ofNullable(jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new FacultyMapper())
                 .stream()
                 .peek(faculty -> faculty.setCourses(getCoursesOneFaculty(id)))
                 .findAny()
-                .orElse(null);
+                .orElse(null));
     }
 
     @Override

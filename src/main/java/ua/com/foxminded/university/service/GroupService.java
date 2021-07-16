@@ -25,7 +25,7 @@ public class GroupService {
     }
 
     public Group findById(Integer id) {
-        return Optional.ofNullable(groupDAO.findById(id)).orElseThrow(() -> new NotFoundException("Group not found by id = " + id));
+        return groupDAO.findById(id).orElseThrow(() -> new NotFoundException("Group not found by id = " + id));
     }
 
     public boolean existsById(Integer id) {

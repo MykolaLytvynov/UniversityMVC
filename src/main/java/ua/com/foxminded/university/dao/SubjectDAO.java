@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -57,11 +58,11 @@ public class SubjectDAO implements CrudOperations<Subject, Integer>{
     }
 
     @Override
-    public Subject findById(Integer id) {
-        return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new SubjectMapper())
+    public Optional<Subject> findById(Integer id) {
+        return Optional.ofNullable(jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new SubjectMapper())
                 .stream()
                 .findAny()
-                .orElse(null);
+                .orElse(null));
 
     }
 

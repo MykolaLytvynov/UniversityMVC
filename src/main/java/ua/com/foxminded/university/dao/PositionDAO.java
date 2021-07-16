@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -51,11 +52,11 @@ public class PositionDAO implements CrudOperations<Position, Integer>{
     }
 
     @Override
-    public Position findById(Integer id) {
-        return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new PositionMapper())
+    public Optional<Position> findById(Integer id) {
+        return Optional.ofNullable(jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new PositionMapper())
                 .stream()
                 .findAny()
-                .orElse(null);
+                .orElse(null));
     }
 
     @Override

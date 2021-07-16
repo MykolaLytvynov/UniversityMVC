@@ -7,7 +7,7 @@ public interface CrudOperations <T, ID>{
 
     T save(T entity);
 
-    T findById(ID id);
+    Optional<T> findById(ID id);
 
     boolean existsById(ID id);
 

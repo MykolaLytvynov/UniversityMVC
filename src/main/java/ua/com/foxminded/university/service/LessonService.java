@@ -21,7 +21,7 @@ public class LessonService {
     }
 
     public Lesson findById(Integer id) {
-        return Optional.ofNullable(lessonDAO.findById(id)).orElseThrow(() -> new NotFoundException("Lesson not found by id = " + id));
+        return lessonDAO.findById(id).orElseThrow(() -> new NotFoundException("Lesson not found by id = " + id));
     }
 
     public boolean existsById(Integer id) {

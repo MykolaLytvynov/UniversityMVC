@@ -1,18 +1,17 @@
 package ua.com.foxminded.university.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.StudentDAO;
-import ua.com.foxminded.university.dao.mapper.StudentMapper;
 import ua.com.foxminded.university.entities.person.Student;
 import ua.com.foxminded.university.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class StudentService {
-    @Autowired
+
     private StudentDAO studentDAO;
 
     public Student save(Student student) {
@@ -20,7 +19,8 @@ public class StudentService {
     }
 
     public Student findById(Integer id) {
-        return studentDAO.findById(id).orElseThrow(() -> new NotFoundException("Student not found by id = " + id));
+        return studentDAO.findById(id)
+                .orElseThrow(() -> new NotFoundException("Student not found by id = " + id));
     }
 
     public boolean existsById(Integer id) {

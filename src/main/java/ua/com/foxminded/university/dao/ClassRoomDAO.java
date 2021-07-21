@@ -1,5 +1,7 @@
 package ua.com.foxminded.university.dao;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,15 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
+import static java.lang.String.format;
+
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+    private final ClassRoomMapper classRoomMapper;
 
     private static final String SAVE_CLASS_ROOM = "INSERT INTO classRoom (name, description) VALUES (?, ?)";
     private static final String FIND_ALL = "SELECT * FROM classRoom";
@@ -30,17 +38,10 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
     private static final String DELETE_CLASS_ROOM = "DELETE FROM classRoom WHERE id = ?";
     private static final String DELETE_ALL = "DELETE FROM classRoom";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClassRoomDAO.class);
-
-    @Autowired
-    public ClassRoomDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
 
     @Override
     public ClassRoom save(ClassRoom classRoom) {
-        LOGGER.debug("Saving classroom - {}", classRoom);
+        log.debug("save('{}') called", classRoom);
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(new PreparedStatementCreator() {
@@ -52,58 +53,67 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
             }
         }, keyHolder);
 
-        classRoom.setId((int) keyHolder.getKeys().get("id"));
+        Integer id = ofNullable(keyHolder.getKeys())
+                .map(map -> (Integer) map.get("id"))
+                .orElseThrow(() -> new RuntimeException(format("Query '%s' didn't returned id!", SAVE_CLASS_ROOM)));
+        classRoom.setId(id);
 
-        if(classRoom.getId()!=0) {
-            LOGGER.debug("Successful adding classroom - {}", classRoom);
-        } else LOGGER.error("Classroom was not added");
-
+        log.debug("save(Classroom) was success. Returned '{}'", classRoom);
         return classRoom;
     }
 
     @Override
     public Optional<ClassRoom> findById(Integer id) {
-        LOGGER.debug("Find classroom by id - {}", id);
-        return Optional.ofNullable(jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new ClassRoomMapper())
-                .stream()
-                .findAny()
-                .orElse(null));
+        log.debug("findById('{}') called", id);
+        ClassRoom result = jdbcTemplate.queryForObject(FIND_BY_ID, classRoomMapper, id);
+        log.debug("findById('{}') returned '{}'", id, result);
+        return ofNullable(result);
     }
 
     @Override
     public boolean existsById(Integer id) {
-        LOGGER.debug("checking if such a classroom exists by id - {}", id);
+        log.debug("existsById('{}') called", id);
         Integer count = jdbcTemplate.queryForObject(EXISTS_BY_ID, Integer.class, id);
-        return count > 0;
+        boolean result = count != null && count > 0;
+        log.debug("existsById('{}') returned '{}'", result);
+        return result;
     }
 
     @Override
     public List<ClassRoom> findAll() {
-        LOGGER.debug("Getting all classrooms");
-        return jdbcTemplate.query(FIND_ALL, new ClassRoomMapper());
+        log.debug("findAll() called");
+        List<ClassRoom> result = jdbcTemplate.query(FIND_ALL, classRoomMapper);
+        log.debug("findAll() returned '{}'", result);
+        return result;
     }
 
     @Override
     public long count() {
-        LOGGER.debug("Getting count classrooms");
-        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+        log.debug("count() called");
+        Integer result = jdbcTemplate.queryForObject(COUNT, Integer.class);
+        log.debug("count() returned '{}'", result);
+        return ofNullable(result)
+                .orElseThrow(() -> new RuntimeException(format("Query '%s' returned null", COUNT)));
     }
 
     @Override
     public void deleteById(Integer id) {
-        LOGGER.debug("Deleting classrooms by id - {}", id);
+        log.debug("deleteById('{}') called", id);
         jdbcTemplate.update(DELETE_CLASS_ROOM, id);
+        log.debug("deleteById('{}') was success", id);
     }
 
     @Override
     public void delete(ClassRoom classRoom) {
-        LOGGER.debug("Deleting classrooms - {}", classRoom);
+        log.debug("delete('{}') called", classRoom);
         jdbcTemplate.update(DELETE_CLASS_ROOM, classRoom.getId());
+        log.debug("delete('{}') was success", classRoom);
     }
 
     @Override
     public void deleteAll() {
-        LOGGER.debug("Deleting all classrooms");
+        log.debug("deleteAll() called");
         jdbcTemplate.update(DELETE_ALL);
+        log.debug("deleteAll() was success");
     }
 }

@@ -21,8 +21,8 @@ import static java.util.Optional.ofNullable;
 @Component
 @RequiredArgsConstructor
 public class StudentDAO implements CrudOperations<Student, Integer> {
-    private JdbcTemplate jdbcTemplate;
-    private StudentMapper studentMapper;
+    private final JdbcTemplate jdbcTemplate;
+    private final StudentMapper studentMapper;
 
     public static final String SAVE_STUDENT = "INSERT INTO students(name, lastName) VALUES (?, ?)";
     public static final String FIND_BY_ID = "SELECT * FROM students WHERE id = ?";
@@ -57,7 +57,7 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
     public Optional<Student> findById(Integer id) {
         log.debug("findById('{}') called", id);
         Student result = jdbcTemplate.queryForObject(FIND_BY_ID, studentMapper, id);
-        log.debug("method findById('{}') returned '{}'", id, result);
+        log.debug("findById('{}') returned '{}'", id, result);
         return ofNullable(result);
     }
 
@@ -98,7 +98,7 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
     public void delete(Student student) {
         log.debug("delete({}) called", student);
         jdbcTemplate.update(DELETE_GROUP, student.getId());
-        log.debug("deleteById('{}') was success", student);
+        log.debug("delete('{}') was success", student);
     }
 
     @Override
@@ -106,6 +106,5 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
         log.debug("deleteAll() called");
         jdbcTemplate.update(DELETE_ALL);
         log.debug("deleteAll() was success");
-
     }
 }

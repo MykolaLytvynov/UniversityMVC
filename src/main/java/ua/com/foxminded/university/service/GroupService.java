@@ -1,10 +1,9 @@
 package ua.com.foxminded.university.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.GroupDAO;
-import ua.com.foxminded.university.dao.mapper.GroupMapper;
-import ua.com.foxminded.university.dao.mapper.StudentMapper;
 import ua.com.foxminded.university.entities.Course;
 import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.person.Student;
@@ -14,49 +13,77 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@Service
+@Slf4j
+@RequiredArgsConstructor
 public class GroupService {
 
-    @Autowired
-    private GroupDAO groupDAO;
+    private final GroupDAO groupDAO;
 
     public Group save(Group group) {
-        return groupDAO.save(group);
+        log.debug("save('{}') called", group);
+        Group result = groupDAO.save(group);
+        log.debug("save('{}') returned '{}'", group, result);
+        return result;
     }
 
     public Group findById(Integer id) {
-        return groupDAO.findById(id).orElseThrow(() -> new NotFoundException("Group not found by id = " + id));
+        log.debug("findById('{}') called", id);
+        Group result = groupDAO.findById(id)
+                .orElseThrow(() -> new NotFoundException("Group not found by id = " + id));
+        log.debug("findById('{}') returned '{}'", id, result);
+        return result;
     }
 
     public boolean existsById(Integer id) {
-        return groupDAO.existsById(id);
+        log.debug("existsById('{}') called", id);
+        boolean result = groupDAO.existsById(id);
+        log.debug("existsById('{}') returned '{}'", id, result);
+        return result;
     }
 
     public List<Group> findAll() {
-        return groupDAO.findAll();
+        log.debug("findAll() called");
+        List<Group> result = groupDAO.findAll();
+        log.debug("findAll() returned '{}'", result);
+        return result;
     }
 
     public long count() {
-        return groupDAO.count();
+        log.debug("count() called");
+        long result = groupDAO.count();
+        log.debug("count() returned '{}'", result);
+        return result;
     }
 
     public void deleteById(Integer id) {
+        log.debug("deleteById('{}') called", id);
         groupDAO.deleteById(id);
+        log.debug("deleteById('{}') was success", id);
     }
 
     public void delete(Group group) {
+        log.debug("delete('{}') called", group);
         groupDAO.delete(group);
+        log.debug("delete('{}') was success", group);
     }
 
     public void deleteAll() {
+        log.debug("deleteAll() called");
         groupDAO.deleteAll();
+        log.debug("deleteAll() was success");
     }
 
     public void addGroupToCourse(Course course, Group group) {
+        log.debug("addGroupToCourse('{}','{}') called", course, group);
         groupDAO.addGroupToCourse(course, group);
+        log.debug("addGroupToCourse('{}','{}') was success", course, group);
     }
 
-    public List<Student> getStudentsOneGroup(Integer id) {
-        return groupDAO.getStudentsOneGroup(id);
+    public List<Student> getStudentsOneGroup(Integer groupId) {
+        log.debug("getStudentsOneGroup('{}') called", groupId);
+        List<Student> result = groupDAO.getStudentsOneGroup(groupId);
+        log.debug("getStudentsOneGroup('{}') returned '{}'", groupId, result);
+        return result;
     }
 }

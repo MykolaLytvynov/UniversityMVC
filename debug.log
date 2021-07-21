@@ -1,0 +1,133 @@
+2021-07-21 21:02:59,533 [DEBUG] [main            ] [ation.AnnotationConfigApplicationContext] - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@13c27452
+2021-07-21 21:02:59,554 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'org.springframework.context.annotation.internalConfigurationAnnotationProcessor'
+2021-07-21 21:02:59,654 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\ClassRoomDAO.class]
+2021-07-21 21:02:59,655 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\CourseDAO.class]
+2021-07-21 21:02:59,657 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\EmployeeDAO.class]
+2021-07-21 21:02:59,658 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\FacultyDAO.class]
+2021-07-21 21:02:59,659 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\GroupDAO.class]
+2021-07-21 21:02:59,662 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\LessonDAO.class]
+2021-07-21 21:02:59,663 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\PositionDAO.class]
+2021-07-21 21:02:59,664 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\StudentDAO.class]
+2021-07-21 21:02:59,665 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\SubjectDAO.class]
+2021-07-21 21:02:59,666 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\mapper\ClassRoomMapper.class]
+2021-07-21 21:02:59,666 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\mapper\CourseMapper.class]
+2021-07-21 21:02:59,667 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\mapper\EmployeeMapper.class]
+2021-07-21 21:02:59,667 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\mapper\FacultyMapper.class]
+2021-07-21 21:02:59,668 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\mapper\GroupMapper.class]
+2021-07-21 21:02:59,669 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\mapper\LessonMapper.class]
+2021-07-21 21:02:59,670 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\mapper\PositionMapper.class]
+2021-07-21 21:02:59,670 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\mapper\StudentMapper.class]
+2021-07-21 21:02:59,671 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\dao\mapper\SubjectMapper.class]
+2021-07-21 21:02:59,686 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\service\ClassRoomService.class]
+2021-07-21 21:02:59,686 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\service\CourseService.class]
+2021-07-21 21:02:59,687 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\service\EmployeeService.class]
+2021-07-21 21:02:59,687 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\service\FacultyService.class]
+2021-07-21 21:02:59,687 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\service\GroupService.class]
+2021-07-21 21:02:59,687 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\service\LessonService.class]
+2021-07-21 21:02:59,687 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\service\PositionService.class]
+2021-07-21 21:02:59,687 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\service\StudentService.class]
+2021-07-21 21:02:59,687 [DEBUG] [main            ] [nnotation.ClassPathBeanDefinitionScanner] - Identified candidate component class: file [C:\springidea\University\target\classes\ua\com\foxminded\university\service\SubjectService.class]
+2021-07-21 21:02:59,834 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'org.springframework.context.event.internalEventListenerProcessor'
+2021-07-21 21:02:59,836 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'org.springframework.context.event.internalEventListenerFactory'
+2021-07-21 21:02:59,838 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'org.springframework.context.annotation.internalAutowiredAnnotationProcessor'
+2021-07-21 21:02:59,845 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'applicationConfig'
+2021-07-21 21:02:59,854 [DEBUG] [main            ] [core.env.PropertySourcesPropertyResolver] - Found key 'postgres.driver' in PropertySource 'class path resource [application.properties]' with value of type String
+2021-07-21 21:02:59,856 [DEBUG] [main            ] [core.env.PropertySourcesPropertyResolver] - Found key 'postgres.url' in PropertySource 'class path resource [application.properties]' with value of type String
+2021-07-21 21:02:59,856 [DEBUG] [main            ] [core.env.PropertySourcesPropertyResolver] - Found key 'postgres.username' in PropertySource 'class path resource [application.properties]' with value of type String
+2021-07-21 21:02:59,857 [DEBUG] [main            ] [core.env.PropertySourcesPropertyResolver] - Found key 'postgres.password' in PropertySource 'class path resource [application.properties]' with value of type String
+2021-07-21 21:02:59,857 [DEBUG] [main            ] [core.env.PropertySourcesPropertyResolver] - Found key 'h2.driver' in PropertySource 'class path resource [application.properties]' with value of type String
+2021-07-21 21:02:59,857 [DEBUG] [main            ] [core.env.PropertySourcesPropertyResolver] - Found key 'h2.url' in PropertySource 'class path resource [application.properties]' with value of type String
+2021-07-21 21:02:59,857 [DEBUG] [main            ] [core.env.PropertySourcesPropertyResolver] - Found key 'h2.username' in PropertySource 'class path resource [application.properties]' with value of type String
+2021-07-21 21:02:59,858 [DEBUG] [main            ] [core.env.PropertySourcesPropertyResolver] - Found key 'h2.password' in PropertySource 'class path resource [application.properties]' with value of type String
+2021-07-21 21:02:59,858 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'classRoomDAO'
+2021-07-21 21:02:59,869 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'jdbcTemplate'
+2021-07-21 21:02:59,892 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'dataSource'
+2021-07-21 21:02:59,911 [DEBUG] [main            ] [.jdbc.datasource.DriverManagerDataSource] - Loaded JDBC driver: org.postgresql.Driver
+2021-07-21 21:02:59,924 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'classRoomMapper'
+2021-07-21 21:02:59,924 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'classRoomDAO' via constructor to bean named 'jdbcTemplate'
+2021-07-21 21:02:59,924 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'classRoomDAO' via constructor to bean named 'classRoomMapper'
+2021-07-21 21:02:59,924 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'courseDAO'
+2021-07-21 21:02:59,936 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'courseMapper'
+2021-07-21 21:02:59,938 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'groupMapper'
+2021-07-21 21:02:59,940 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'courseDAO' via constructor to bean named 'jdbcTemplate'
+2021-07-21 21:02:59,940 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'courseDAO' via constructor to bean named 'courseMapper'
+2021-07-21 21:02:59,940 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'courseDAO' via constructor to bean named 'groupMapper'
+2021-07-21 21:02:59,941 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'employeeDAO'
+2021-07-21 21:02:59,944 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'employeeMapper'
+2021-07-21 21:02:59,945 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'employeeDAO' via constructor to bean named 'jdbcTemplate'
+2021-07-21 21:02:59,945 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'employeeDAO' via constructor to bean named 'employeeMapper'
+2021-07-21 21:02:59,945 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'facultyDAO'
+2021-07-21 21:02:59,948 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'facultyMapper'
+2021-07-21 21:02:59,948 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'facultyDAO' via constructor to bean named 'jdbcTemplate'
+2021-07-21 21:02:59,949 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'facultyDAO' via constructor to bean named 'facultyMapper'
+2021-07-21 21:02:59,949 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'facultyDAO' via constructor to bean named 'courseMapper'
+2021-07-21 21:02:59,949 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'groupDAO'
+2021-07-21 21:02:59,951 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'studentMapper'
+2021-07-21 21:02:59,952 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'groupDAO' via constructor to bean named 'jdbcTemplate'
+2021-07-21 21:02:59,952 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'groupDAO' via constructor to bean named 'groupMapper'
+2021-07-21 21:02:59,952 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'groupDAO' via constructor to bean named 'studentMapper'
+2021-07-21 21:02:59,953 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'lessonDAO'
+2021-07-21 21:02:59,955 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'lessonMapper'
+2021-07-21 21:02:59,956 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'lessonDAO' via constructor to bean named 'jdbcTemplate'
+2021-07-21 21:02:59,956 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'lessonDAO' via constructor to bean named 'lessonMapper'
+2021-07-21 21:02:59,957 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'positionDAO'
+2021-07-21 21:02:59,960 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'positionMapper'
+2021-07-21 21:02:59,960 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'positionDAO' via constructor to bean named 'jdbcTemplate'
+2021-07-21 21:02:59,960 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'positionDAO' via constructor to bean named 'positionMapper'
+2021-07-21 21:02:59,961 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'studentDAO'
+2021-07-21 21:02:59,964 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'studentDAO' via constructor to bean named 'jdbcTemplate'
+2021-07-21 21:02:59,964 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'studentDAO' via constructor to bean named 'studentMapper'
+2021-07-21 21:02:59,965 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'subjectDAO'
+2021-07-21 21:02:59,968 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'subjectMapper'
+2021-07-21 21:02:59,968 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'subjectDAO' via constructor to bean named 'jdbcTemplate'
+2021-07-21 21:02:59,968 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'subjectDAO' via constructor to bean named 'subjectMapper'
+2021-07-21 21:02:59,969 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'classRoomService'
+2021-07-21 21:02:59,972 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'classRoomService' via constructor to bean named 'classRoomDAO'
+2021-07-21 21:02:59,972 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'courseService'
+2021-07-21 21:02:59,974 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'courseService' via constructor to bean named 'courseDAO'
+2021-07-21 21:02:59,975 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'employeeService'
+2021-07-21 21:02:59,977 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'employeeService' via constructor to bean named 'employeeDAO'
+2021-07-21 21:02:59,977 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'facultyService'
+2021-07-21 21:02:59,979 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'facultyService' via constructor to bean named 'facultyDAO'
+2021-07-21 21:02:59,980 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'groupService'
+2021-07-21 21:02:59,981 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'groupService' via constructor to bean named 'groupDAO'
+2021-07-21 21:02:59,981 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'lessonService'
+2021-07-21 21:02:59,983 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'lessonService' via constructor to bean named 'lessonDAO'
+2021-07-21 21:02:59,984 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'positionService'
+2021-07-21 21:02:59,985 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'positionService' via constructor to bean named 'positionDAO'
+2021-07-21 21:02:59,986 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'studentService'
+2021-07-21 21:02:59,987 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'studentService' via constructor to bean named 'studentDAO'
+2021-07-21 21:02:59,988 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'subjectService'
+2021-07-21 21:02:59,990 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Autowiring by type from bean name 'subjectService' via constructor to bean named 'subjectDAO'
+2021-07-21 21:02:59,991 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'dataSourceForTest'
+2021-07-21 21:02:59,993 [DEBUG] [main            ] [.jdbc.datasource.DriverManagerDataSource] - Loaded JDBC driver: org.h2.Driver
+2021-07-21 21:02:59,993 [DEBUG] [main            ] [ctory.support.DefaultListableBeanFactory] - Creating shared instance of singleton bean 'jdbcTemplateForTest'
+2021-07-21 21:03:00,027 [DEBUG] [main            ] [inded.university.service.PositionService] - count() called
+2021-07-21 21:03:00,027 [DEBUG] [main            ] [com.foxminded.university.dao.PositionDAO] - count() called
+2021-07-21 21:03:00,061 [DEBUG] [main            ] [g.springframework.jdbc.core.JdbcTemplate] - Executing SQL query [SELECT COUNT(*) FROM positions]
+2021-07-21 21:03:00,067 [DEBUG] [main            ] [ramework.jdbc.datasource.DataSourceUtils] - Fetching JDBC Connection from DataSource
+2021-07-21 21:03:00,067 [DEBUG] [main            ] [.jdbc.datasource.DriverManagerDataSource] - Creating new JDBC DriverManager Connection to [jdbc:postgresql://localhost:5432/university11task]
+2021-07-21 21:03:00,687 [DEBUG] [main            ] [com.foxminded.university.dao.PositionDAO] - count() returned '2'
+2021-07-21 21:03:00,689 [DEBUG] [main            ] [inded.university.service.PositionService] - count() returned '2'
+2021-07-21 21:03:00,689 [DEBUG] [main            ] [inded.university.service.PositionService] - findAll() called
+2021-07-21 21:03:00,689 [DEBUG] [main            ] [com.foxminded.university.dao.PositionDAO] - findAll() called
+2021-07-21 21:03:00,689 [DEBUG] [main            ] [g.springframework.jdbc.core.JdbcTemplate] - Executing SQL query [SELECT * FROM positions]
+2021-07-21 21:03:00,689 [DEBUG] [main            ] [ramework.jdbc.datasource.DataSourceUtils] - Fetching JDBC Connection from DataSource
+2021-07-21 21:03:00,689 [DEBUG] [main            ] [.jdbc.datasource.DriverManagerDataSource] - Creating new JDBC DriverManager Connection to [jdbc:postgresql://localhost:5432/university11task]
+2021-07-21 21:03:00,776 [DEBUG] [main            ] [com.foxminded.university.dao.PositionDAO] - findAll() returned '[Position(id=2, name=Teacher                            ), Position(id=4, name=Manager                            )]'
+2021-07-21 21:03:00,780 [DEBUG] [main            ] [inded.university.service.PositionService] - findAll() returned '[Position(id=2, name=Teacher                            ), Position(id=4, name=Manager                            )]'
+2021-07-21 21:03:00,780 [DEBUG] [main            ] [minded.university.service.SubjectService] - existsById('2') called
+2021-07-21 21:03:00,780 [DEBUG] [main            ] [.com.foxminded.university.dao.SubjectDAO] - existsById('2') called
+2021-07-21 21:03:00,780 [DEBUG] [main            ] [g.springframework.jdbc.core.JdbcTemplate] - Executing prepared SQL query
+2021-07-21 21:03:00,780 [DEBUG] [main            ] [g.springframework.jdbc.core.JdbcTemplate] - Executing prepared SQL statement [SELECT COUNT(*) FROM subjects WHERE id = ?]
+2021-07-21 21:03:00,780 [DEBUG] [main            ] [ramework.jdbc.datasource.DataSourceUtils] - Fetching JDBC Connection from DataSource
+2021-07-21 21:03:00,780 [DEBUG] [main            ] [.jdbc.datasource.DriverManagerDataSource] - Creating new JDBC DriverManager Connection to [jdbc:postgresql://localhost:5432/university11task]
+2021-07-21 21:03:00,896 [DEBUG] [main            ] [.com.foxminded.university.dao.SubjectDAO] - existsById('2') returned 'true'
+2021-07-21 21:03:00,896 [DEBUG] [main            ] [minded.university.service.SubjectService] - existsById('2') returned 'true'
+2021-07-21 21:03:00,896 [DEBUG] [main            ] [minded.university.service.SubjectService] - findAll() called
+2021-07-21 21:03:00,896 [DEBUG] [main            ] [.com.foxminded.university.dao.SubjectDAO] - findAll() called
+2021-07-21 21:03:00,896 [DEBUG] [main            ] [g.springframework.jdbc.core.JdbcTemplate] - Executing SQL query [SELECT * FROM subjects]
+2021-07-21 21:03:00,896 [DEBUG] [main            ] [ramework.jdbc.datasource.DataSourceUtils] - Fetching JDBC Connection from DataSource
+2021-07-21 21:03:00,897 [DEBUG] [main            ] [.jdbc.datasource.DriverManagerDataSource] - Creating new JDBC DriverManager Connection to [jdbc:postgresql://localhost:5432/university11task]
+2021-07-21 21:03:00,967 [DEBUG] [main            ] [.com.foxminded.university.dao.SubjectDAO] - findAll() returned '[Subject(id=2, name=Chemie                             , description=AboutChemie                                            , teacherId=1, amountLessons=25), Subject(id=1, name=Biologie                           , description=AboutBio                                               , teacherId=2, amountLessons=20)]'
+2021-07-21 21:03:00,973 [DEBUG] [main            ] [minded.university.service.SubjectService] - findAll() returned '[Subject(id=2, name=Chemie                             , description=AboutChemie                                            , teacherId=1, amountLessons=25), Subject(id=1, name=Biologie                           , description=AboutBio                                               , teacherId=2, amountLessons=20)]'

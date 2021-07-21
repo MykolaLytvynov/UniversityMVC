@@ -1,6 +1,7 @@
 package ua.com.foxminded.university.dao.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import ua.com.foxminded.university.entities.Lesson;
 
 import java.sql.ResultSet;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Component
 public class LessonMapper implements RowMapper<Lesson> {
     @Override
     public Lesson mapRow(ResultSet resultSet, int i) throws SQLException {

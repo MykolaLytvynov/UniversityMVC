@@ -7,8 +7,7 @@ import ua.com.foxminded.university.dao.*;
 import ua.com.foxminded.university.entities.*;
 import ua.com.foxminded.university.entities.person.Employee;
 import ua.com.foxminded.university.entities.person.Student;
-import ua.com.foxminded.university.service.ClassRoomService;
-import ua.com.foxminded.university.service.CourseService;
+import ua.com.foxminded.university.service.*;
 
 
 import java.time.LocalDateTime;
@@ -24,8 +23,11 @@ public class University {
 
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
-//        context.getBean("classRoomService", ClassRoomService.class).findAll().stream().forEach(System.out::println);
 
-        context.getBean("classRoomService", ClassRoomService.class).deleteById(4);
+        context.getBean("positionService", PositionService.class).count();
+        context.getBean("positionService", PositionService.class).findAll();
+
+        context.getBean("subjectService", SubjectService.class).existsById(2);
+        context.getBean("subjectService", SubjectService.class).findAll();
     }
 }

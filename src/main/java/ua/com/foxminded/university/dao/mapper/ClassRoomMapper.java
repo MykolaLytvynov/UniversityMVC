@@ -1,11 +1,13 @@
 package ua.com.foxminded.university.dao.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import ua.com.foxminded.university.entities.ClassRoom;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Component
 public class ClassRoomMapper implements RowMapper<ClassRoom> {
     @Override
     public ClassRoom mapRow(ResultSet resultSet, int i) throws SQLException {

@@ -1,5 +1,7 @@
 package ua.com.foxminded.university.dao;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -7,6 +9,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.university.dao.mapper.PositionMapper;
+import ua.com.foxminded.university.entities.Lesson;
 import ua.com.foxminded.university.entities.Position;
 
 import java.sql.Connection;
@@ -14,16 +17,19 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
-public class PositionDAO implements CrudOperations<Position, Integer>{
-    private JdbcTemplate jdbcTemplate;
+import static java.lang.String.format;
+import static java.util.Optional.ofNullable;
 
-    @Autowired
-    public PositionDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+@Component
+@Slf4j
+@RequiredArgsConstructor
+public class PositionDAO implements CrudOperations<Position, Integer> {
+    private final JdbcTemplate jdbcTemplate;
+    private final PositionMapper positionMapper;
+
 
     public static final String SAVE_POSITION = "INSERT INTO positions (name) VALUES (?)";
     public static final String FIND_BY_ID = "SELECT * FROM positions WHERE id = ?";
@@ -36,6 +42,7 @@ public class PositionDAO implements CrudOperations<Position, Integer>{
 
     @Override
     public Position save(Position position) {
+        log.debug("save('{}') called", position);
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(new PreparedStatementCreator() {
@@ -46,46 +53,65 @@ public class PositionDAO implements CrudOperations<Position, Integer>{
             }
         }, keyHolder);
 
-        position.setId((int)keyHolder.getKeys().get("id"));
+        Integer id = ofNullable(keyHolder.getKeys())
+                .map(map -> (Integer) map.get("id"))
+                .orElseThrow(() -> new RuntimeException(format("Query '%s' didn't returned it!", SAVE_POSITION)));
+        position.setId(id);
+        log.debug("save(Position) was success. Returned '{}'", position);
         return position;
     }
 
     @Override
-    public Position findById(Integer id) {
-        return jdbcTemplate.query(FIND_BY_ID, new Object[]{id}, new PositionMapper())
-                .stream()
-                .findAny()
-                .orElse(null);
+    public Optional<Position> findById(Integer id) {
+        log.debug("findById('{}') called", id);
+        Position result = jdbcTemplate.queryForObject(FIND_BY_ID, positionMapper, id);
+        log.debug("findById('{}') returned '{}'", id, result);
+        return ofNullable(result);
     }
 
     @Override
     public boolean existsById(Integer id) {
-        int count = jdbcTemplate.queryForObject(EXISTS_BY_ID, Integer.class, id);
-        return count > 0;
+        log.debug("existsById('{}') called", id);
+        Integer count = jdbcTemplate.queryForObject(EXISTS_BY_ID, Integer.class, id);
+        boolean result = count != null && count > 0;
+        log.debug("existsById('{}') returned '{}'", id, result);
+        return result;
     }
 
     @Override
     public List<Position> findAll() {
-        return jdbcTemplate.query(FIND_ALL, new PositionMapper());
+        log.debug("findAll() called");
+        List<Position> result = jdbcTemplate.query(FIND_ALL, positionMapper);
+        log.debug("findAll() returned '{}'", result);
+        return result;
     }
 
     @Override
     public long count() {
-        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+        log.debug("count() called");
+        long result = jdbcTemplate.queryForObject(COUNT, Integer.class);
+        log.debug("count() returned '{}'", result);
+        return result;
     }
 
     @Override
     public void deleteById(Integer id) {
+        log.debug("deleteById('{}') called", id);
         jdbcTemplate.update(DELETE_POSITION, id);
+        log.debug("deleteById('{}') was success", id);
     }
 
     @Override
     public void delete(Position position) {
+        log.debug("delete('{}') called", position);
         jdbcTemplate.update(DELETE_POSITION, position.getId());
+        log.debug("delete('{}') was success", position);
     }
 
     @Override
     public void deleteAll() {
+        log.debug("deleteAll() called");
         jdbcTemplate.update(DELETE_ALL);
+        log.debug("deleteAll() was success");
     }
 }

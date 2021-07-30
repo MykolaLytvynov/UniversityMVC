@@ -3,6 +3,7 @@ package ua.com.foxminded.university;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ua.com.foxminded.university.configuration.ApplicationConfig;
+import ua.com.foxminded.university.configuration.MyWebMvcConfig;
 import ua.com.foxminded.university.dao.*;
 import ua.com.foxminded.university.entities.*;
 import ua.com.foxminded.university.entities.person.Employee;
@@ -24,10 +25,11 @@ public class University {
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
 
-        context.getBean("positionService", PositionService.class).count();
-        context.getBean("positionService", PositionService.class).findAll();
+//        context.getBean("positionService", PositionService.class).count();
+//        context.getBean("positionService", PositionService.class).findAll();
+//
+//        context.getBean("subjectService", SubjectService.class).existsById(2);
+//        context.getBean("subjectService", SubjectService.class).findAll();
 
-        context.getBean("subjectService", SubjectService.class).existsById(2);
-        context.getBean("subjectService", SubjectService.class).findAll();
     }
 }

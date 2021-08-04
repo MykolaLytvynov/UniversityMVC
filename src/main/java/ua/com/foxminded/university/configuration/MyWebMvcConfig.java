@@ -1,6 +1,7 @@
 package ua.com.foxminded.university.configuration;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -15,12 +16,17 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 
 @Configuration
-@ComponentScan("ua.com.foxminded.university.controllers")
+@ComponentScan("ua.com.foxminded.university")
 @EnableWebMvc
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class MyWebMvcConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
+
+    @Autowired
+    public MyWebMvcConfig(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {

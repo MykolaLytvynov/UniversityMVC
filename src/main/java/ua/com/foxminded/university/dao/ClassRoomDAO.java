@@ -2,26 +2,20 @@ package ua.com.foxminded.university.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.university.dao.mapper.ClassRoomMapper;
 import ua.com.foxminded.university.entities.ClassRoom;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
 import static java.lang.String.format;
+import static java.util.Optional.ofNullable;
 
 @Slf4j
 @Component
@@ -44,13 +38,11 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
         log.debug("save('{}') called", classRoom);
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(SAVE_CLASS_ROOM, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, classRoom.getName());
-                ps.setString(2, classRoom.getDescription());
-                return ps;
-            }
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(SAVE_CLASS_ROOM, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, classRoom.getName());
+            ps.setString(2, classRoom.getDescription());
+            return ps;
         }, keyHolder);
 
         Integer id = ofNullable(keyHolder.getKeys())
@@ -75,7 +67,7 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
         log.debug("existsById('{}') called", id);
         Integer count = jdbcTemplate.queryForObject(EXISTS_BY_ID, Integer.class, id);
         boolean result = count != null && count > 0;
-        log.debug("existsById('{}') returned '{}'", result);
+        log.debug("existsById('{}') returned '{}'", id, result);
         return result;
     }
 

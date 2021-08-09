@@ -32,6 +32,8 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
     private static final String DELETE_CLASS_ROOM = "DELETE FROM classRoom WHERE id = ?";
     private static final String DELETE_ALL = "DELETE FROM classRoom";
 
+    private static final String UPDATE = "UPDATE classRoom SET name = ?, description = ? WHERE id = ?";
+
 
     @Override
     public ClassRoom save(ClassRoom classRoom) {
@@ -107,5 +109,9 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
         log.debug("deleteAll() called");
         jdbcTemplate.update(DELETE_ALL);
         log.debug("deleteAll() was success");
+    }
+
+    public void update(ClassRoom classRoom) {
+        jdbcTemplate.update(UPDATE, classRoom.getName(), classRoom.getDescription(), classRoom.getId());
     }
 }

@@ -29,7 +29,6 @@ public class University {
 //        context.getBean("positionService", PositionService.class).findAll();
 //
 //        context.getBean("subjectService", SubjectService.class).existsById(2);
-//        context.getBean("subjectService", SubjectService.class).findAll();
-
+//        context.getBean("studentService", StudentService.class).findAll();
     }
 }

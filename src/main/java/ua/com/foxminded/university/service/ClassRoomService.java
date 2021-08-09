@@ -70,4 +70,8 @@ public class ClassRoomService {
         classRoomDAO.deleteAll();
         log.debug("deleteAll() was success");
     }
+
+    public void update(ClassRoom classRoom) {
+        classRoomDAO.update(classRoom);
+    }
 }

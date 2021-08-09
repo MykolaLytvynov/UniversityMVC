@@ -22,14 +22,14 @@ public class StudentController {
     public String getAll(Model model) {
         List<Student> students = studentService.findAll();
         model.addAttribute("students", students);
-        return "students";
+        return "students/students";
     }
 
     @PostMapping("/create")
     public String addNew(@RequestParam String firstName,
                          @RequestParam String lastName) {
         studentService.save(Student.builder().name(firstName).lastName(lastName).build());
-        return "redirect:/students";
+        return "students/students";
     }
 
     @GetMapping("update/{id}")
@@ -46,19 +46,19 @@ public class StudentController {
         student.setName(firstName);
         student.setLastName(lastName);
         studentService.save(student);
-        return "redirect:/students";
+        return "students/students";
     }
 
     @GetMapping("/delete")
     public String delete(@PathVariable Integer id) {
         studentService.delete(studentService.findById(id));
-        return "redirect:/students";
+        return "students/students";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable Integer id) {
         studentService.delete(studentService.findById(id));
-        return "redirect:/students";
+        return "students/students";
     }
 
 }

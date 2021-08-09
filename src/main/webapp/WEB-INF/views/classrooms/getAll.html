@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All classrooms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<h3>List of classrooms</h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Classrooms</li>
+    </ol>
+</nav>
+
+<a href="/classrooms/new">Add new classroom</a>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${classrooms.isEmpty()}">
+        <td colspan="3">No classrooms available</td>
+    </tr>
+    <tr th:each="classroom : ${classrooms}">
+        <td th:text="${classroom.id}" scope="row"></td>
+        <td th:text="${classroom.name}" scope="row"></td>
+        <td th:text="${classroom.description}" scope="row"></td>
+        <td>
+            <div><a th:href="@{/classrooms/{id}(id = ${classroom.id})}" type="button" class="btn btn-primary btn-sm">view</a>
+                <a th:href="@{/classrooms/{id}/edit(id=${classroom.id})}" type="button" class="btn btn-secondary btn-sm">change</a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+</div>
+</body>
+</html>

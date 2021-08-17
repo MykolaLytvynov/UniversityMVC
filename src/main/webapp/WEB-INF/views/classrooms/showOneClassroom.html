@@ -9,13 +9,13 @@
 </head>
 <body>
 
-<h3 th:text="'Classroom id: ' + ${classroom.id}"></h3>
+<h3 th:text="${classroom.name} + ' classroom'"></h3>
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a href="/classrooms">Classrooms</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Classroom id: <span th:text="${classroom.id}">id</span></li>
+        <li class="breadcrumb-item active" aria-current="page"><span th:text="${classroom.name}">name</span> classroom</li>
     </ol>
 </nav>
 

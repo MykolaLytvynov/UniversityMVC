@@ -79,4 +79,10 @@ public class FacultyService {
         log.debug("getCoursesOneFaculty('{}') returned '{}'", facultyId, result);
         return result;
     }
+
+    public void update(Faculty faculty) {
+        log.debug("update('{}') called", faculty);
+        facultyDAO.update(faculty);
+        log.debug("update('{}') was success", faculty);
+    }
 }

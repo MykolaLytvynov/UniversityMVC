@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Faculty id: ' + ${faculty.id}">faculty</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<h3 th:text="${faculty.name} + ' faculty'"></h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/faculties">Faculties</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><span th:text="${faculty.name}"/> faculty</li>
+    </ol>
+</nav>
+
+<p><strong>ID: </strong> <span th:text="${faculty.id}"></span></p>
+<p><strong>Name: </strong> <span th:text="${faculty.name}"></span></p>
+<p><strong>Description: </strong> <span th:text="${faculty.description}"></span></p>
+
+<div><a th:href="@{/faculties/{id}/edit(id = ${faculty.id})}" type="button" class="btn btn-primary btn-sm">Edit</a>
+    <form th:method="DELETE" th:action="@{/faculties/{id}(id = ${faculty.id})}">
+        <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
+    </form>
+</div>
+
+<h4>Courses:</h4>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">Course <a th:href="@{/faculties/{idFaculty}/courses/new(idFaculty = ${faculty.id})}">(NEW COURSE)</a></th>
+        <th scope="col">Groups</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${faculty.getCourses().isEmpty()}">
+        <td colspan="2">No courses</td>
+    </tr>
+    <tr th:each="course : ${faculty.getCourses()}">
+        <td scope="row">
+            <a th:href="@{/faculties/{idFaculty}/courses/{id}(id = ${course.getId()}, idFaculty = ${course.facultyId})}" th:text="${course.getNumberCourse} + ' course'"></a>
+        </td>
+
+        <td scope="row">
+            <p th:each="group : ${course.getGroups()}">
+                <a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{id}(id = ${group.id}, idFaculty = ${course.facultyId}, idCourse =${course.id})}"
+                   th:text="${group.getNumberGroup()} + ' group'"></a>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

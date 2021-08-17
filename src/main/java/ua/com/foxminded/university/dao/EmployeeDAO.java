@@ -124,4 +124,9 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer> {
         log.debug("getAllEmploeesOnePosition('{}') returned '{}'", positionId, result);
         return result;
     }
+
+    @Override
+    public void update(Employee employee) {
+
+    }
 }

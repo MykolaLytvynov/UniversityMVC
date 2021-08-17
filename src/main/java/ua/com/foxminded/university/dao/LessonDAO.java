@@ -140,4 +140,9 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
         jdbcTemplate.update(DELETE_GROUP_FROM_LESSON, group.getId(), lesson.getId());
         log.debug("deleteGroupFromLesson('{}','{}') was success", group, lesson);
     }
+
+    @Override
+    public void update(Lesson lesson) {
+
+    }
 }

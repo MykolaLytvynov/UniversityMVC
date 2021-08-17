@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Group id: ' + ${group.id}">Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<h3 th:text="${course.numberCourse} + ' course ' + ${group.numberGroup} + ' group'"></h3>
+
+<nav aria-label=" breadcrumb">
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a href="/faculties">Faculties</a></li>
+    <li class="breadcrumb-item"><a th:href="@{/faculties/{idFaculty}(idFaculty = ${faculty.id})}"><span
+            th:text="${faculty.name}">name</span> faculty</a></li>
+    <li class="breadcrumb-item"><a
+            th:href="@{/faculties/{idFaculty}/courses/{idCourse}/(idFaculty = ${faculty.id}, idCourse = ${course.id})}"><span
+            th:text="${course.numberCourse}"/> course</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><span th:text="${group.numberGroup}"/> group</li>
+</ol>
+</nav>
+
+
+<p><strong>ID: </strong> <span th:text="${group.id}"></span></p>
+<p><strong>Number group: </strong> <span th:text="${group.numberGroup}"></span></p>
+<a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/new(idFaculty = ${faculty.id}, idCourse = ${course.id}, idGroup = ${group.id})}">NEW
+    STUDENT</a>
+<p><strong>Students:</strong> <span th:text="${group.students.size()}"></span></p>
+
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Last Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${group.students.isEmpty()}">
+        <td colspan="3">No students</td>
+    <tr th:each="student : ${group.students}" }>
+        <td scope="row" th:text="${student.id}"></td>
+        <td scope="row" th:text="${student.name}"></td>
+        <td scope="row" th:text="${student.lastName}"></td>
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>

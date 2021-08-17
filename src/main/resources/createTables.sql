@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS classRoom, faculties, courses, groups, students;
+DROP TABLE IF EXISTS classRoom, faculties, courses, groups, students, groupsLessons, lessons, subjects, employees, positions;
 
 CREATE TABLE classRoom (
     id SERIAL PRIMARY KEY,
@@ -15,14 +15,14 @@ CREATE TABLE faculties (
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
     nummerCourse int NOT NULL,
-    facultyId int,
+    facultyId int NOT NULL,
     FOREIGN KEY (facultyId) REFERENCES faculties (id) ON DELETE CASCADE
 );
 
 CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     nummerGroup int NOT NULL,
-    courseId int,
+    courseId int NOT NULL,
     FOREIGN KEY (courseId) REFERENCES courses (id) ON DELETE CASCADE
 );
 
@@ -30,8 +30,8 @@ CREATE TABLE students (
     id SERIAL PRIMARY KEY,
     name CHARACTER (25) NOT NULL,
     lastName CHARACTER (35) NOT NULL,
-    groupId int,
-    FOREIGN KEY (groupId) REFERENCES groups (id) ON DELETE SET NULL
+    groupId int NOT NULL,
+    FOREIGN KEY (groupId) REFERENCES groups (id) ON DELETE CASCADE
 );
 
 CREATE TABLE positions (

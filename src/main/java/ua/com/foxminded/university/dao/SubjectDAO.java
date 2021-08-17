@@ -129,4 +129,9 @@ public class SubjectDAO implements CrudOperations<Subject, Integer> {
         log.debug("getAllSubjectsOneTeacher('{}') returned '{}'", teacherId, result);
         return result;
     }
+
+    @Override
+    public void update(Subject subject) {
+
+    }
 }

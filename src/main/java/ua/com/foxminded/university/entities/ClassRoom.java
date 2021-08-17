@@ -2,7 +2,6 @@ package ua.com.foxminded.university.entities;
 
 import lombok.*;
 
-//@Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter

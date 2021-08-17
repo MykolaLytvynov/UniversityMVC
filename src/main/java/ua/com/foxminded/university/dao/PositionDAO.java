@@ -114,4 +114,9 @@ public class PositionDAO implements CrudOperations<Position, Integer> {
         jdbcTemplate.update(DELETE_ALL);
         log.debug("deleteAll() was success");
     }
+
+    @Override
+    public void update(Position position) {
+
+    }
 }

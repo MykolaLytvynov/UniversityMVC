@@ -111,6 +111,7 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
         log.debug("deleteAll() was success");
     }
 
+    @Override
     public void update(ClassRoom classRoom) {
         jdbcTemplate.update(UPDATE, classRoom.getName(), classRoom.getDescription(), classRoom.getId());
     }

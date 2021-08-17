@@ -2,9 +2,6 @@ package ua.com.foxminded.university.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -35,16 +32,21 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
     private final GroupMapper groupMapper;
     private final StudentMapper studentMapper;
 
-    public static final String SAVE_GROUP = "INSERT INTO groups (nummerGroup) VALUES (?)";
+    public static final String SAVE_GROUP = "INSERT INTO groups (nummerGroup, courseId) VALUES (?, ?)";
     public static final String FIND_BY_ID = "SELECT * FROM groups WHERE id = ?";
     public static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM groups WHERE id = ?";
     public static final String FIND_ALL = "SELECT * FROM groups";
     public static final String COUNT = "SELECT COUNT(*) FROM groups";
     public static final String DELETE_GROUP = "DELETE FROM groups WHERE id = ?";
     public static final String DELETE_ALL = "DELETE FROM groups";
-    public static final String ADD_GROUP_TO_COURSE = "UPDATE groups SET courseId = ? WHERE id = ?";
 
     public static final String GET_STUDENTS_ONE_GROUP = "SELECT * FROM students WHERE groupId = ?";
+
+
+    // Исправить на обычный апдейт.
+    public static final String ADD_GROUP_TO_COURSE = "UPDATE groups SET courseId = ? WHERE id = ?";
+
+
 
     @Override
     public Group save(Group group) {
@@ -54,7 +56,8 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
         jdbcTemplate.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(SAVE_GROUP, Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, group.getNummerGroup());
+                ps.setInt(1, group.getNumberGroup());
+                ps.setInt(2, group.getCourseId());
                 return ps;
             }
         }, keyHolder);
@@ -139,5 +142,10 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
         List<Student> result = jdbcTemplate.query(GET_STUDENTS_ONE_GROUP, studentMapper, groupId);
         log.debug("getStudentsOneGroup('{}') returned '{}'", groupId, result);
         return result;
+    }
+
+    @Override
+    public void update(Group group) {
+
     }
 }

@@ -2,7 +2,6 @@ package ua.com.foxminded.university.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -33,13 +32,15 @@ public class CourseDAO implements CrudOperations<Course, Integer> {
     private final CourseMapper courseMapper;
     private final GroupMapper groupMapper;
 
-    private static final String SAVE_COURSE = "INSERT INTO courses (nummerCourse) VALUES (?)";
+    private static final String SAVE_COURSE = "INSERT INTO courses (nummerCourse, facultyId) VALUES (?, ?)";
     public static final String FIND_BY_ID = "SELECT * FROM courses WHERE id = ?";
     public static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM courses WHERE id = ?";
     public static final String FIND_ALL = "SELECT * FROM courses";
     public static final String COUNT = "SELECT COUNT(*) FROM courses";
     public static final String DELETE_COURSE = "DELETE FROM courses WHERE id = ?";
     public static final String DELETE_ALL = "DELETE FROM courses";
+
+    // исправить
     public static final String ADD_COURSE_TO_FACULTY = "UPDATE courses SET facultyId = ? WHERE id = ?";
 
 
@@ -53,7 +54,8 @@ public class CourseDAO implements CrudOperations<Course, Integer> {
         jdbcTemplate.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(SAVE_COURSE, Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, course.getNummerCourse());
+                ps.setInt(1, course.getNumberCourse());
+                ps.setInt(2, course.getFacultyId());
                 return ps;
             }
         }, keyHolder);
@@ -93,7 +95,7 @@ public class CourseDAO implements CrudOperations<Course, Integer> {
         log.debug("findAll() called");
         List<Course> result = jdbcTemplate.query(FIND_ALL, courseMapper)
                 .stream()
-                .peek(course -> getGroupsOneCourse(course.getId()))
+                .peek(course -> course.setGroups(getGroupsOneCourse(course.getId())))
                 .collect(Collectors.toList());
 
         log.debug("findAll() returned '{}'", result);
@@ -141,5 +143,9 @@ public class CourseDAO implements CrudOperations<Course, Integer> {
         List<Group> result = jdbcTemplate.query(GET_GROUPS_ONE_COURSE, groupMapper, courseId);
         log.debug("getGroupsOneCourse('{}') returned '{}'", courseId, result);
         return result;
+    }
+
+    @Override
+    public void update(Course course) {
     }
 }

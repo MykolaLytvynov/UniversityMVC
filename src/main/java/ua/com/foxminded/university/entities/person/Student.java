@@ -1,15 +1,16 @@
 package ua.com.foxminded.university.entities.person;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
-import ua.com.foxminded.university.entities.Group;
 
-@Data
+@NoArgsConstructor
+//@RequiredArgsConstructor
+@Getter
+@Setter
 @SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Student extends Person {
+    @NonNull
     private Integer groupId;
 }

@@ -74,12 +74,6 @@ public class GroupService {
         log.debug("deleteAll() was success");
     }
 
-    public void addGroupToCourse(Course course, Group group) {
-        log.debug("addGroupToCourse('{}','{}') called", course, group);
-        groupDAO.addGroupToCourse(course, group);
-        log.debug("addGroupToCourse('{}','{}') was success", course, group);
-    }
-
     public List<Student> getStudentsOneGroup(Integer groupId) {
         log.debug("getStudentsOneGroup('{}') called", groupId);
         List<Student> result = groupDAO.getStudentsOneGroup(groupId);

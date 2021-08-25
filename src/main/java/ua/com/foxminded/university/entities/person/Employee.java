@@ -1,12 +1,11 @@
 package ua.com.foxminded.university.entities.person;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 @SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

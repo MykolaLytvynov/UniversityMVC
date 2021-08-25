@@ -39,6 +39,7 @@ public class PositionDAO implements CrudOperations<Position, Integer> {
     public static final String DELETE_POSITION = "DELETE FROM positions WHERE id = ?";
     public static final String DELETE_ALL = "DELETE FROM positions";
 
+    public static final String UPDATE = "UPDATE positions SET name = ? WHERE id = ?";
 
     @Override
     public Position save(Position position) {
@@ -117,6 +118,8 @@ public class PositionDAO implements CrudOperations<Position, Integer> {
 
     @Override
     public void update(Position position) {
-
+        log.debug("update('{}') called", position);
+        jdbcTemplate.update(UPDATE, position.getName(), position.getId());
+        log.debug("update('{}') was success", position);
     }
 }

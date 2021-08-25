@@ -1,10 +1,12 @@
 package ua.com.foxminded.university.entities;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 import ua.com.foxminded.university.entities.person.Teacher;
 
-@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@Setter
 public class Subject {
     private Integer id;
     @NonNull

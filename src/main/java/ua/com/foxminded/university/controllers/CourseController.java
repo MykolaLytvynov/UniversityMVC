@@ -28,8 +28,6 @@ public class CourseController {
     public String newCourse(@PathVariable("idFaculty") int idFaculty, Model model) {
         model.addAttribute("course", new Course());
         model.addAttribute("faculty", facultyService.findById(idFaculty));
-
-//        model.addAttribute("idFaculty", idFaculty);
         return "/courses/new";
     }
 
@@ -37,5 +35,11 @@ public class CourseController {
     public String createCourse(@ModelAttribute("course") Course course) {
         Course result = courseService.save(course);
         return "redirect:/faculties/{idFaculty}/courses/" + result.getId();
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteCourse(@PathVariable("id") int id) {
+        courseService.deleteById(id);
+        return "redirect:/faculties/{idFaculty}";
     }
 }

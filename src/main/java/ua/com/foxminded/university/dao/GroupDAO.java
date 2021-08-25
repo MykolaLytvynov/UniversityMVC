@@ -42,12 +42,6 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
 
     public static final String GET_STUDENTS_ONE_GROUP = "SELECT * FROM students WHERE groupId = ?";
 
-
-    // Исправить на обычный апдейт.
-    public static final String ADD_GROUP_TO_COURSE = "UPDATE groups SET courseId = ? WHERE id = ?";
-
-
-
     @Override
     public Group save(Group group) {
         log.debug("save('{}') called", group);
@@ -131,11 +125,6 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
         log.debug("deleteAll() was success");
     }
 
-    public void addGroupToCourse(Course course, Group group) {
-        log.debug("addGroupToCourse('{}','{}') called", course, group);
-        jdbcTemplate.update(ADD_GROUP_TO_COURSE, course.getId(), group.getId());
-        log.debug("addGroupToCourse('{}','{}') was success", course, group);
-    }
 
     public List<Student> getStudentsOneGroup(Integer groupId) {
         log.debug("getStudentsOneGroup('{}') called", groupId);
@@ -146,6 +135,5 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
 
     @Override
     public void update(Group group) {
-
     }
 }

@@ -35,8 +35,12 @@ public class SubjectDAO implements CrudOperations<Subject, Integer> {
     public static final String COUNT = "SELECT COUNT(*) FROM subjects";
     public static final String DELETE_SUBJECT = "DELETE FROM subjects WHERE id = ?";
     public static final String DELETE_ALL = "DELETE FROM subjects";
-    public static final String ADD_TEACHER_TO_SUBJECT = "UPDATE subjects SET employeeId = ? WHERE id = ?";
     public static final String GET_ALL_SUBJECTS_ONE_TEACHER = "SELECT * FROM subjects WHERE employeeId = ?";
+    public static final String ADD_TEACHER_TO_SUBJECT = "UPDATE subjects SET employeeId = ? WHERE id = ?";
+    public static final String UPDATE_SUBJECT = "UPDATE subjects SET name = ?, description = ?, employeeId = ?, amountLessons = ? WHERE id = ?";
+    public static final String GET_SUBJECTS_WITHOUT_TEACHER = "SELECT * FROM subjects WHERE employeeId IS NULL";
+
+
 
     @Override
     public Subject save(Subject subject) {
@@ -117,10 +121,10 @@ public class SubjectDAO implements CrudOperations<Subject, Integer> {
     }
 
 
-    public void addSubjecctToTeacher(Subject subject, Employee employee) {
-        log.debug("addSubjecctToTeacher('{}', '{}') called", subject, employee);
-        jdbcTemplate.update(ADD_TEACHER_TO_SUBJECT, employee.getId(), subject.getId());
-        log.debug("addSubjecctToTeacher('{}', '{}') was success", subject, employee);
+    public void addSubjectToTeacher(Integer subjectId, Integer teacherId) {
+        log.debug("addSubjecctToTeacher('{}', '{}') called", subjectId, teacherId);
+        jdbcTemplate.update(ADD_TEACHER_TO_SUBJECT, teacherId, subjectId);
+        log.debug("addSubjecctToTeacher('{}', '{}') was success", subjectId, teacherId);
     }
 
     public List<Subject> getAllSubjectsOneTeacher(Integer teacherId) {
@@ -132,6 +136,17 @@ public class SubjectDAO implements CrudOperations<Subject, Integer> {
 
     @Override
     public void update(Subject subject) {
-
+        log.debug("update('{}') called", subject);
+        jdbcTemplate.update(UPDATE_SUBJECT, subject.getName(), subject.getDescription(),
+                subject.getTeacherId(), subject.getAmountLessons(), subject.getId());
+        log.debug("update('{}') was success", subject);
     }
+
+    public List<Subject> getSubjectsWithoutTeacher() {
+        log.debug("getSubjectsWithoutTeacher() called");
+        List<Subject> result = jdbcTemplate.query(GET_SUBJECTS_WITHOUT_TEACHER, subjectMapper);
+        log.debug("getSubjectsWithoutTeacher() returned '{}', result");
+        return result;
+    }
+
 }

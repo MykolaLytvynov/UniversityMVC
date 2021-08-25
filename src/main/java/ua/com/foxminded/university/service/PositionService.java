@@ -71,4 +71,10 @@ public class PositionService {
         positionDAO.deleteAll();
         log.debug("deleteAll() was success");
     }
+
+    public void update(Position position) {
+        log.debug("update('{}') called", position);
+        positionDAO.update(position);
+        log.debug("update('{}') was success", position);
+    }
 }

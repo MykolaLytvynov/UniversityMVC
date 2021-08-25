@@ -76,12 +76,6 @@ public class CourseService {
         log.debug("deleteAll() was success");
     }
 
-    public void addCourseToFaculty(Course course, Faculty faculty) {
-        log.debug("addCourseToFaculty('{}', '{}') called", course, faculty);
-        courseDAO.addCourseToFaculty(course, faculty);
-        log.debug("addCourseToFaculty('{}', '{}') was success", course, faculty);
-    }
-
     public List<Group> getGroupsOneCourse(Integer courseId) {
         log.debug("getGroupsOneCourse('{}') called", courseId);
         List<Group> result = courseDAO.getGroupsOneCourse(courseId);

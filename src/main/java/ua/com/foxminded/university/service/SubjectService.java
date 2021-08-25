@@ -76,16 +76,29 @@ public class SubjectService {
     }
 
 
-    public void addSubjecctToTeacher(Subject subject, Employee employee) {
-        log.debug("addSubjecctToTeacher('{}', '{}') called", subject, employee);
-        subjectDAO.addSubjecctToTeacher(subject, employee);
-        log.debug("addSubjecctToTeacher('{}', '{}') was success", subject, employee);
+    public void addSubjectToTeacher(Integer subjectId, Integer TeacherId) {
+        log.debug("addSubjecctToTeacher('{}', '{}') called", subjectId, TeacherId);
+        subjectDAO.addSubjectToTeacher(subjectId, TeacherId);
+        log.debug("addSubjecctToTeacher('{}', '{}') was success", subjectId, TeacherId);
     }
 
     public List<Subject> getAllSubjectsOneTeacher(Integer teacherId) {
         log.debug("getAllSubjectsOneTeacher('{}') called", teacherId);
         List<Subject> result = subjectDAO.getAllSubjectsOneTeacher(teacherId);
         log.debug("getAllSubjectsOneTeacher('{}') returned '{}'", teacherId, result);
+        return result;
+    }
+
+    public void update(Subject subject) {
+        log.debug("update('{}') called", subject);
+        subjectDAO.update(subject);
+        log.debug("update('{}') was success", subject);
+    }
+
+    public List<Subject> getSubjectsWithoutTeacher() {
+        log.debug("getSubjectsWithoutTeacher() called");
+        List<Subject> result = subjectDAO.getSubjectsWithoutTeacher();
+        log.debug("getSubjectsWithoutTeacher() returned '{}', result");
         return result;
     }
 }

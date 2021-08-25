@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS classRoom, faculties, courses, groups, students, groupsLessons, lessons, subjects, employees, positions;
+DROP TABLE IF EXISTS groupsLessons;
 
 CREATE TABLE classRoom (
     id SERIAL PRIMARY KEY,
@@ -43,8 +44,8 @@ CREATE TABLE employees (
     id SERIAL PRIMARY KEY,
     name CHARACTER (25) NOT NULL,
     lastName CHARACTER (35) NOT NULL,
-    positionId int,
-    salary int,
+    positionId int NOT NULL,
+    salary int NOT NULL,
     FOREIGN KEY (positionId) REFERENCES positions (id) ON DELETE CASCADE
 );
 

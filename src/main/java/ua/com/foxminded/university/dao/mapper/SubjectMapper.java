@@ -16,7 +16,6 @@ public class SubjectMapper implements RowMapper<Subject> {
                 resultSet.getInt("amountLessons"));
         subject.setId(resultSet.getInt("id"));
         subject.setTeacherId(resultSet.getInt("employeeId"));
-
         return subject;
     }
 }

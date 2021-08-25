@@ -9,9 +9,6 @@ import ua.com.foxminded.university.entities.Course;
 import ua.com.foxminded.university.entities.Faculty;
 import ua.com.foxminded.university.service.FacultyService;
 import ua.com.foxminded.university.service.CourseService;
-import ua.com.foxminded.university.service.GroupService;
-
-import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -20,7 +17,6 @@ import java.util.stream.Collectors;
 public class FacultyController {
     private final FacultyService facultyService;
     private final CourseService courseService;
-//    private final GroupService groupService;
 
     @GetMapping
     public String getAll(Model model) {
@@ -35,14 +31,10 @@ public class FacultyController {
                 .stream()
                 .forEach(course -> course.setGroups(courseService.findById(course.getId()).getGroups()));
         model.addAttribute("faculty", faculty);
-
-        Course newCourse = new Course();
-//        newCourse.setFacultyId(id);
-        model.addAttribute("newCourse", newCourse);
         return "/faculties/showOneFaculty";
     }
 
-    @GetMapping ("/new")
+    @GetMapping("/new")
     public String newFaculty(Model model) {
         model.addAttribute("faculty", new Faculty());
         return "/faculties/new";
@@ -57,7 +49,7 @@ public class FacultyController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
         Faculty result = facultyService.findById(id);
-        if(result != null) {
+        if (result != null) {
             result.setName(result.getName().trim());
             result.setDescription(result.getDescription().trim());
         }
@@ -65,12 +57,12 @@ public class FacultyController {
         return "/faculties/edit";
     }
 
-    @PatchMapping ("/{id}")
+    @PatchMapping("/{id}")
     public String update(@ModelAttribute("faculty") Faculty faculty,
-                         @PathVariable("id") int id) {
+                         @PathVariable("id") int id, Model model) {
         faculty.setId(id);
         facultyService.update(faculty);
-        return "faculties/showOneFaculty";
+        return "redirect:/faculties/{id}";
     }
 
     @DeleteMapping("/{id}")

@@ -5,13 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ua.com.foxminded.university.entities.Course;
+import ua.com.foxminded.university.entities.Faculty;
 import ua.com.foxminded.university.entities.person.Student;
 import ua.com.foxminded.university.service.CourseService;
 import ua.com.foxminded.university.service.FacultyService;
 import ua.com.foxminded.university.service.GroupService;
 import ua.com.foxminded.university.service.StudentService;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -23,12 +26,6 @@ public class StudentController {
     private final CourseService courseService;
     private final GroupService groupService;
 
-    @GetMapping("/students")
-    public String getAll(Model model) {
-        List<Student> students = studentService.findAll();
-        model.addAttribute("students", students);
-        return "/students/getAll";
-    }
 
     @GetMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}")
     public String findById(@PathVariable("idCourse") int idCourse,
@@ -57,52 +54,58 @@ public class StudentController {
     @PostMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/")
     public String create(@ModelAttribute("student") Student student) {
         Student result = studentService.save(student);
-        return "redirect:/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/"+result.getId();
+        return "redirect:/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/" + result.getId();
     }
 
-//    @PostMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/")
-//    public String create(@RequestParam String name,
-//                         @RequestParam String lastName,
-//                         @RequestParam Integer groupId) {
-//        Student result = studentService.save(Student.builder().name(name).lastName(lastName).groupId(groupId).build());
-//        return "redirect:/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/" + result.getId();
-//    }
+    @GetMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}/edit")
+    public String edit(@PathVariable("idCourse") int idCourse,
+                       @PathVariable("idFaculty") int idFaculty,
+                       @PathVariable("idGroup") int idGroup,
+                       @PathVariable("idStudent") int idStudent, Model model) {
+        Student result = studentService.findById(idStudent);
+        if (result != null) {
+            result.setName(result.getName().trim());
+            result.setLastName(result.getLastName().trim());
+        }
+        model.addAttribute("student", result);
+        Faculty faculty = facultyService.findById(idFaculty);
+        model.addAttribute("faculty", faculty);
+        model.addAttribute("course", courseService.findById(idCourse));
+        model.addAttribute("group", groupService.findById(idGroup));
 
+        Map<Integer, String> mapGroupAndCourseOneFaculty = new HashMap<>();
+        faculty.getCourses().stream()
+                .peek(course -> course.setGroups(courseService.getGroupsOneCourse(course.getId())))
+                .collect(Collectors.toList())
+                .stream()
+                .forEach(course -> course.getGroups()
+                        .stream()
+                        .forEach(group -> mapGroupAndCourseOneFaculty.put(group.getId(), course.getNumberCourse() + " course, " + group.getNumberGroup() + " group")));
 
-//    @PostMapping("/create")
-//    public String addNew(@RequestParam String firstName,
-//                         @RequestParam String lastName) {
-//        studentService.save(Student.builder().name(firstName).lastName(lastName).build());
-//        return "getAll";
-//    }
-//
-//    @GetMapping("update/{id}")
-//    public String edit(@PathVariable Integer id, Model model) {
-//        model.addAttribute("student", studentService.findById(id));
-//        return "edit/editStudent";
-//    }
-//
-//    @PostMapping("update")
-//    public String update(@RequestParam Integer id,
-//                         @RequestParam String firstName,
-//                         @RequestParam String lastName) {
-//        Student student = studentService.findById(id);
-//        student.setName(firstName);
-//        student.setLastName(lastName);
-//        studentService.save(student);
-//        return "getAll";
-//    }
-//
-//    @GetMapping("/delete")
-//    public String delete(@PathVariable Integer id) {
-//        studentService.delete(studentService.findById(id));
-//        return "getAll";
-//    }
-//
-//    @GetMapping("/delete/{id}")
-//    public String deleteById(@PathVariable Integer id) {
-//        studentService.delete(studentService.findById(id));
-//        return "getAll";
-//    }
+        model.addAttribute("mapGroupAndCourseOneFaculty", mapGroupAndCourseOneFaculty);
+        return "/students/edit";
+    }
+
+    @PatchMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}")
+    public String update(@ModelAttribute("student") Student student,
+                         @PathVariable("idStudent") int idStudent,
+                         @PathVariable("idCourse") int idCourse,
+                         @PathVariable("idFaculty") int idFaculty,
+                         @PathVariable("idGroup") int idGroup, Model model) {
+        student.setId(idStudent);
+        studentService.update(student);
+        model.addAttribute("student", student);
+        model.addAttribute("faculty", facultyService.findById(idFaculty));
+        model.addAttribute("course", courseService.findById(idCourse));
+        model.addAttribute("group", groupService.findById(idGroup));
+        return "redirect:/faculties/{idFaculty}/courses/" + groupService.findById(student.getGroupId()).getCourseId()
+                + "/groups/" + student.getGroupId() + "/student/" + student.getId();
+    }
+
+    @DeleteMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}")
+    public String delete(@PathVariable("idStudent") int idStudent) {
+        studentService.deleteById(idStudent);
+        return "redirect:/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}";
+    }
 
 }

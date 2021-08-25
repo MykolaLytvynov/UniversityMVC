@@ -1,15 +1,17 @@
 package ua.com.foxminded.university.entities.person;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import ua.com.foxminded.university.entities.Subject;
 
-@Data
+import java.util.List;
+
+@NoArgsConstructor
+@Getter
+@Setter
 @SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Teacher extends Employee {
-    private Subject subject;
+    private List<Subject> subjectList;
 }

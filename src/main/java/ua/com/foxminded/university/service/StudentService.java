@@ -69,4 +69,10 @@ public class StudentService {
         studentDAO.deleteAll();
         log.debug("deleteAll() was success");
     }
+
+    public void update(Student student) {
+        log.info("update({}) called", student);
+        studentDAO.update(student);
+        log.info("update({}) was success", student);
+    }
 }

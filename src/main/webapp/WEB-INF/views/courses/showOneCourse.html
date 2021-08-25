@@ -18,13 +18,20 @@
         <li class="breadcrumb-item"><a href="/faculties">Faculties</a></li>
         <li class="breadcrumb-item"><a th:href="@{/faculties/{id}(id = ${course.facultyId})}"><span
                 th:text="${faculty.name}">name</span> faculty</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><span th:text="${course.numberCourse}">id</span> course</li>
+        <li class="breadcrumb-item active" aria-current="page"><span th:text="${course.numberCourse}">id</span> course
+        </li>
     </ol>
 </nav>
 
+<form th:method="DELETE"
+      th:action="@{/faculties/{idFaculty}/courses/{id}(idFaculty = ${faculty.id}, id = ${course.id})}">
+    <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
+</form>
+
 <p><strong>ID: </strong> <span th:text="${course.id}"></span></p>
 <p><strong>Number course: </strong> <span th:text="${course.numberCourse}"></span></p>
-<a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/new(idFaculty = ${course.facultyId}, idCourse = ${course.id})}">(NEW GROUP)</a>
+<a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/new(idFaculty = ${course.facultyId}, idCourse = ${course.id})}">(NEW
+    GROUP)</a>
 <p><strong>Groups:</strong></p>
 
 <p th:if="${course.groups.isEmpty()}">No groups</p>

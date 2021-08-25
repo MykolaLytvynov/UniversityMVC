@@ -31,6 +31,8 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
     public static final String COUNT = "SELECT COUNT(*) FROM students";
     public static final String DELETE_STUDENT = "DELETE FROM students WHERE id = ?";
     public static final String DELETE_ALL = "DELETE FROM students";
+    public static final String UPDATE_STUDENT = "UPDATE students SET name = ?, lastName = ?, groupId = ? WHERE id = ?";
+
 
     @Override
     public Student save(Student student) {
@@ -111,6 +113,8 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
 
     @Override
     public void update(Student student) {
-
+        log.info("update({}) called", student);
+        jdbcTemplate.update(UPDATE_STUDENT, student.getName(), student.getLastName(), student.getGroupId(), student.getId());
+        log.info("update({}) was success", student);
     }
 }

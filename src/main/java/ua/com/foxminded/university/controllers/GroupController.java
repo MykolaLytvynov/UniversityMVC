@@ -42,4 +42,10 @@ public class GroupController {
         Group result = groupService.save(group);
         return "redirect:/faculties/{idFaculty}/courses/{idCourse}/groups/" + result.getId();
     }
+
+    @DeleteMapping("{id}")
+    public String delete(@PathVariable("id") int id) {
+        groupService.deleteById(id);
+        return "redirect:/faculties/{idFaculty}/courses/{idCourse}";
+    }
 }

@@ -77,4 +77,17 @@ public class EmployeeService {
         log.debug("getAllEmploeesOnePosition('{}') returned '{}'", positionId, result);
         return result;
     }
+
+    public void update(Employee employee) {
+        log.debug("update('{}') called", employee);
+        employeeDAO.update(employee);
+        log.debug("update('{}') was success", employee);
+    }
+
+    public List<Employee> getAllTeacher() {
+        log.debug("getAllTeacher() called");
+        List<Employee> teachers = employeeDAO.getAllTeacher();
+        log.debug("getAllTeacher() returned '{}'", teachers);
+        return teachers;
+    }
 }

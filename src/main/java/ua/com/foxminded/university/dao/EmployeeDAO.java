@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.university.dao.mapper.EmployeeMapper;
 import ua.com.foxminded.university.entities.person.Employee;
+import ua.com.foxminded.university.entities.person.Teacher;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,7 +37,11 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer> {
     public static final String COUNT = "SELECT COUNT(*) FROM employees";
     public static final String DELETE_GROUP = "DELETE FROM employees WHERE id = ?";
     public static final String DELETE_ALL = "DELETE FROM employees";
-    public static final String GET_ALL_EMPLOEES_ONE_POSITION = "SELECT * FROM employees WHERE positionId = ?";
+    public static final String GET_ALL_EMPLOYEES_ONE_POSITION = "SELECT * FROM employees WHERE positionId = ?";
+    public static final String UPDATE = "UPDATE employees SET name = ?, lastName = ?, positionId = ?, salary = ? WHERE id = ?";
+
+    public static final String GET_ALL_TEACHER = "SELECT DISTINCT employees.id, employees.name, lastname, positionId, salary " +
+            "FROM employees INNER JOIN subjects ON employees.id = subjects.employeeid;";
 
 
     @Override
@@ -120,13 +125,23 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer> {
 
     public List<Employee> getAllEmploeesOnePosition(Integer positionId) {
         log.debug("getAllEmploeesOnePosition('{}') called", positionId);
-        List<Employee> result = jdbcTemplate.query(GET_ALL_EMPLOEES_ONE_POSITION, employeeMapper, positionId);
+        List<Employee> result = jdbcTemplate.query(GET_ALL_EMPLOYEES_ONE_POSITION, employeeMapper, positionId);
         log.debug("getAllEmploeesOnePosition('{}') returned '{}'", positionId, result);
         return result;
     }
 
     @Override
     public void update(Employee employee) {
+        log.debug("update('{}') called", employee);
+        jdbcTemplate.update(UPDATE, employee.getName(), employee.getLastName(),
+                employee.getPositionId(), employee.getSalary(), employee.getId());
+        log.debug("update('{}') was success");
+    }
 
+    public List<Employee> getAllTeacher() {
+        log.debug("getAllTeacher() called");
+        List<Employee> teachers = jdbcTemplate.query(GET_ALL_TEACHER, employeeMapper);
+        log.debug("getAllTeacher() returned '{}'", teachers);
+        return teachers;
     }
 }

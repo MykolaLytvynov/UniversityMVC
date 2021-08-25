@@ -40,10 +40,6 @@ public class CourseDAO implements CrudOperations<Course, Integer> {
     public static final String DELETE_COURSE = "DELETE FROM courses WHERE id = ?";
     public static final String DELETE_ALL = "DELETE FROM courses";
 
-    // исправить
-    public static final String ADD_COURSE_TO_FACULTY = "UPDATE courses SET facultyId = ? WHERE id = ?";
-
-
     public static final String GET_GROUPS_ONE_COURSE = "SELECT * FROM groups WHERE courseId = ?";
 
     @Override
@@ -130,12 +126,6 @@ public class CourseDAO implements CrudOperations<Course, Integer> {
         log.debug("deleteAll() called");
         jdbcTemplate.update(DELETE_ALL);
         log.debug("deleteAll() was success");
-    }
-
-    public void addCourseToFaculty(Course course, Faculty faculty) {
-        log.debug("addCourseToFaculty('{}', '{}') called", course, faculty);
-        jdbcTemplate.update(ADD_COURSE_TO_FACULTY, faculty.getId(), course.getId());
-        log.debug("addCourseToFaculty('{}', '{}') was success", course, faculty);
     }
 
     public List<Group> getGroupsOneCourse(Integer courseId) {

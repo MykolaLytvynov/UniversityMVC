@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @Getter
 @Setter
 @SuperBuilder

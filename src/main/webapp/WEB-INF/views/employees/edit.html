@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Edit ' + ${employee.name} + ' ' + ${employee.lastName}">Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<h3 th:text="'Update employee details: ' + ${employee.name} + ' ' + ${employee.lastName}"></h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/employees">Employees</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/employees/{id}(id = ${employee.id})}"
+                                       th:text="'Employee by id: ' + ${employee.id}"/></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+</nav>
+
+<div class="ml-5">
+    <form th:method="PATCH" th:action="@{/employees/{id}(id = ${employee.id})}" th:object="${employee}">
+        <div class="form-group row">
+            <label for="name">Enter new name: </label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{name}" id="name" class="form-control"
+                       placeholder="Enter new name"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lastName">Enter new last name: </label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{lastName}" id="lastName" class="form-control"
+                       placeholder="Enter new last name"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="positionId">Select another position: </label>
+            <div class="col-sm-6">
+                <select class="form-control" id="positionId" th:field="*{positionId}">
+                    <option th:each="position : ${positions}"
+                            th:value="${position.id}"
+                            th:text="${position.name}"/>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="salary">Enter salary($): </label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{salary}" id="salary" class="form-control"
+                       placeholder="Enter salary"/>
+            </div>
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="Update"/>
+    </form>
+</div>
+
+
+
+</body>
+</html>

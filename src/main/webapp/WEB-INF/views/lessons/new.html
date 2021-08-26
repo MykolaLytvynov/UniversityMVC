@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New lesson</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<h3>Fill data below</h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/lessons">Lessons</a></li>
+        <li class="breadcrumb-item active" aria-current="page">New lesson</li>
+    </ol>
+</nav>
+
+<div class="ml-5">
+    <form th:method="POST" th:action="@{/lessons}" >
+
+        <div class="form-group row">
+            <label for="subject">Select subject</label>
+            <div class="col-sm-6">
+                <select name="subjectId" class="form-control" id="subject">
+                    <option th:each="subject : ${subjects}"
+                            th:value="${subject.id}"
+                            th:text="${subject.name}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="dateTime">Enter a time:</label>
+        </div>
+        <div class="col-sm-6">
+            <input name="dateTime" type="datetime-local" id="dateTime">
+        </div>
+
+
+        <div class="form-group row">
+            <label for="duration">Enter duration: </label>
+            <div class="col-sm-6">
+                <input name="duration" type="text" id="duration" class="form-control"
+                       placeholder="Enter duration"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="classRoom">Select classroom</label>
+            <div class="col-sm-6">
+                <select name="classRoomId" class="form-control" id="classRoom">
+                    <option th:each="classroom : ${classrooms}"
+                            th:value="${classroom.id}"
+                            th:text="${classroom.name}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="groups">Select classroom</label>
+            <div class="col-sm-6">
+                <select name="lessonForGroups" multiple class="form-control" id="groups">
+                    <option th:each="group : ${groups}"
+                            th:value="${group.id}"
+                            th:text="${mapGroupAndCourseAndFaculty.get(group.id)}"></option>
+                </select>
+            </div>
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="Create lesson"/>
+    </form>
+</div>
+
+</body>
+</html>

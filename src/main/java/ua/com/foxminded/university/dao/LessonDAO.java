@@ -17,8 +17,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
@@ -41,6 +43,8 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
     public static final String GET_ALL_GROUPS_ONE_LESSON = "SELECT idGroup FROM groupsLessons WHERE idLesson = ?";
     public static final String ADD_GROUPS_TO_LESSON = "INSERT INTO groupsLessons (idGroup, idLesson) VALUES (?, ?)";
     public static final String DELETE_GROUP_FROM_LESSON = "DELETE FROM groupsLessons WHERE idGroup = ? AND idLesson = ?";
+
+    public static final String GET_LESSONS_BETWEEN_DATA = "SELECT * FROM lessons WHERE dateTime BETWEEN ? AND ?";
 
 
     @Override
@@ -72,6 +76,7 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
     public Optional<Lesson> findById(Integer id) {
         log.debug("findById('{}') called", id);
         Lesson result = jdbcTemplate.queryForObject(FIND_BY_ID, lessonMapper, id);
+        result.setGroupsIdOneLesson(getAllGroupsOneLesson(result.getId()));
         log.debug("findById('{}') returned '{}'", id, result);
         return ofNullable(result);
     }
@@ -89,6 +94,8 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
     public List<Lesson> findAll() {
         log.debug("findAll() called");
         List<Lesson> result = jdbcTemplate.query(FIND_ALL, lessonMapper);
+        result.stream()
+                .forEach(lesson -> lesson.setGroupsIdOneLesson(getAllGroupsOneLesson(lesson.getId())));
         log.debug("findAll() returned '{}'", result);
         return result;
     }
@@ -122,16 +129,16 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
         log.debug("deleteAll() was success");
     }
 
-    public void addGroupsToLesson(Group group, Lesson lesson) {
-        log.debug("addGroupsToLesson('{}','{}') called", group, lesson);
-        jdbcTemplate.update(ADD_GROUPS_TO_LESSON, group.getId(), lesson.getId());
-        log.debug("addGroupsToLesson('{}','{}') was success", group, lesson);
+    public void addGroupsToLesson(Integer groupId, Integer lessonId) {
+        log.debug("addGroupsToLesson('{}','{}') called", groupId, lessonId);
+        jdbcTemplate.update(ADD_GROUPS_TO_LESSON, groupId, lessonId);
+        log.debug("addGroupsToLesson('{}','{}') was success", groupId, lessonId);
     }
 
-    public List<Integer> getAllGroupsOneLesson(Lesson lesson) {
-        log.debug("getAllGroupsOneLesson('{}') called", lesson);
-        List<Integer> result = jdbcTemplate.queryForList(GET_ALL_GROUPS_ONE_LESSON, Integer.class, lesson.getId());
-        log.debug("getAllGroupsOneLesson('{}') returned '{}'", lesson, result);
+    public List<Integer> getAllGroupsOneLesson(Integer lessonId) {
+        log.debug("getAllGroupsOneLesson('{}') called", lessonId);
+        List<Integer> result = jdbcTemplate.queryForList(GET_ALL_GROUPS_ONE_LESSON, Integer.class, lessonId);
+        log.debug("getAllGroupsOneLesson('{}') returned '{}'", lessonId, result);
         return result;
     }
 
@@ -144,5 +151,12 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
     @Override
     public void update(Lesson lesson) {
 
+    }
+
+    public List<Lesson> getLessonsBetweenData (LocalDateTime start, LocalDateTime end) {
+        log.debug("getLessonsBetweenData('{}', '{}') called", start, end);
+        List<Lesson> result = jdbcTemplate.query(GET_LESSONS_BETWEEN_DATA, lessonMapper, start, end);
+        log.debug("getLessonsBetweenData('{}', '{}') returned '{}'", start, end, result);
+        return result;
     }
 }

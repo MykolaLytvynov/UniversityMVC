@@ -20,5 +20,5 @@ public class Lesson {
     private Integer duration;
     @NonNull
     private Integer classRoomId;
-    private List<Group> lessonForGroups;
+    private List<Integer> groupsIdOneLesson;
 }

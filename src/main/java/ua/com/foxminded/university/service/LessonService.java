@@ -8,6 +8,7 @@ import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.Lesson;
 import ua.com.foxminded.university.exception.NotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,16 +73,16 @@ public class LessonService {
         log.debug("deleteAll() was success");
     }
 
-    public void addGroupsToLesson(Group group, Lesson lesson) {
-        log.debug("addGroupsToLesson('{}','{}') called", group, lesson);
-        lessonDAO.addGroupsToLesson(group, lesson);
-        log.debug("addGroupsToLesson('{}','{}') was success", group, lesson);
+    public void addGroupsToLesson(Integer groupId, Integer lessonId) {
+        log.debug("addGroupsToLesson('{}','{}') called", groupId, lessonId);
+        lessonDAO.addGroupsToLesson(groupId, lessonId);
+        log.debug("addGroupsToLesson('{}','{}') was success", groupId, lessonId);
     }
 
-    public List<Integer> getAllGroupsOneLesson(Lesson lesson) {
-        log.debug("getAllGroupsOneLesson('{}') called", lesson);
-        List<Integer> result = lessonDAO.getAllGroupsOneLesson(lesson);
-        log.debug("getAllGroupsOneLesson('{}') returned '{}'", lesson, result);
+    public List<Integer> getAllGroupsOneLesson(Integer lessonId) {
+        log.debug("getAllGroupsOneLesson('{}') called", lessonId);
+        List<Integer> result = lessonDAO.getAllGroupsOneLesson(lessonId);
+        log.debug("getAllGroupsOneLesson('{}') returned '{}'", lessonId, result);
         return result;
     }
 
@@ -89,5 +90,12 @@ public class LessonService {
         log.debug("deleteGroupFromLesson('{}','{}') called", group, lesson);
         lessonDAO.deleteGroupFromLesson(group, lesson);
         log.debug("deleteGroupFromLesson('{}','{}') was success", group, lesson);
+    }
+
+    public List<Lesson> getLessonsBetweenData (LocalDateTime start, LocalDateTime end) {
+        log.debug("getLessonsBetweenData('{}', '{}') called", start, end);
+        List<Lesson> result = lessonDAO.getLessonsBetweenData(start, end);
+        log.debug("getLessonsBetweenData('{}', '{}') returned '{}'", start, end, result);
+        return result;
     }
 }

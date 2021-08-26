@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Lesson by id: ' + ${lesson.id}">Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<h3>Lesson data:</h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/lessons">Lessons</a></li>
+        <li class="breadcrumb-item active" aria-current="page" th:text="'Lesson by id: ' + ${lesson.id}"></li>
+    </ol>
+</nav>
+
+<p><strong>ID:</strong> <span th:text="${lesson.id}">id</span></p>
+<p><strong>Subject:</strong> <span th:each="subject : ${subjects}"
+                                   th:if="${subject.id == lesson.subjectId}"
+                                   th:text="${subject.name}">subject</span></p>
+<p><strong>Date/Time:</strong> <span th:text="${lesson.dateTime}"/></p>
+<p><strong>Duration:</strong> <span th:text="${lesson.duration}"/></p>
+<p><strong>Classroom:</strong> <span th:each="classroom : ${classrooms}"
+                                     th:if="${classroom.id == lesson.classRoomId}"
+                                     th:text="${classroom.name}">subject</span></p>
+
+<div><a th:href="@{/lessons/{id}/edit(id=${lesson.id})}" type="button" class="btn btn-primary btn-sm">Edit</a>
+    <form th:method="DELETE" th:action="@{/lessons/{id}(id=${lesson.id})}">
+        <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
+    </form>
+</div>
+
+<h3>Lesson for:</h3>
+<ul>
+    <li th:each="dataOneGroup : ${dataAllGroupOneLesson}" th:text="${dataOneGroup}"/>
+</ul>
+
+
+</body>
+</html>

@@ -16,7 +16,7 @@
     </ol>
 </nav>
 
-<a href="/lessons/new">Add new lessons</a>
+<a href="/lessons/new">Add new lesson</a>
 
 <table class="table table-hover">
     <thead>
@@ -47,8 +47,9 @@
             th:text="${classroom.name}" scope="row"></td>
 
         <td>
-            <p th:each="groupFromMap : ${mapGroupAndCourseAndFaculty}" th:text="${groupFromMap.value}"/>
+            <p th:each="groupId : ${lesson.getGroupsIdOneLesson}" th:text="${mapGroupAndCourseAndFaculty.get(groupId)}"/>
         </td>
+
         <td>
             <div><a th:href="@{/lessons/{id}(id = ${lesson.id})}" type="button" class="btn btn-primary btn-sm">view</a>
                 <a th:href="@{/lessons/{id}/edit(id=${lesson.id})}" type="button"

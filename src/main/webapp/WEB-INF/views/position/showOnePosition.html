@@ -21,7 +21,9 @@
 <p><strong>ID:</strong> <span th:text="${position.id}">id</span></p>
 <p><strong>Name:</strong> <span th:text="${position.name}">name</span></p>
 
-<div><a th:href="@{/position/{id}/edit(id=${position.id})}" type="button" class="btn btn-primary btn-sm">Edit</a>
+<div class="btn-group"><a th:href="@{/position/{id}/edit(id=${position.id})}" type="button"
+                          class="btn btn-primary btn-sm">Edit</a></div>
+<div class="btn-group">
     <form th:method="DELETE" th:action="@{/position/{id}(id=${position.id})}">
         <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
     </form>

@@ -25,7 +25,16 @@
                                     th:text="${position.name}">position</span></p>
 <p><strong>Salary:</strong> <span th:text="${employee.salary}">Salary</span> $</p>
 
-<div><a th:href="@{/employees/{id}/edit(id=${employee.id})}" type="button" class="btn btn-primary btn-sm">Edit</a>
+
+
+<div class="btn-group" th:if="${!subjectsOneEmployee.isEmpty()}"><a
+        th:href="@{/lessons/{idTeacher}/lessons-teacher/search(idTeacher=${employee.id})}" type="button"
+        class="btn btn-primary btn-sm">Search Lessons</a></div>
+
+<div class="btn-group"><a th:href="@{/employees/{id}/edit(id=${employee.id})}" type="button"
+                          class="btn btn-primary btn-sm">Edit</a></div>
+
+<div class="btn-group">
     <form th:method="DELETE" th:action="@{/employees/{id}(id=${employee.id})}">
         <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
     </form>

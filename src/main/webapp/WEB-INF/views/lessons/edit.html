@@ -2,29 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New lesson</title>
+    <title th:text="'Lesson by id: ' + ${lesson.id}">Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-
-<h3>Fill data below</h3>
-
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item"><a href="/lessons">Lessons</a></li>
-        <li class="breadcrumb-item active" aria-current="page">New lesson</li>
-    </ol>
-</nav>
+<h3>Update lesson by id: <span th:text="${lesson.id}"/></h3>
 
 <div class="ml-5">
-    <form th:method="POST" th:action="@{/lessons}" >
+    <form th:method="PATCH" th:action="@{/lessons/{idLesson}(idLesson=${lesson.id})}" th:object="${lesson}">
+
 
         <div class="form-group row">
             <label for="subject">Select subject</label>
             <div class="col-sm-6">
-                <select name="subjectId" class="form-control" id="subject">
+                <select name="subjectId" class="form-control" id="subject" th:field="${lesson.subjectId}">
                     <option th:each="subject : ${subjects}"
                             th:value="${subject.id}"
                             th:text="${subject.name}"></option>
@@ -36,22 +28,21 @@
             <label for="dateTime">Enter a time:</label>
         </div>
         <div class="col-sm-6">
-            <input name="dateTime" type="datetime-local" id="dateTime">
+            <input name="dateTime" type="datetime-local" id="dateTime" th:field="${lesson.dateTime}">
         </div>
 
 
         <div class="form-group row">
             <label for="duration">Enter duration: </label>
             <div class="col-sm-6">
-                <input name="duration" type="text" id="duration" class="form-control"
-                       placeholder="Enter duration"/>
+                <input name="duration" type="text" id="duration" class="form-control" th:field="${lesson.duration}"/>
             </div>
         </div>
 
         <div class="form-group row">
             <label for="classRoom">Select classroom</label>
             <div class="col-sm-6">
-                <select name="classRoomId" class="form-control" id="classRoom">
+                <select name="classRoomId" class="form-control" id="classRoom" th:field="${lesson.classRoomId}">
                     <option th:each="classroom : ${classrooms}"
                             th:value="${classroom.id}"
                             th:text="${classroom.name}"></option>
@@ -60,9 +51,10 @@
         </div>
 
         <div class="form-group row">
-            <label for="groups">Select groups</label>
+            <label for="groups">Change groups</label>
             <div class="col-sm-6">
                 <select name="lessonForGroups" multiple class="form-control" id="groups">
+                    <option value="">No change</option>
                     <option th:each="group : ${groups}"
                             th:value="${group.id}"
                             th:text="${mapGroupAndCourseAndFaculty.get(group.id)}"></option>
@@ -70,9 +62,11 @@
             </div>
         </div>
 
-        <input class="btn btn-primary" type="submit" value="Create lesson"/>
+
+        <input class="btn btn-primary" type="submit" value="Update"/>
     </form>
 </div>
+
 
 </body>
 </html>

@@ -25,7 +25,9 @@
     <span th:if="${subject.teacherId == 0 || subject.teacherId == null}">NO</span></p>
 <p><strong>Amount Lessons:</strong> <span th:text="${subject.amountLessons}">amountLessons</span></p>
 
-<div><a th:href="@{/subjects/{id}/edit(id=${subject.id})}" type="button" class="btn btn-primary btn-sm">Edit</a>
+<div class="btn-group"><a th:href="@{/subjects/{id}/edit(id=${subject.id})}" type="button"
+                          class="btn btn-primary btn-sm">Edit</a></div>
+<div class="btn-group">
     <form th:method="DELETE" th:action="@{/subjects/{id}(id=${subject.id})}">
         <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
     </form>

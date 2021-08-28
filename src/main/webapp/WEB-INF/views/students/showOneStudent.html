@@ -32,11 +32,14 @@
 <p><strong>Faculty: </strong> <span th:text="${faculty.name}"></span></p>
 <p><strong>Course: </strong> <span th:text="${course.numberCourse}"></span></p>
 <p><strong>Group: </strong> <span th:text="${group.numberGroup}"></span></p>
-
-<div>
+<br>
+<div class="btn-group"><a th:href="@{/lessons/{idGroup}/lessons-group/search(idGroup = ${student.groupId})}"
+   type="button" class="btn btn-primary btn-sm">Search lessons</a></div>
+<div class="btn-group">
     <a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}/edit
     (idFaculty = ${faculty.id}, idCourse = ${course.id}, idGroup = ${group.id}, idStudent = ${student.id})}"
-       type="button" class="btn btn-primary btn-sm">Edit</a>
+       type="button" class="btn btn-primary btn-sm">Edit</a></div>
+<div class="btn-group">
     <form th:method="DELETE" th:action="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}
     (idFaculty = ${faculty.id}, idCourse = ${course.id}, idGroup = ${group.id}, idStudent = ${student.id})}">
         <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>

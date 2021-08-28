@@ -27,7 +27,9 @@
                                      th:if="${classroom.id == lesson.classRoomId}"
                                      th:text="${classroom.name}">subject</span></p>
 
-<div><a th:href="@{/lessons/{id}/edit(id=${lesson.id})}" type="button" class="btn btn-primary btn-sm">Edit</a>
+<div class="btn-group"><a th:href="@{/lessons/{id}/edit(id=${lesson.id})}" type="button" class="btn btn-primary btn-sm">Edit</a>
+</div>
+<div class="btn-group">
     <form th:method="DELETE" th:action="@{/lessons/{id}(id=${lesson.id})}">
         <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
     </form>

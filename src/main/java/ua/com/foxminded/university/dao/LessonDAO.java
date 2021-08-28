@@ -2,13 +2,11 @@ package ua.com.foxminded.university.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.university.dao.mapper.GroupMapper;
 import ua.com.foxminded.university.dao.mapper.LessonMapper;
 import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.Lesson;
@@ -20,7 +18,6 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
@@ -39,13 +36,15 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
     public static final String COUNT = "SELECT COUNT(*) FROM lessons";
     public static final String DELETE_LESSON = "DELETE FROM lessons WHERE id = ?";
     public static final String DELETE_ALL = "DELETE FROM lessons";
-
     public static final String GET_ALL_GROUPS_ONE_LESSON = "SELECT idGroup FROM groupsLessons WHERE idLesson = ?";
     public static final String ADD_GROUPS_TO_LESSON = "INSERT INTO groupsLessons (idGroup, idLesson) VALUES (?, ?)";
-    public static final String DELETE_GROUP_FROM_LESSON = "DELETE FROM groupsLessons WHERE idGroup = ? AND idLesson = ?";
-
-    public static final String GET_LESSONS_BETWEEN_DATA = "SELECT * FROM lessons WHERE dateTime BETWEEN ? AND ?";
-
+    public static final String DELETE_GROUP_FROM_LESSON = "DELETE FROM groupsLessons WHERE idLesson = ?";
+    public static final String GET_LESSONS_BETWEEN_DATES = "SELECT * FROM lessons WHERE dateTime BETWEEN ? AND ?";
+    public static final String GET_LESSONS_BETWEEN_DATES_FOR_GROUP = "SELECT id, subjectId, dateTime, duration, classRoomId FROM lessons " +
+            "INNER JOIN groupsLessons ON lessons.id = groupsLessons.idLesson WHERE (idGroup = ?) AND (dateTime BETWEEN ? AND ?)";
+    public static final String UPDATE_LESSON = "UPDATE lessons SET subjectId = ?, dateTime = ?, duration = ?, classRoomId = ? WHERE id = ?";
+    public static final String GET_LESSONS_BETWEEN_DATES_FOR_TEACHER = "SELECT lessons.id, subjectId, dateTime, duration, classRoomId FROM lessons " +
+            "INNER JOIN subjects ON lessons.subjectId = subjects.id WHERE (employeeId = ?) AND (dateTime BETWEEN ? AND ?)";
 
     @Override
     public Lesson save(Lesson lesson) {
@@ -142,21 +141,39 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
         return result;
     }
 
-    public void deleteGroupFromLesson(Group group, Lesson lesson) {
-        log.debug("deleteGroupFromLesson('{}','{}') called", group, lesson);
-        jdbcTemplate.update(DELETE_GROUP_FROM_LESSON, group.getId(), lesson.getId());
-        log.debug("deleteGroupFromLesson('{}','{}') was success", group, lesson);
+    public void deleteGroupsFromLesson(Integer lessonId) {
+        log.debug("deleteGroupsFromLesson('{}') called", lessonId);
+        jdbcTemplate.update(DELETE_GROUP_FROM_LESSON, lessonId);
+        log.debug("deleteGroupsFromLesson('{}') was success", lessonId);
     }
 
     @Override
     public void update(Lesson lesson) {
-
+        log.debug("update('{}') called", lesson);
+        jdbcTemplate.update(UPDATE_LESSON, lesson.getSubjectId(), lesson.getDateTime(), lesson.getDuration(),
+                lesson.getClassRoomId(), lesson.getId());
+        log.debug("update('{}') was success", lesson);
     }
 
-    public List<Lesson> getLessonsBetweenData (LocalDateTime start, LocalDateTime end) {
-        log.debug("getLessonsBetweenData('{}', '{}') called", start, end);
-        List<Lesson> result = jdbcTemplate.query(GET_LESSONS_BETWEEN_DATA, lessonMapper, start, end);
-        log.debug("getLessonsBetweenData('{}', '{}') returned '{}'", start, end, result);
+    public List<Lesson> getLessonsBetweenDates(LocalDateTime start, LocalDateTime end) {
+        log.debug("getLessonsBetweenDates('{}', '{}') called", start, end);
+        List<Lesson> result = jdbcTemplate.query(GET_LESSONS_BETWEEN_DATES, lessonMapper, start, end);
+        log.debug("getLessonsBetweenDates('{}', '{}') returned '{}'", start, end, result);
         return result;
     }
+
+    public List<Lesson> getLessonsBetweenDatesForGroup(LocalDateTime start, LocalDateTime end, Integer idGroup) {
+        log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') called", start, end, idGroup);
+        List<Lesson> result = jdbcTemplate.query(GET_LESSONS_BETWEEN_DATES_FOR_GROUP, lessonMapper, idGroup, start, end);
+        log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') returned '{}'", start, end, idGroup);
+        return result;
+    }
+
+        public List<Lesson> getLessonsBetweenDatesForTeacher(LocalDateTime start, LocalDateTime end, Integer idTeacher) {
+        log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') called", start, end, idTeacher);
+        List<Lesson> result = jdbcTemplate.query(GET_LESSONS_BETWEEN_DATES_FOR_TEACHER, lessonMapper, idTeacher, start, end);
+        log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') returned '{}'", start, end, idTeacher);
+        return result;
+    }
+
 }

@@ -86,16 +86,36 @@ public class LessonService {
         return result;
     }
 
-    public void deleteGroupFromLesson(Group group, Lesson lesson) {
-        log.debug("deleteGroupFromLesson('{}','{}') called", group, lesson);
-        lessonDAO.deleteGroupFromLesson(group, lesson);
-        log.debug("deleteGroupFromLesson('{}','{}') was success", group, lesson);
+    public void deleteGroupsFromLesson(Integer lessonId) {
+        log.debug("deleteGroupsFromLesson('{}') called", lessonId);
+        lessonDAO.deleteGroupsFromLesson(lessonId);
+        log.debug("deleteGroupsFromLesson('{}') was success", lessonId);
     }
 
-    public List<Lesson> getLessonsBetweenData (LocalDateTime start, LocalDateTime end) {
-        log.debug("getLessonsBetweenData('{}', '{}') called", start, end);
-        List<Lesson> result = lessonDAO.getLessonsBetweenData(start, end);
-        log.debug("getLessonsBetweenData('{}', '{}') returned '{}'", start, end, result);
+    public List<Lesson> getLessonsBetweenDates(LocalDateTime start, LocalDateTime end) {
+        log.debug("getLessonsBetweenDates('{}', '{}') called", start, end);
+        List<Lesson> result = lessonDAO.getLessonsBetweenDates(start, end);
+        log.debug("getLessonsBetweenDates('{}', '{}') returned '{}'", start, end, result);
         return result;
+    }
+
+    public List<Lesson> getLessonsBetweenDatesForGroup(LocalDateTime start, LocalDateTime end, Integer idGroup) {
+        log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') called", start, end, idGroup);
+        List<Lesson> result = lessonDAO.getLessonsBetweenDatesForGroup(start, end, idGroup);
+        log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') returned '{}'", start, end, idGroup);
+        return result;
+    }
+
+    public List<Lesson> getLessonsBetweenDatesForTeacher(LocalDateTime start, LocalDateTime end, Integer idTeacher) {
+        log.debug("getLessonsBetweenDatesForTeacher('{}', '{}', '{}') called", start, end, idTeacher);
+        List<Lesson> result = lessonDAO.getLessonsBetweenDatesForTeacher(start, end, idTeacher);
+        log.debug("getLessonsBetweenDatesForTeacher('{}', '{}', '{}') returned '{}'", start, end, idTeacher);
+        return result;
+    }
+
+    public void update(Lesson lesson) {
+        log.debug("update('{}') called", lesson);
+        lessonDAO.update(lesson);
+        log.debug("update('{}') was success", lesson);
     }
 }

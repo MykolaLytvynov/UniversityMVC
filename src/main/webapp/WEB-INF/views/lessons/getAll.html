@@ -7,6 +7,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
+
 <h3>List of lessons</h3>
 
 <nav aria-label="breadcrumb">
@@ -31,35 +32,31 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:if="${lessons.isEmpty()}">
+    <tr th:if="${lessonInfoDtoList.isEmpty()}">
         <td colspan="7">No lessons available</td>
     </tr>
-    <tr th:each="lesson : ${lessons}">
-        <td th:text="${lesson.id}" scope="row"></td>
-        <td th:each="subject : ${subjects}"
-            th:if="${subject.id == lesson.subjectId}"
-            th:text="${subject.name}" scope="row"></td>
+    <tr th:each="lessonInfoDto : ${lessonInfoDtoList}">
+        <td th:text="${lessonInfoDto.id}" scope="row"></td>
+        <td th:text="${lessonInfoDto.getSubject().name}" scope="row"></td>
 
-        <td th:text="${lesson.dateTime}" scope="row"></td>
-        <td th:text="${lesson.duration}" scope="row"></td>
-        <td th:each="classroom : ${classrooms}"
-            th:if="${classroom.id == lesson.classRoomId}"
-            th:text="${classroom.name}" scope="row"></td>
+        <td th:text="${lessonInfoDto.dateTime}" scope="row"></td>
+        <td th:text="${lessonInfoDto.duration}" scope="row"></td>
+        <td th:text="${lessonInfoDto.getClassRoom().name}" scope="row"></td>
 
         <td>
-            <p th:each="groupId : ${lesson.getGroupsIdOneLesson}" th:text="${mapGroupAndCourseAndFaculty.get(groupId)}"/>
+            <p th:each="group : ${lessonInfoDto.getGroups()}" th:text="${lessonInfoDto.getFaculty().name + ': ' +
+            lessonInfoDto.getCourse().numberCourse + ' course, ' + group.getNumberGroup() + ' group'}"/>
         </td>
 
         <td>
-            <div><a th:href="@{/lessons/{id}(id = ${lesson.id})}" type="button" class="btn btn-primary btn-sm">view</a>
-                <a th:href="@{/lessons/{id}/edit(id=${lesson.id})}" type="button"
+            <div><a th:href="@{/lessons/{id}(id = ${lessonInfoDto.id})}" type="button" class="btn btn-primary btn-sm">view</a>
+                <a th:href="@{/lessons/{id}/edit(id=${lessonInfoDto.id})}" type="button"
                    class="btn btn-secondary btn-sm">change</a>
             </div>
         </td>
     </tr>
     </tbody>
 </table>
-
 
 </body>
 </html>

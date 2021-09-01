@@ -63,9 +63,10 @@
             <label for="groups">Select groups</label>
             <div class="col-sm-6">
                 <select name="lessonForGroups" multiple class="form-control" id="groups">
-                    <option th:each="group : ${groups}"
-                            th:value="${group.id}"
-                            th:text="${mapGroupAndCourseAndFaculty.get(group.id)}"></option>
+                    <option th:each="groupInfoDto : ${groupInfoDtoList}"
+                            th:value="${groupInfoDto.id}"
+                            th:text="${groupInfoDto.getFaculty().name + ': ' + groupInfoDto.getCourse().numberCourse
+                            + ' course, ' + groupInfoDto.getNumberGroup() + ' group'}"></option>
                 </select>
             </div>
         </div>

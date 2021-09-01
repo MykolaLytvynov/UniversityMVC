@@ -6,12 +6,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.com.foxminded.university.FormatterGroup;
+import ua.com.foxminded.university.dto.GroupInfoDto;
+import ua.com.foxminded.university.dto.LessonInfoDto;
+import ua.com.foxminded.university.entities.Course;
+import ua.com.foxminded.university.entities.Faculty;
+import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.Lesson;
 import ua.com.foxminded.university.service.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,6 +30,8 @@ public class LessonController {
     private final GroupService groupService;
     private final FormatterGroup formatterGroup;
     private final EmployeeService employeeService;
+    private final CourseService courseService;
+    private final FacultyService facultyService;
 
 
     @GetMapping
@@ -30,22 +39,50 @@ public class LessonController {
         model.addAttribute("lessons", lessonService.findAll());
         model.addAttribute("subjects", subjectService.findAll());
         model.addAttribute("classrooms", classRoomService.findAll());
-        model.addAttribute("mapGroupAndCourseAndFaculty", formatterGroup.getAllDataAllGroup());
+
+        List<LessonInfoDto> lessonInfoDtoList = new ArrayList<>();
+        for (Lesson lesson : lessonService.findAll()) {
+            LessonInfoDto lessonInfoDto = new LessonInfoDto(lesson.getId(), lesson.getDateTime(), lesson.getDuration());
+
+            lessonInfoDto.setClassRoom(classRoomService.findById(lesson.getClassRoomId()));
+            lessonInfoDto.setGroups(lesson.getGroupsIdOneLesson()
+                    .stream()
+                    .map(idGroup -> groupService.findById(idGroup))
+                    .collect(Collectors.toList()));
+            Course course = courseService.findById(lessonInfoDto.getGroups()
+                    .stream()
+                    .findFirst().orElse(null)
+                    .getCourseId());
+            lessonInfoDto.setCourse(course);
+            lessonInfoDto.setFaculty(facultyService.findById(course.getFacultyId()));
+            lessonInfoDto.setSubject(subjectService.findById(lesson.getSubjectId()));
+            lessonInfoDtoList.add(lessonInfoDto);
+        }
+        model.addAttribute("lessonInfoDtoList", lessonInfoDtoList);
+
+
         return "lessons/getAll";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model) {
         Lesson lesson = lessonService.findById(id);
-        model.addAttribute("lesson", lesson);
-        model.addAttribute("subjects", subjectService.findAll());
-        model.addAttribute("classrooms", classRoomService.findAll());
+        LessonInfoDto lessonInfoDto = new LessonInfoDto(lesson.getId(), lesson.getDateTime(), lesson.getDuration());
 
-        List<String> dataAllGroupOneLesson = new ArrayList<>();
-        lesson.getGroupsIdOneLesson().stream()
-                .forEach(integer -> dataAllGroupOneLesson.add(formatterGroup.getDataOneGroup(integer)));
+        lessonInfoDto.setClassRoom(classRoomService.findById(lesson.getClassRoomId()));
+        lessonInfoDto.setGroups(lesson.getGroupsIdOneLesson()
+                .stream()
+                .map(idGroup -> groupService.findById(idGroup))
+                .collect(Collectors.toList()));
+        Course course = courseService.findById(lessonInfoDto.getGroups()
+                .stream()
+                .findFirst().orElse(null)
+                .getCourseId());
+        lessonInfoDto.setCourse(course);
+        lessonInfoDto.setFaculty(facultyService.findById(course.getFacultyId()));
+        lessonInfoDto.setSubject(subjectService.findById(lesson.getSubjectId()));
 
-        model.addAttribute("dataAllGroupOneLesson", dataAllGroupOneLesson);
+        model.addAttribute("lessonInfoDto", lessonInfoDto);
         return "/lessons/ShowOneLesson";
     }
 
@@ -53,8 +90,15 @@ public class LessonController {
     public String newLesson(Model model) {
         model.addAttribute("subjects", subjectService.findAll());
         model.addAttribute("classrooms", classRoomService.findAll());
-        model.addAttribute("groups", groupService.findAll());
-        model.addAttribute("mapGroupAndCourseAndFaculty", formatterGroup.getAllDataAllGroup());
+
+        List<GroupInfoDto> groupInfoDtoList = new ArrayList<>();
+        for (Group group : groupService.findAll()) {
+            Course course = courseService.findById(group.getCourseId());
+            Faculty faculty = facultyService.findById(course.getFacultyId());
+            groupInfoDtoList.add(new GroupInfoDto(group.getId(), group.getNumberGroup(), group.getStudents(),
+                    course, faculty));
+        }
+        model.addAttribute("groupInfoDtoList", groupInfoDtoList);
         return "/lessons/new";
     }
 
@@ -81,8 +125,15 @@ public class LessonController {
         result.setGroupsIdOneLesson(lessonService.getAllGroupsOneLesson(idLesson));
         model.addAttribute("subjects", subjectService.findAll());
         model.addAttribute("classrooms", classRoomService.findAll());
-        model.addAttribute("groups", groupService.findAll());
-        model.addAttribute("mapGroupAndCourseAndFaculty", formatterGroup.getAllDataAllGroup());
+
+        List<GroupInfoDto> groupInfoDtoList = new ArrayList<>();
+        for (Group group : groupService.findAll()) {
+            Course course = courseService.findById(group.getCourseId());
+            Faculty faculty = facultyService.findById(course.getFacultyId());
+            groupInfoDtoList.add(new GroupInfoDto(group.getId(), group.getNumberGroup(), group.getStudents(),
+                    course, faculty));
+        }
+        model.addAttribute("groupInfoDtoList", groupInfoDtoList);
         return "/lessons/edit";
     }
 

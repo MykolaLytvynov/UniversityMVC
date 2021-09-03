@@ -18,16 +18,13 @@ public class SubjectController {
 
     @GetMapping
     public String getAll(Model model) {
-        model.addAttribute("subjects", subjectService.findAll());
-        model.addAttribute("employees", employeeService.findAll());
-
+        model.addAttribute("subjectsDto", subjectService.getAllSubjectsDto());
         return "subject/getAll";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("subject", subjectService.findById(id));
-        model.addAttribute("employees", employeeService.findAll());
+        model.addAttribute("subjectDto", subjectService.getSubjectDtoByID(id));
         return "subject/showOneSubject";
     }
 
@@ -64,11 +61,10 @@ public class SubjectController {
                          Model model) {
         subject.setId(id);
         subjectService.update(subject);
-        model.addAttribute("subject", subject);
         if (subject.getTeacherId() != null) {
             subjectService.addSubjectToTeacher(subject.getId(), subject.getTeacherId());
         }
-        model.addAttribute("employees", employeeService.findAll());
+        model.addAttribute("subjectDto", subjectService.getSubjectDtoByID(id));
         return "/subject/showOneSubject";
     }
 

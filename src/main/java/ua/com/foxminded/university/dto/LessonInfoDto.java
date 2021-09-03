@@ -1,7 +1,6 @@
 package ua.com.foxminded.university.dto;
 
 import lombok.*;
-import ua.com.foxminded.university.entities.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,14 +12,16 @@ import java.util.List;
 @Setter
 public class LessonInfoDto {
     @NonNull
-    private Integer id;
+    private Integer lessonId;
     @NonNull
     private LocalDateTime dateTime;
     @NonNull
     private Integer duration;
-    private ClassRoom classRoom;
-    private List<Group> groups;
-    private Course course;
-    private Faculty faculty;
-    private Subject subject;
+    @NonNull
+    private Integer classRoomId;
+    @NonNull
+    private Integer subjectId;
+    private List<GroupInfoDto> groupsDto;
+    private String classRoomName;
+    private String subjectName;
 }

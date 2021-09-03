@@ -4,15 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.SubjectDAO;
-import ua.com.foxminded.university.dao.mapper.SubjectMapper;
+import ua.com.foxminded.university.dto.SubjectDto;
 import ua.com.foxminded.university.entities.Subject;
-import ua.com.foxminded.university.entities.person.Employee;
 import ua.com.foxminded.university.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.Optional.ofNullable;
 
 @Service
 @Slf4j
@@ -99,6 +95,20 @@ public class SubjectService {
         log.debug("getSubjectsWithoutTeacher() called");
         List<Subject> result = subjectDAO.getSubjectsWithoutTeacher();
         log.debug("getSubjectsWithoutTeacher() returned '{}', result");
+        return result;
+    }
+
+    public List<SubjectDto> getAllSubjectsDto() {
+        log.debug("getAllSubjectsDto() called");
+        List<SubjectDto> result = subjectDAO.getAllSubjectsDto();
+        log.debug("getAllSubjectsDto() returned '{}'", result);
+        return result;
+    }
+
+    public SubjectDto getSubjectDtoByID(Integer subjectId) {
+        log.debug("getSubjectDtoByID('{}') called", subjectId);
+        SubjectDto result = subjectDAO.getSubjectDtoByID(subjectId);
+        log.debug("getSubjectDtoByID('{}') returned '{}'", result, subjectId);
         return result;
     }
 }

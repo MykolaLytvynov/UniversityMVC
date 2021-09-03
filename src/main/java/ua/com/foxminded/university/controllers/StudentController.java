@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.entities.Course;
 import ua.com.foxminded.university.entities.Faculty;
 import ua.com.foxminded.university.entities.person.Student;
@@ -28,26 +29,16 @@ public class StudentController {
 
 
     @GetMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}")
-    public String findById(@PathVariable("idCourse") int idCourse,
-                           @PathVariable("idFaculty") int idFaculty,
-                           @PathVariable("idGroup") int idGroup,
-                           @PathVariable("idStudent") int idStudent, Model model) {
-        model.addAttribute("student", studentService.findById(idStudent));
-        model.addAttribute("faculty", facultyService.findById(idFaculty));
-        model.addAttribute("course", courseService.findById(idCourse));
-        model.addAttribute("group", groupService.findById(idGroup));
+    public String findById(@PathVariable("idStudent") int idStudent, Model model) {
+        model.addAttribute("studentDto", studentService.getStudentDtoById(idStudent));
         return "/students/showOneStudent";
     }
 
 
     @GetMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/new")
-    public String newStudent(@PathVariable("idCourse") int idCourse,
-                             @PathVariable("idFaculty") int idFaculty,
-                             @PathVariable("idGroup") int idGroup, Model model) {
+    public String newStudent(@PathVariable("idGroup") int idGroup, Model model) {
         model.addAttribute("student", new Student());
-        model.addAttribute("faculty", facultyService.findById(idFaculty));
-        model.addAttribute("course", courseService.findById(idCourse));
-        model.addAttribute("group", groupService.findById(idGroup));
+        model.addAttribute("groupDto", groupService.getGroupDto(idGroup));
         return "/students/new";
     }
 
@@ -58,48 +49,30 @@ public class StudentController {
     }
 
     @GetMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}/edit")
-    public String edit(@PathVariable("idCourse") int idCourse,
-                       @PathVariable("idFaculty") int idFaculty,
-                       @PathVariable("idGroup") int idGroup,
-                       @PathVariable("idStudent") int idStudent, Model model) {
-        Student result = studentService.findById(idStudent);
+    public String edit(@PathVariable("idStudent") int idStudent, Model model) {
+        StudentDto result = studentService.getStudentDtoById(idStudent);
         if (result != null) {
             result.setName(result.getName().trim());
             result.setLastName(result.getLastName().trim());
+            result.setFacultyName(result.getFacultyName().trim());
         }
-        model.addAttribute("student", result);
-        Faculty faculty = facultyService.findById(idFaculty);
-        model.addAttribute("faculty", faculty);
-        model.addAttribute("course", courseService.findById(idCourse));
-        model.addAttribute("group", groupService.findById(idGroup));
-
-        Map<Integer, String> mapGroupAndCourseOneFaculty = new HashMap<>();
-        faculty.getCourses().stream()
-                .peek(course -> course.setGroups(courseService.getGroupsOneCourse(course.getId())))
-                .collect(Collectors.toList())
-                .stream()
-                .forEach(course -> course.getGroups()
-                        .stream()
-                        .forEach(group -> mapGroupAndCourseOneFaculty.put(group.getId(), course.getNumberCourse() + " course, " + group.getNumberGroup() + " group")));
-
-        model.addAttribute("mapGroupAndCourseOneFaculty", mapGroupAndCourseOneFaculty);
+        model.addAttribute("studentDto", result);
+        model.addAttribute("groupsDto", groupService.getAllGroupsDto());
         return "/students/edit";
     }
 
     @PatchMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}")
-    public String update(@ModelAttribute("student") Student student,
-                         @PathVariable("idStudent") int idStudent,
-                         @PathVariable("idCourse") int idCourse,
-                         @PathVariable("idFaculty") int idFaculty,
-                         @PathVariable("idGroup") int idGroup, Model model) {
-        student.setId(idStudent);
+    public String update(@ModelAttribute("studentDto") StudentDto studentDto,
+                         @PathVariable("idStudent") Integer studentId, Model model) {
+        Student student = Student.builder()
+                .id(studentId)
+                .name(studentDto.getName())
+                .lastName(studentDto.getLastName())
+                .groupId(studentDto.getGroupId())
+                .build();
         studentService.update(student);
-        model.addAttribute("student", student);
-        model.addAttribute("faculty", facultyService.findById(idFaculty));
-        model.addAttribute("course", courseService.findById(idCourse));
-        model.addAttribute("group", groupService.findById(idGroup));
-        return "redirect:/faculties/{idFaculty}/courses/" + groupService.findById(student.getGroupId()).getCourseId()
-                + "/groups/" + student.getGroupId() + "/student/" + student.getId();
+        model.addAttribute("studentDto", studentService.getStudentDtoById(studentId));
+        return "/students/showOneStudent";
     }
 
     @DeleteMapping("/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}")

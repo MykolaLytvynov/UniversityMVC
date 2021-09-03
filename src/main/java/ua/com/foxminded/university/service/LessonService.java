@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.LessonDAO;
+import ua.com.foxminded.university.dto.LessonInfoDto;
 import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.Lesson;
 import ua.com.foxminded.university.exception.NotFoundException;
@@ -99,16 +100,16 @@ public class LessonService {
         return result;
     }
 
-    public List<Lesson> getLessonsBetweenDatesForGroup(LocalDateTime start, LocalDateTime end, Integer idGroup) {
+    public List<LessonInfoDto> getLessonsBetweenDatesForGroup(LocalDateTime start, LocalDateTime end, Integer idGroup) {
         log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') called", start, end, idGroup);
-        List<Lesson> result = lessonDAO.getLessonsBetweenDatesForGroup(start, end, idGroup);
+        List<LessonInfoDto> result = lessonDAO.getLessonsBetweenDatesForGroup(start, end, idGroup);
         log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') returned '{}'", start, end, idGroup);
         return result;
     }
 
-    public List<Lesson> getLessonsBetweenDatesForTeacher(LocalDateTime start, LocalDateTime end, Integer idTeacher) {
+    public List<LessonInfoDto> getLessonsBetweenDatesForTeacher(LocalDateTime start, LocalDateTime end, Integer idTeacher) {
         log.debug("getLessonsBetweenDatesForTeacher('{}', '{}', '{}') called", start, end, idTeacher);
-        List<Lesson> result = lessonDAO.getLessonsBetweenDatesForTeacher(start, end, idTeacher);
+        List<LessonInfoDto> result = lessonDAO.getLessonsBetweenDatesForTeacher(start, end, idTeacher);
         log.debug("getLessonsBetweenDatesForTeacher('{}', '{}', '{}') returned '{}'", start, end, idTeacher);
         return result;
     }
@@ -117,5 +118,19 @@ public class LessonService {
         log.debug("update('{}') called", lesson);
         lessonDAO.update(lesson);
         log.debug("update('{}') was success", lesson);
+    }
+
+    public List<LessonInfoDto> getAllLessonWithInfo() {
+        log.debug("getAllLessonWithInfo() called");
+        List<LessonInfoDto> result = lessonDAO.getAllLessonWithInfo();
+        log.debug("getAllLessonWithInfo() returned '{}'", result);
+        return result;
+    }
+
+    public LessonInfoDto getLessonWithInfo(Integer lessonId) {
+        log.debug("getLessonWithInfo('{}') called", lessonId);
+        LessonInfoDto result = lessonDAO.getLessonWithInfo(lessonId);
+        log.debug("getLessonWithInfo('{}') returned '{}'", lessonId, result);
+        return result;
     }
 }

@@ -30,23 +30,22 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:if="${employees.isEmpty()}">
+    <tr th:if="${employeesDto.isEmpty()}">
         <td colspan="5">No employees available</td>
     </tr>
-    <tr th:each="employee : ${employees}">
-        <td th:text="${employee.id}" scope="row"></td>
-        <td th:text="${employee.name}" scope="row"></td>
-        <td th:text="${employee.lastName}" scope="row"></td>
+    <tr th:each="employeeDto : ${employeesDto}">
+        <td th:text="${employeeDto.id}" scope="row"></td>
+        <td th:text="${employeeDto.name}" scope="row"></td>
+        <td th:text="${employeeDto.lastName}" scope="row"></td>
         <td scope="row">
-            <a th:each="position : ${positions}"
-               th:href="@{/position/{id}(id = ${position.id})}"
-               th:if="${position.id == employee.positionId}" th:text="${position.name}"></a>
+            <a th:href="@{/position/{id}(id = ${employeeDto.positionId})}"
+               th:text="${employeeDto.positionName}"></a>
         </td>
-        <td th:text="${employee.salary} + ' $'" scope="row"></td>
+        <td th:text="${employeeDto.salary} + ' $'" scope="row"></td>
         <td>
-            <div><a th:href="@{/employees/{id}(id = ${employee.id})}" type="button"
+            <div><a th:href="@{/employees/{id}(id = ${employeeDto.id})}" type="button"
                     class="btn btn-primary btn-sm">view</a>
-                <a th:href="@{/employees/{id}/edit(id=${employee.id})}" type="button"
+                <a th:href="@{/employees/{id}/edit(id=${employeeDto.id})}" type="button"
                    class="btn btn-secondary btn-sm">change</a>
             </div>
         </td>

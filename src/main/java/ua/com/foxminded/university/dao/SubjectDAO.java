@@ -8,6 +8,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.university.dao.mapper.SubjectMapper;
+import ua.com.foxminded.university.dao.mapper.dto.SubjectDtoMapper;
+import ua.com.foxminded.university.dto.EmployeeDto;
+import ua.com.foxminded.university.dto.SubjectDto;
 import ua.com.foxminded.university.entities.Subject;
 import ua.com.foxminded.university.entities.person.Employee;
 
@@ -27,6 +30,7 @@ import static java.util.Optional.ofNullable;
 public class SubjectDAO implements CrudOperations<Subject, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final SubjectMapper subjectMapper;
+    private final SubjectDtoMapper subjectDtoMapper;
 
     public static final String SAVE_SUBJECT = "INSERT INTO subjects (name, description, amountLessons) VALUES (?, ?, ?)";
     public static final String FIND_BY_ID = "SELECT * FROM subjects WHERE id = ?";
@@ -40,7 +44,11 @@ public class SubjectDAO implements CrudOperations<Subject, Integer> {
     public static final String UPDATE_SUBJECT = "UPDATE subjects SET name = ?, description = ?, employeeId = ?, amountLessons = ? WHERE id = ?";
     public static final String GET_SUBJECTS_WITHOUT_TEACHER = "SELECT * FROM subjects WHERE employeeId IS NULL";
 
-
+    //For Dto
+    public static final String GET_ALL_SUBJECTS_DTO = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
+            "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id";
+    public static final String GET_SUBJECT_DTO_BY_ID = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
+            "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id WHERE subjects.id = ?";
 
     @Override
     public Subject save(Subject subject) {
@@ -149,4 +157,17 @@ public class SubjectDAO implements CrudOperations<Subject, Integer> {
         return result;
     }
 
+    public List<SubjectDto> getAllSubjectsDto() {
+        log.debug("getAllSubjectsDto() called");
+        List<SubjectDto> result = jdbcTemplate.query(GET_ALL_SUBJECTS_DTO, subjectDtoMapper);
+        log.debug("getAllSubjectsDto() returned '{}'", result);
+        return result;
+    }
+
+    public SubjectDto getSubjectDtoByID(Integer subjectId) {
+        log.debug("getSubjectDtoByID('{}') called", subjectId);
+        SubjectDto result = jdbcTemplate.queryForObject(GET_SUBJECT_DTO_BY_ID, subjectDtoMapper, subjectId);
+        log.debug("getSubjectDtoByID('{}') returned '{}'", result, subjectId);
+        return result;
+    }
 }

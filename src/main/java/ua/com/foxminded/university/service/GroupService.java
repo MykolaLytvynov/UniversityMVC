@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.GroupDAO;
+import ua.com.foxminded.university.dto.GroupInfoDto;
 import ua.com.foxminded.university.entities.Course;
 import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.person.Student;
@@ -78,6 +79,20 @@ public class GroupService {
         log.debug("getStudentsOneGroup('{}') called", groupId);
         List<Student> result = groupDAO.getStudentsOneGroup(groupId);
         log.debug("getStudentsOneGroup('{}') returned '{}'", groupId, result);
+        return result;
+    }
+
+    public GroupInfoDto getGroupDto(Integer groupId) {
+        log.debug("getAllGroupsDto('{}') called", groupId);
+        GroupInfoDto result = groupDAO.getGroupDto(groupId);
+        log.debug("getAllGroupsDto('{}') returned '{}'", groupId, result);
+        return result;
+    }
+
+    public List<GroupInfoDto> getAllGroupsDto() {
+        log.debug("getAllGroupsDto() called");
+        List<GroupInfoDto> result = groupDAO.getAllGroupsDto();
+        log.debug("getAllGroupsDto() returned '{}'", result);
         return result;
     }
 }

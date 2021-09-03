@@ -17,16 +17,12 @@ public class GroupController {
     private final CourseService courseService;
     private final FacultyService facultyService;
 
+
     @GetMapping("/{id}")
-    public String getById(@PathVariable("idCourse") int idCourse,
-                          @PathVariable("idFaculty") int idFaculty,
-                          @PathVariable("id") int id, Model model) {
-        model.addAttribute("group", groupService.findById(id));
-        model.addAttribute("faculty", facultyService.findById(idFaculty));
-        model.addAttribute("course", courseService.findById(idCourse));
+    public String getById(@PathVariable("id") int id, Model model) {
+        model.addAttribute("groupDto", groupService.getGroupDto(id));
         return "/groups/showOneGroup";
     }
-
 
     @GetMapping("/new")
     public String newGroup(@PathVariable("idCourse") int idCourse,

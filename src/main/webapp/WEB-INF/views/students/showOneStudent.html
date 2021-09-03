@@ -2,46 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Student ' + ${student.name} + ' ' + ${student.lastName}"></title>
+    <title th:text="'Student ' + ${studentDto.name} + ' ' + ${studentDto.lastName}"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<h3 th:text="${student.name} + ' ' + ${student.lastName}"></h3>
+<h3 th:text="${studentDto.name} + ' ' + ${studentDto.lastName}"></h3>
 
 <nav aria-label=" breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a href="/faculties">Faculties</a></li>
-        <li class="breadcrumb-item"><a th:href="@{/faculties/{idFaculty}(idFaculty = ${faculty.id})}"><span
-                th:text="${faculty.name}">name</span> faculty</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/faculties/{idFaculty}(idFaculty = ${studentDto.facultyId})}"><span
+                th:text="${studentDto.facultyName}">name</span> faculty</a></li>
         <li class="breadcrumb-item"><a
-                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/(idFaculty = ${faculty.id}, idCourse = ${course.id})}"><span
-                th:text="${course.numberCourse}"/> course</a></li>
+                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/(idFaculty = ${studentDto.facultyId}, idCourse = ${studentDto.courseId})}"><span
+                th:text="${studentDto.numberCourse}"/> course</a></li>
         <li class="breadcrumb-item"><a
-                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}(idFaculty = ${faculty.id}, idCourse = ${course.id}, idGroup = ${group.id})}"><span
-                th:text="${group.numberGroup}"/> group</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><span th:text="${student.name}"/> <span
-                th:text="${student.lastName}"/></li>
+                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}
+                (idFaculty = ${studentDto.id}, idCourse = ${studentDto.courseId}, idGroup = ${studentDto.groupId})}"><span
+                th:text="${studentDto.numberGroup}"/> group</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><span th:text="${studentDto.name}"/> <span
+                th:text="${studentDto.lastName}"/></li>
     </ol>
 </nav>
 
-
-<p><strong>ID: </strong> <span th:text="${student.id}"></span></p>
-<p><strong>Faculty: </strong> <span th:text="${faculty.name}"></span></p>
-<p><strong>Course: </strong> <span th:text="${course.numberCourse}"></span></p>
-<p><strong>Group: </strong> <span th:text="${group.numberGroup}"></span></p>
+<p><strong>ID: </strong> <span th:text="${studentDto.id}"></span></p>
+<p><strong>Faculty: </strong> <span th:text="${studentDto.facultyName}"></span></p>
+<p><strong>Course: </strong> <span th:text="${studentDto.numberCourse}"></span></p>
+<p><strong>Group: </strong> <span th:text="${studentDto.numberGroup}"></span></p>
 <br>
-<div class="btn-group"><a th:href="@{/lessons/{idGroup}/lessons-group/search(idGroup = ${student.groupId})}"
-   type="button" class="btn btn-primary btn-sm">Search lessons</a></div>
+<div class="btn-group"><a th:href="@{/lessons/{idGroup}/lessons-group/search(idGroup = ${studentDto.groupId})}"
+                          type="button" class="btn btn-primary btn-sm">Search lessons</a></div>
 <div class="btn-group">
     <a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}/edit
-    (idFaculty = ${faculty.id}, idCourse = ${course.id}, idGroup = ${group.id}, idStudent = ${student.id})}"
+    (idFaculty = ${studentDto.facultyId}, idCourse = ${studentDto.courseId}, idGroup = ${studentDto.groupId}, idStudent = ${studentDto.id})}"
        type="button" class="btn btn-primary btn-sm">Edit</a></div>
 <div class="btn-group">
     <form th:method="DELETE" th:action="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}
-    (idFaculty = ${faculty.id}, idCourse = ${course.id}, idGroup = ${group.id}, idStudent = ${student.id})}">
+    (idFaculty = ${studentDto.facultyId}, idCourse = ${studentDto.courseId}, idGroup = ${studentDto.groupId}, idStudent = ${studentDto.id})}">
         <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
     </form>
 </div>

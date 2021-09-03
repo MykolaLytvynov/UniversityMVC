@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.com.foxminded.university.entities.Course;
-import ua.com.foxminded.university.entities.Faculty;
 import ua.com.foxminded.university.service.CourseService;
 import ua.com.foxminded.university.service.FacultyService;
 
@@ -17,12 +16,10 @@ public class CourseController {
     private final FacultyService facultyService;
 
     @GetMapping("/{id}")
-    public String getById(@PathVariable("idFaculty") int idFaculty, @PathVariable("id") int id, Model model) {
-        model.addAttribute("course", courseService.findById(id));
-        model.addAttribute("faculty", facultyService.findById(idFaculty));
+    public String getById(@PathVariable("id") int id, Model model) {
+        model.addAttribute("courseDto", courseService.getCourseDtoById(id));
         return "/courses/showOneCourse";
     }
-
 
     @GetMapping("/new")
     public String newCourse(@PathVariable("idFaculty") int idFaculty, Model model) {

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.EmployeeDAO;
+import ua.com.foxminded.university.dto.EmployeeDto;
+import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.entities.person.Employee;
 import ua.com.foxminded.university.exception.NotFoundException;
 
@@ -84,10 +86,25 @@ public class EmployeeService {
         log.debug("update('{}') was success", employee);
     }
 
-    public List<Employee> getAllTeacher() {
+    public List<TeacherDto> getAllTeacher() {
         log.debug("getAllTeacher() called");
-        List<Employee> teachers = employeeDAO.getAllTeacher();
+        List<TeacherDto> teachers = employeeDAO.getAllTeacher();
         log.debug("getAllTeacher() returned '{}'", teachers);
         return teachers;
     }
+
+    public List<EmployeeDto> getAllEmployeesDto() {
+        log.debug("getAllEmployeesDto() called");
+        List<EmployeeDto> result = employeeDAO.getAllEmployeesDto();
+        log.debug("getAllEmployeesDto() returned '{}'", result);
+        return result;
+    }
+
+    public EmployeeDto getEmployeeDtoByID(Integer employeeId) {
+        log.debug("getEmployeeDtoByID('{}') called", employeeId);
+        EmployeeDto result = employeeDAO.getEmployeeDtoByID(employeeId);
+        log.debug("getEmployeeDtoByID('{}') returned '{}'", result, employeeId);
+        return result;
+    }
+
 }

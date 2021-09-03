@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.StudentDAO;
+import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.entities.person.Student;
 import ua.com.foxminded.university.exception.NotFoundException;
 
@@ -74,5 +75,12 @@ public class StudentService {
         log.info("update({}) called", student);
         studentDAO.update(student);
         log.info("update({}) was success", student);
+    }
+
+    public StudentDto getStudentDtoById(Integer studentId) {
+        log.info("getStudentDtoById('{}') called", studentId);
+        StudentDto result = studentDAO.getStudentDtoById(studentId);
+        log.info("getStudentDtoById('{}') returned '{}'", studentId, result);
+        return result;
     }
 }

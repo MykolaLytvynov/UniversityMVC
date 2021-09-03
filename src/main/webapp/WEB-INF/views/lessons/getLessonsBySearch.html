@@ -29,24 +29,21 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:if="${lessons.isEmpty()}">
+    <tr th:if="${LessonInfoDtoList.isEmpty()}">
         <td colspan="6">No lessons available</td>
     </tr>
-    <tr th:each="lesson : ${lessons}">
-        <td th:text="${lesson.id}" scope="row"></td>
-        <td th:each="subject : ${subjects}"
-            th:if="${subject.id == lesson.subjectId}"
-            th:text="${subject.name}" scope="row"></td>
+    <tr th:each="LessonInfoDto : ${LessonInfoDtoList}">
+        <td th:text="${LessonInfoDto.lessonId}" scope="row"></td>
+        <td th:text="${LessonInfoDto.subjectName}" scope="row"></td>
 
-        <td th:text="${lesson.dateTime}" scope="row"></td>
-        <td th:text="${lesson.duration}" scope="row"></td>
-        <td th:each="classroom : ${classrooms}"
-            th:if="${classroom.id == lesson.classRoomId}"
-            th:text="${classroom.name}" scope="row"></td>
+        <td th:text="${LessonInfoDto.dateTime}" scope="row"></td>
+        <td th:text="${LessonInfoDto.duration}" scope="row"></td>
+        <td th:text="${LessonInfoDto.classRoomName}" scope="row"></td>
 
 
         <td>
-            <div><a th:href="@{/lessons/{id}(id = ${lesson.id})}" type="button" class="btn btn-primary btn-sm">view</a>
+            <div><a th:href="@{/lessons/{id}(id = ${LessonInfoDto.lessonId})}" type="button"
+                    class="btn btn-primary btn-sm">view</a>
             </div>
         </td>
     </tr>

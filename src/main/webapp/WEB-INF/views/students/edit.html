@@ -2,33 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Edit ' + ${student.name} + ' ' + ${student.lastName}">Title</title>
+    <title th:text="'Edit ' + ${studentDto.name} + ' ' + ${studentDto.lastName}">Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<h3 th:text="'Update student details: ' + ${student.name} + ' ' + ${student.lastName}"></h3>
+<h3 th:text="'Update student details: ' + ${studentDto.name} + ' ' + ${studentDto.lastName}"></h3>
 
 <nav aria-label=" breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a href="/faculties">Faculties</a></li>
-        <li class="breadcrumb-item"><a th:href="@{/faculties/{idFaculty}(idFaculty = ${faculty.id})}"><span
-                th:text="${faculty.name}">name</span> faculty</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/faculties/{idFaculty}(idFaculty = ${studentDto.facultyId})}"><span
+                th:text="${studentDto.facultyName}">name</span> faculty</a></li>
         <li class="breadcrumb-item"><a
                 th:href="@{/faculties/{idFaculty}/courses/{idCourse}/
-                (idFaculty = ${faculty.id}, idCourse = ${course.id})}"><span
-                th:text="${course.numberCourse}"/> course</a></li>
+                (idFaculty = ${studentDto.facultyId}, idCourse = ${studentDto.courseId})}"><span
+                th:text="${studentDto.numberCourse}"/> course</a></li>
         <li class="breadcrumb-item"><a
                 th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}
-                (idFaculty = ${faculty.id}, idCourse = ${course.id}, idGroup = ${group.id})}"><span
-                th:text="${group.numberGroup}"/> group</a></li>
+                (idFaculty = ${studentDto.facultyId}, idCourse = ${studentDto.courseId}, idGroup = ${studentDto.groupId})}"><span
+                th:text="${studentDto.numberGroup}"/> group</a></li>
 
         <li class="breadcrumb-item"><a
                 th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}
-                (idFaculty = ${faculty.id}, idCourse = ${course.id}, idGroup = ${group.id}, idStudent = ${student.id})}"><span
-                th:text="${student.name} + ' ' + ${student.lastName}"/></a></li>
+                (idFaculty = ${studentDto.facultyId}, idCourse = ${studentDto.courseId}, idGroup = ${studentDto.groupId}, idStudent = ${studentDto.id})}"><span
+                th:text="${studentDto.name} + ' ' + ${studentDto.lastName}"/></a></li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
@@ -36,16 +36,16 @@
 <div class="ml-5">
     <form th:method="PATCH"
           th:action="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}
-          (idFaculty = ${faculty.id}, idCourse = ${course.id}, idGroup = ${group.id}, idStudent = ${student.id})}"
-          th:object="${student}">
+          (idFaculty = ${studentDto.facultyId}, idCourse = ${studentDto.courseId}, idGroup = ${studentDto.groupId}, idStudent = ${studentDto.id})}"
+          th:object="${studentDto}">
 
         <div class="form-group row">
             <label for="groupId">Details of study:</label>
             <div class="col-sm-6">
                 <select class="form-control" id="groupId" th:field="*{groupId}">
-                    <option th:each="groupFromMap : ${mapGroupAndCourseOneFaculty}"
-                            th:value="${groupFromMap.key}"
-                            th:text="${groupFromMap.value}"/>
+                    <option th:each="groupDto : ${groupsDto}"
+                            th:value="${groupDto.id}"
+                            th:text="${groupDto.facultyName + ': ' + groupDto.courseNumber + ' course, ' + groupDto.numberGroup + ' group'}"/>
                 </select>
             </div>
         </div>

@@ -6,7 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ua.com.foxminded.university.dao.mapper.dto.StudentDtoMapper;
 import ua.com.foxminded.university.dao.mapper.StudentMapper;
+import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.entities.person.Student;
 
 import java.sql.PreparedStatement;
@@ -23,6 +25,7 @@ import static java.util.Optional.ofNullable;
 public class StudentDAO implements CrudOperations<Student, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final StudentMapper studentMapper;
+    private final StudentDtoMapper studentDtoMapper;
 
     public static final String SAVE_STUDENT = "INSERT INTO students(name, lastName, groupId) VALUES (?, ?, ?)";
     public static final String FIND_BY_ID = "SELECT * FROM students WHERE id = ?";
@@ -33,6 +36,11 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
     public static final String DELETE_ALL = "DELETE FROM students";
     public static final String UPDATE_STUDENT = "UPDATE students SET name = ?, lastName = ?, groupId = ? WHERE id = ?";
 
+    //For Dto
+    public static final String GET_STUDENT_DTO_BY_ID = "SELECT students.id, students.name, lastName, groupId, " +
+            "nummerGroup, nummerCourse, faculties.name faculty_name, courses.id course_id, faculties.id faculty_id FROM students " +
+            "INNER JOIN groups ON students.groupId = groups.id INNER JOIN courses ON groups.courseId = courses.id " +
+            "INNER JOIN faculties ON courses.facultyId = faculties.id WHERE students.id = ?";
 
     @Override
     public Student save(Student student) {
@@ -92,14 +100,14 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
 
     @Override
     public void deleteById(Integer id) {
-        log.debug("deleteById({}) called", id);
+        log.debug("deleteById('{}') called", id);
         jdbcTemplate.update(DELETE_STUDENT, id);
         log.debug("deleteById('{}') was success", id);
     }
 
     @Override
     public void delete(Student student) {
-        log.debug("delete({}) called", student);
+        log.debug("delete('{}') called", student);
         jdbcTemplate.update(DELETE_STUDENT, student.getId());
         log.debug("delete('{}') was success", student);
     }
@@ -113,8 +121,15 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
 
     @Override
     public void update(Student student) {
-        log.info("update({}) called", student);
+        log.info("update('{}') called", student);
         jdbcTemplate.update(UPDATE_STUDENT, student.getName(), student.getLastName(), student.getGroupId(), student.getId());
-        log.info("update({}) was success", student);
+        log.info("update('{}') was success", student);
+    }
+
+    public StudentDto getStudentDtoById(Integer studentId) {
+        log.info("getStudentDtoById('{}') called", studentId);
+        StudentDto result = jdbcTemplate.queryForObject(GET_STUDENT_DTO_BY_ID, studentDtoMapper, studentId);
+        log.info("getStudentDtoById('{}') returned '{}'", studentId, result);
+        return result;
     }
 }

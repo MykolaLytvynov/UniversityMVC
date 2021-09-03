@@ -6,19 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.com.foxminded.university.FormatterGroup;
-import ua.com.foxminded.university.dto.GroupInfoDto;
-import ua.com.foxminded.university.dto.LessonInfoDto;
-import ua.com.foxminded.university.entities.Course;
-import ua.com.foxminded.university.entities.Faculty;
-import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.Lesson;
 import ua.com.foxminded.university.service.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,53 +28,13 @@ public class LessonController {
 
     @GetMapping
     public String getAll(Model model) {
-        model.addAttribute("lessons", lessonService.findAll());
-        model.addAttribute("subjects", subjectService.findAll());
-        model.addAttribute("classrooms", classRoomService.findAll());
-
-        List<LessonInfoDto> lessonInfoDtoList = new ArrayList<>();
-        for (Lesson lesson : lessonService.findAll()) {
-            LessonInfoDto lessonInfoDto = new LessonInfoDto(lesson.getId(), lesson.getDateTime(), lesson.getDuration());
-
-            lessonInfoDto.setClassRoom(classRoomService.findById(lesson.getClassRoomId()));
-            lessonInfoDto.setGroups(lesson.getGroupsIdOneLesson()
-                    .stream()
-                    .map(idGroup -> groupService.findById(idGroup))
-                    .collect(Collectors.toList()));
-            Course course = courseService.findById(lessonInfoDto.getGroups()
-                    .stream()
-                    .findFirst().orElse(null)
-                    .getCourseId());
-            lessonInfoDto.setCourse(course);
-            lessonInfoDto.setFaculty(facultyService.findById(course.getFacultyId()));
-            lessonInfoDto.setSubject(subjectService.findById(lesson.getSubjectId()));
-            lessonInfoDtoList.add(lessonInfoDto);
-        }
-        model.addAttribute("lessonInfoDtoList", lessonInfoDtoList);
-
-
+        model.addAttribute("lessonsDto", lessonService.getAllLessonWithInfo());
         return "lessons/getAll";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model) {
-        Lesson lesson = lessonService.findById(id);
-        LessonInfoDto lessonInfoDto = new LessonInfoDto(lesson.getId(), lesson.getDateTime(), lesson.getDuration());
-
-        lessonInfoDto.setClassRoom(classRoomService.findById(lesson.getClassRoomId()));
-        lessonInfoDto.setGroups(lesson.getGroupsIdOneLesson()
-                .stream()
-                .map(idGroup -> groupService.findById(idGroup))
-                .collect(Collectors.toList()));
-        Course course = courseService.findById(lessonInfoDto.getGroups()
-                .stream()
-                .findFirst().orElse(null)
-                .getCourseId());
-        lessonInfoDto.setCourse(course);
-        lessonInfoDto.setFaculty(facultyService.findById(course.getFacultyId()));
-        lessonInfoDto.setSubject(subjectService.findById(lesson.getSubjectId()));
-
-        model.addAttribute("lessonInfoDto", lessonInfoDto);
+        model.addAttribute("lessonInfoDto", lessonService.getLessonWithInfo(id));
         return "/lessons/ShowOneLesson";
     }
 
@@ -90,18 +42,9 @@ public class LessonController {
     public String newLesson(Model model) {
         model.addAttribute("subjects", subjectService.findAll());
         model.addAttribute("classrooms", classRoomService.findAll());
-
-        List<GroupInfoDto> groupInfoDtoList = new ArrayList<>();
-        for (Group group : groupService.findAll()) {
-            Course course = courseService.findById(group.getCourseId());
-            Faculty faculty = facultyService.findById(course.getFacultyId());
-            groupInfoDtoList.add(new GroupInfoDto(group.getId(), group.getNumberGroup(), group.getStudents(),
-                    course, faculty));
-        }
-        model.addAttribute("groupInfoDtoList", groupInfoDtoList);
+        model.addAttribute("groupInfoDtoList", groupService.getAllGroupsDto());
         return "/lessons/new";
     }
-
 
     @PostMapping
     public String create(@RequestParam("subjectId") Integer subjectId,
@@ -117,26 +60,14 @@ public class LessonController {
         return "redirect:/lessons/" + result.getId();
     }
 
-
     @GetMapping("/{idLesson}/edit")
     public String edit(@PathVariable("idLesson") Integer idLesson, Model model) {
-        Lesson result = lessonService.findById(idLesson);
-        model.addAttribute("lesson", result);
-        result.setGroupsIdOneLesson(lessonService.getAllGroupsOneLesson(idLesson));
+        model.addAttribute("lessonDto", lessonService.getLessonWithInfo(idLesson));
         model.addAttribute("subjects", subjectService.findAll());
         model.addAttribute("classrooms", classRoomService.findAll());
-
-        List<GroupInfoDto> groupInfoDtoList = new ArrayList<>();
-        for (Group group : groupService.findAll()) {
-            Course course = courseService.findById(group.getCourseId());
-            Faculty faculty = facultyService.findById(course.getFacultyId());
-            groupInfoDtoList.add(new GroupInfoDto(group.getId(), group.getNumberGroup(), group.getStudents(),
-                    course, faculty));
-        }
-        model.addAttribute("groupInfoDtoList", groupInfoDtoList);
+        model.addAttribute("groupInfoDtoList", groupService.getAllGroupsDto());
         return "/lessons/edit";
     }
-
 
     @PatchMapping("/{idLesson}")
     public String update(@RequestParam("subjectId") Integer subjectId,
@@ -177,13 +108,9 @@ public class LessonController {
                                      @RequestParam("endTime")
                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
                                      Model model) {
-        List<Lesson> result = lessonService.getLessonsBetweenDatesForGroup(startTime, endTime, idGroup);
-        model.addAttribute("lessons", result);
-        model.addAttribute("classrooms", classRoomService.findAll());
-        model.addAttribute("subjects", subjectService.findAll());
+        model.addAttribute("LessonInfoDtoList", lessonService.getLessonsBetweenDatesForGroup(startTime, endTime, idGroup));
         return "lessons/getLessonsBySearch";
     }
-
 
     @GetMapping("/{idTeacher}/lessons-teacher/search")
     public String searchLessonsForTeacher(@PathVariable("idTeacher") Integer idTeacher, Model model) {
@@ -198,12 +125,8 @@ public class LessonController {
                                        @RequestParam("endTime")
                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
                                        Model model) {
-        List<Lesson> result = lessonService.getLessonsBetweenDatesForTeacher(startTime, endTime, idTeacher);
-        model.addAttribute("lessons", result);
-        model.addAttribute("classrooms", classRoomService.findAll());
-        model.addAttribute("subjects", subjectService.findAll());
+        model.addAttribute("LessonInfoDtoList", lessonService.getLessonsBetweenDatesForTeacher(startTime, endTime, idTeacher));
         return "lessons/getLessonsBySearch";
     }
-
 
 }

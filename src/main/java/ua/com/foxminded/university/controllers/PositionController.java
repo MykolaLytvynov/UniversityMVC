@@ -46,7 +46,6 @@ public class PositionController {
         if(position != null) {
             position.setName(position.getName().trim());
         }
-
         model.addAttribute("position", position);
         return "position/edit";
     }
@@ -58,7 +57,6 @@ public class PositionController {
         model.addAttribute("position", position);
         return "position/showOnePosition";
     }
-
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {

@@ -7,8 +7,11 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ua.com.foxminded.university.dao.mapper.dto.GroupInfoDtoMapper;
+import ua.com.foxminded.university.dao.mapper.dto.LessonInfoDtoMapper;
 import ua.com.foxminded.university.dao.mapper.LessonMapper;
-import ua.com.foxminded.university.entities.Group;
+import ua.com.foxminded.university.dto.GroupInfoDto;
+import ua.com.foxminded.university.dto.LessonInfoDto;
 import ua.com.foxminded.university.entities.Lesson;
 
 import java.sql.Connection;
@@ -28,6 +31,8 @@ import static java.util.Optional.ofNullable;
 public class LessonDAO implements CrudOperations<Lesson, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final LessonMapper lessonMapper;
+    private final LessonInfoDtoMapper lessonInfoDtoMapper;
+    private final GroupInfoDtoMapper groupInfoDtoMapper;
 
     public static final String SAVE_LESSON = "INSERT INTO lessons (subjectId, dateTime, duration, classRoomId) VALUES (?, ?, ?, ?)";
     public static final String FIND_BY_ID = "SELECT * FROM lessons WHERE id = ?";
@@ -40,11 +45,28 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
     public static final String ADD_GROUPS_TO_LESSON = "INSERT INTO groupsLessons (idGroup, idLesson) VALUES (?, ?)";
     public static final String DELETE_GROUP_FROM_LESSON = "DELETE FROM groupsLessons WHERE idLesson = ?";
     public static final String GET_LESSONS_BETWEEN_DATES = "SELECT * FROM lessons WHERE dateTime BETWEEN ? AND ?";
-    public static final String GET_LESSONS_BETWEEN_DATES_FOR_GROUP = "SELECT id, subjectId, dateTime, duration, classRoomId FROM lessons " +
-            "INNER JOIN groupsLessons ON lessons.id = groupsLessons.idLesson WHERE (idGroup = ?) AND (dateTime BETWEEN ? AND ?)";
     public static final String UPDATE_LESSON = "UPDATE lessons SET subjectId = ?, dateTime = ?, duration = ?, classRoomId = ? WHERE id = ?";
-    public static final String GET_LESSONS_BETWEEN_DATES_FOR_TEACHER = "SELECT lessons.id, subjectId, dateTime, duration, classRoomId FROM lessons " +
-            "INNER JOIN subjects ON lessons.subjectId = subjects.id WHERE (employeeId = ?) AND (dateTime BETWEEN ? AND ?)";
+
+
+    // For Dto
+    public static final String GET_LESSONS_DTO_BETWEEN_DATES_FOR_GROUP = "SELECT lessons.id, subjectId subject_id, dateTime, duration, classRoomId classroom_id," +
+            " classRoom.name name_classroom, subjects.name name_subject FROM lessons INNER JOIN groupsLessons ON lessons.id = groupsLessons.idLesson " +
+            "INNER JOIN classRoom ON lessons.classRoomId = classRoom.id INNER JOIN subjects ON lessons.subjectId = subjects.id" +
+            " WHERE (idGroup = ?) AND (dateTime BETWEEN ? AND ?)";
+    public static final String GET_LESSONS_BETWEEN_DATES_FOR_TEACHER = "SELECT lessons.id, subjectId subject_id, dateTime, " +
+            "duration, classRoomId classroom_id, classRoom.name name_classroom, subjects.name name_subject " +
+            "FROM lessons INNER JOIN subjects ON lessons.subjectId = subjects.id " +
+            "INNER JOIN classRoom ON lessons.classRoomId = classRoom.id WHERE (employeeId = ?) AND (dateTime BETWEEN ? AND ?)";
+    public static final String GET_ALL_LESSONS_WITH_INFO = "SELECT lessons.id, dateTime, duration, classRoom.id classroom_id, subjects.id subject_id, " +
+            "classRoom.name name_classroom, subjects.name name_subject " +
+            "FROM lessons INNER JOIN classRoom ON lessons.classRoomId = classRoom.id INNER JOIN subjects ON lessons.subjectId = subjects.id";
+    public static final String GET_LESSON_WITH_INFO_BY_ID = "SELECT lessons.id, dateTime, duration, classRoom.id classroom_id, subjects.id subject_id, " +
+            "classRoom.name name_classroom, subjects.name name_subject " +
+            "FROM lessons INNER JOIN classRoom ON lessons.classRoomId = classRoom.id INNER JOIN subjects ON lessons.subjectId = subjects.id WHERE lessons.id = ?";
+    public static final String GET_ALL_GROUPS_ONE_LESSON_WITH_INFO = "SELECT idGroup id, nummerGroup, nummerCourse, name, courses.id course_id, faculties.id faculty_id FROM groupsLessons " +
+            "INNER JOIN groups ON groupsLessons.idGroup = groups.id INNER JOIN courses ON groups.courseId = courses.id " +
+            "INNER JOIN faculties ON courses.facultyId = faculties.id WHERE idLesson = ?";
+
 
     @Override
     public Lesson save(Lesson lesson) {
@@ -162,18 +184,41 @@ public class LessonDAO implements CrudOperations<Lesson, Integer> {
         return result;
     }
 
-    public List<Lesson> getLessonsBetweenDatesForGroup(LocalDateTime start, LocalDateTime end, Integer idGroup) {
+    public List<LessonInfoDto> getLessonsBetweenDatesForGroup(LocalDateTime start, LocalDateTime end, Integer idGroup) {
         log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') called", start, end, idGroup);
-        List<Lesson> result = jdbcTemplate.query(GET_LESSONS_BETWEEN_DATES_FOR_GROUP, lessonMapper, idGroup, start, end);
+        List<LessonInfoDto> result = jdbcTemplate.query(GET_LESSONS_DTO_BETWEEN_DATES_FOR_GROUP, lessonInfoDtoMapper, idGroup, start, end);
         log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') returned '{}'", start, end, idGroup);
         return result;
     }
 
-        public List<Lesson> getLessonsBetweenDatesForTeacher(LocalDateTime start, LocalDateTime end, Integer idTeacher) {
+    public List<LessonInfoDto> getLessonsBetweenDatesForTeacher(LocalDateTime start, LocalDateTime end, Integer idTeacher) {
         log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') called", start, end, idTeacher);
-        List<Lesson> result = jdbcTemplate.query(GET_LESSONS_BETWEEN_DATES_FOR_TEACHER, lessonMapper, idTeacher, start, end);
+        List<LessonInfoDto> result = jdbcTemplate.query(GET_LESSONS_BETWEEN_DATES_FOR_TEACHER, lessonInfoDtoMapper, idTeacher, start, end);
         log.debug("getLessonsBetweenDatesForGroup('{}', '{}', '{}') returned '{}'", start, end, idTeacher);
         return result;
     }
 
+    public List<LessonInfoDto> getAllLessonWithInfo() {
+        log.debug("getAllLessonWithInfo() called");
+        List<LessonInfoDto> result = jdbcTemplate.query(GET_ALL_LESSONS_WITH_INFO, lessonInfoDtoMapper);
+        result.stream()
+                .forEach(lessonInfoDto -> lessonInfoDto.setGroupsDto(getGroupsDtoOneLesson(lessonInfoDto.getLessonId())));
+        log.debug("getAllLessonWithInfo() returned '{}'", result);
+        return result;
+    }
+
+    public LessonInfoDto getLessonWithInfo(Integer lessonId) {
+        log.debug("getLessonWithInfo('{}') called", lessonId);
+        LessonInfoDto result = jdbcTemplate.queryForObject(GET_LESSON_WITH_INFO_BY_ID, lessonInfoDtoMapper, lessonId);
+        result.setGroupsDto(getGroupsDtoOneLesson(result.getLessonId()));
+        log.debug("getLessonWithInfo('{}') returned '{}'", lessonId, result);
+        return result;
+    }
+
+    private List<GroupInfoDto> getGroupsDtoOneLesson(Integer lessonId) {
+        log.debug("getGroupsDtoOneLesson('{}') called", lessonId);
+        List<GroupInfoDto> result = jdbcTemplate.query(GET_ALL_GROUPS_ONE_LESSON_WITH_INFO, groupInfoDtoMapper, lessonId);
+        log.debug("getGroupsDtoOneLesson('{}') returned '{}'", lessonId, result);
+        return result;
+    }
 }

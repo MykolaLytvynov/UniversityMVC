@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Course id: ' + ${course.getId()}">Title</title>
+    <title th:text="'Course id: ' + ${courseDto.getId()}">Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -10,35 +10,35 @@
 <body>
 
 
-<h3 th:text="${course.numberCourse} + ' course'"></h3>
+<h3 th:text="${courseDto.numberCourse} + ' course'"></h3>
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a href="/faculties">Faculties</a></li>
-        <li class="breadcrumb-item"><a th:href="@{/faculties/{id}(id = ${course.facultyId})}"><span
-                th:text="${faculty.name}">name</span> faculty</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><span th:text="${course.numberCourse}">id</span> course
+        <li class="breadcrumb-item"><a th:href="@{/faculties/{id}(id = ${courseDto.facultyId})}"><span
+                th:text="${courseDto.facultyName}">name</span> faculty</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><span th:text="${courseDto.numberCourse}">id</span> course
         </li>
     </ol>
 </nav>
 
 <form th:method="DELETE"
-      th:action="@{/faculties/{idFaculty}/courses/{id}(idFaculty = ${faculty.id}, id = ${course.id})}">
+      th:action="@{/faculties/{idFaculty}/courses/{id}(idFaculty = ${courseDto.facultyId}, id = ${courseDto.id})}">
     <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
 </form>
 
-<p><strong>ID: </strong> <span th:text="${course.id}"></span></p>
-<p><strong>Number course: </strong> <span th:text="${course.numberCourse}"></span></p>
-<a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/new(idFaculty = ${course.facultyId}, idCourse = ${course.id})}">(NEW
+<p><strong>ID: </strong> <span th:text="${courseDto.id}"></span></p>
+<p><strong>Number course: </strong> <span th:text="${courseDto.numberCourse}"></span></p>
+<a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/new(idFaculty = ${courseDto.facultyId}, idCourse = ${courseDto.id})}">(NEW
     GROUP)</a>
 <p><strong>Groups:</strong></p>
 
-<p th:if="${course.groups.isEmpty()}">No groups</p>
+<p th:if="${courseDto.groups.isEmpty()}">No groups</p>
 
 <ul>
-    <li th:each="group : ${course.groups}">
-        <a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{id}(id = ${group.id}, idFaculty = ${course.facultyId}, idCourse =${course.id})}"
+    <li th:each="group : ${courseDto.groups}">
+        <a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{id}(id = ${group.id}, idFaculty = ${courseDto.facultyId}, idCourse =${courseDto.id})}"
            th:text="${group.numberGroup} + ' group'"></a>
     </li>
 </ul>

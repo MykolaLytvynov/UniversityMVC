@@ -30,23 +30,21 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:if="${subjects.isEmpty()}">
+    <tr th:if="${subjectsDto.isEmpty()}">
         <td colspan="6">No subjects available</td>
     </tr>
-    <tr th:each="subject : ${subjects}">
-        <td th:text="${subject.id}" scope="row"></td>
-        <td th:text="${subject.name}" scope="row"></td>
-        <td th:text="${subject.description}" scope="row"></td>
-        <td th:if="${subject.teacherId == 0}">No teacher</td>
-        <td th:each="employee : ${employees}" th:if="${employee.id == subject.teacherId}">
-            <a th:href="@{employees/{id}(id = ${employee.id})}"
-               th:text="${employee.name} + ' ' + ${employee.lastName}"/>
-        </td>
-        <td th:text="${subject.amountLessons}" scope="row"></td>
+    <tr th:each="subjectDto : ${subjectsDto}">
+        <td th:text="${subjectDto.id}" scope="row"></td>
+        <td th:text="${subjectDto.name}" scope="row"></td>
+        <td th:text="${subjectDto.description}" scope="row"></td>
+        <td th:if="${subjectDto.teacherId == 0}">No teacher</td>
+        <td th:if="${subjectDto.teacherId != 0}"><a th:href="@{employees/{id}(id = ${subjectDto.teacherId})}"
+               th:text="${subjectDto.teacherName} + ' ' + ${subjectDto.teacherLastName}"/></td>
+        <td th:text="${subjectDto.amountLessons}" scope="row"></td>
         <td>
-            <div><a th:href="@{/subjects/{id}(id = ${subject.id})}" type="button"
+            <div><a th:href="@{/subjects/{id}(id = ${subjectDto.id})}" type="button"
                     class="btn btn-primary btn-sm">view</a>
-                <a th:href="@{/subjects/{id}/edit(id=${subject.id})}" type="button"
+                <a th:href="@{/subjects/{id}/edit(id=${subjectDto.id})}" type="button"
                    class="btn btn-secondary btn-sm">change</a>
             </div>
         </td>

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.CourseDAO;
 import ua.com.foxminded.university.dao.mapper.GroupMapper;
+import ua.com.foxminded.university.dto.CourseInfoDto;
 import ua.com.foxminded.university.entities.Course;
 import ua.com.foxminded.university.entities.Faculty;
 import ua.com.foxminded.university.entities.Group;
@@ -80,6 +81,14 @@ public class CourseService {
         log.debug("getGroupsOneCourse('{}') called", courseId);
         List<Group> result = courseDAO.getGroupsOneCourse(courseId);
         log.debug("getGroupsOneCourse('{}') returned '{}'", courseId, result);
+        return result;
+    }
+
+    public CourseInfoDto getCourseDtoById(Integer courseId) {
+        log.debug("getCourseDtoById('{}') called", courseId);
+        CourseInfoDto result = courseDAO.getCourseDtoById(courseId);
+        result.setGroups(getGroupsOneCourse(result.getId()));
+        log.debug("getCourseDtoById('{}') returned '{}'", courseId, result);
         return result;
     }
 }

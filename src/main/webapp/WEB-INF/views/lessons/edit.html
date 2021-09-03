@@ -2,21 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Lesson by id: ' + ${lesson.id}">Title</title>
+    <title th:text="'Lesson by id: ' + ${lessonDto.lessonId}">Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<h3>Update lesson by id: <span th:text="${lesson.id}"/></h3>
+<h3>Update lesson by id: <span th:text="${lessonDto.lessonId}"/></h3>
 
 <div class="ml-5">
-    <form th:method="PATCH" th:action="@{/lessons/{idLesson}(idLesson=${lesson.id})}" th:object="${lesson}">
-
+    <form th:method="PATCH" th:action="@{/lessons/{idLesson}(idLesson=${lessonDto.lessonId})}" th:object="${lessonDto}">
 
         <div class="form-group row">
             <label for="subject">Select subject</label>
             <div class="col-sm-6">
-                <select name="subjectId" class="form-control" id="subject" th:field="${lesson.subjectId}">
+                <select name="subjectId" class="form-control" id="subject" th:field="${lessonDto.subjectId}">
                     <option th:each="subject : ${subjects}"
                             th:value="${subject.id}"
                             th:text="${subject.name}"></option>
@@ -28,21 +27,20 @@
             <label for="dateTime">Enter a time:</label>
         </div>
         <div class="col-sm-6">
-            <input name="dateTime" type="datetime-local" id="dateTime" th:field="${lesson.dateTime}">
+            <input name="dateTime" type="datetime-local" id="dateTime" th:field="${lessonDto.dateTime}">
         </div>
-
 
         <div class="form-group row">
             <label for="duration">Enter duration: </label>
             <div class="col-sm-6">
-                <input name="duration" type="text" id="duration" class="form-control" th:field="${lesson.duration}"/>
+                <input name="duration" type="text" id="duration" class="form-control" th:field="${lessonDto.duration}"/>
             </div>
         </div>
 
         <div class="form-group row">
             <label for="classRoom">Select classroom</label>
             <div class="col-sm-6">
-                <select name="classRoomId" class="form-control" id="classRoom" th:field="${lesson.classRoomId}">
+                <select name="classRoomId" class="form-control" id="classRoom" th:field="${lessonDto.classRoomId}">
                     <option th:each="classroom : ${classrooms}"
                             th:value="${classroom.id}"
                             th:text="${classroom.name}"></option>
@@ -57,17 +55,15 @@
                     <option value="">No change</option>
                     <option th:each="groupInfoDto : ${groupInfoDtoList}"
                             th:value="${groupInfoDto.id}"
-                            th:text="${groupInfoDto.getFaculty().name + ': ' + groupInfoDto.getCourse().numberCourse
-                            + ' course, ' + groupInfoDto.getNumberGroup() + ' group'}"></option>
+                            th:text="${groupInfoDto.facultyName + ': ' + groupInfoDto.courseNumber
+                            + ' course, ' + groupInfoDto.numberGroup + ' group'}"></option>
                 </select>
             </div>
         </div>
 
-
         <input class="btn btn-primary" type="submit" value="Update"/>
     </form>
 </div>
-
 
 </body>
 </html>

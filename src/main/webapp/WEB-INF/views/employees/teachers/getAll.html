@@ -39,17 +39,14 @@
         <td th:text="${teacher.name}" scope="row"></td>
         <td th:text="${teacher.lastName}" scope="row"></td>
         <td scope="row">
-            <a th:each="position : ${positions}"
-               th:href="@{/position/{id}(id = ${position.id})}"
-               th:if="${position.id == teacher.positionId}" th:text="${position.name}"></a>
+            <a th:href="@{/position/{id}(id = ${teacher.positionId})}"
+               th:text="${teacher.positionName}"></a>
         </td>
         <td th:text="${teacher.salary} + ' $'" scope="row"></td>
 
-        <td>
-            <p th:each="subject : ${teacher.subjectList}">
-                <a th:href="@{/subjects/{id}(id = ${subject.id})}" th:text="${subject.name}"/>
-            </p>
-        </td>
+        <td><p th:each="subject : ${teacher.subjectList}">
+            <a th:href="@{/subjects/{id}(id = ${subject.id})}" th:text="${subject.name}"/>
+        </p></td>
 
         <td>
             <div><a th:href="@{/employees/{id}(id = ${teacher.id})}" type="button"

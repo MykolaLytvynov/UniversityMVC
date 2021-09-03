@@ -7,9 +7,10 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ua.com.foxminded.university.dao.mapper.dto.GroupInfoDtoMapper;
 import ua.com.foxminded.university.dao.mapper.GroupMapper;
 import ua.com.foxminded.university.dao.mapper.StudentMapper;
-import ua.com.foxminded.university.entities.Course;
+import ua.com.foxminded.university.dto.GroupInfoDto;
 import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.person.Student;
 
@@ -31,6 +32,7 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final GroupMapper groupMapper;
     private final StudentMapper studentMapper;
+    private final GroupInfoDtoMapper groupInfoDtoMapper;
 
     public static final String SAVE_GROUP = "INSERT INTO groups (nummerGroup, courseId) VALUES (?, ?)";
     public static final String FIND_BY_ID = "SELECT * FROM groups WHERE id = ?";
@@ -41,6 +43,12 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
     public static final String DELETE_ALL = "DELETE FROM groups";
 
     public static final String GET_STUDENTS_ONE_GROUP = "SELECT * FROM students WHERE groupId = ?";
+
+    //For Dto
+    public static final String GET_ALL_GROUPS_DTO = "SELECT groups.id, nummerGroup, nummerCourse, name, courses.id course_id, faculties.id faculty_id " +
+            "FROM groups INNER JOIN courses ON courseId = courses.id INNER JOIN faculties on faculties.id = courses.facultyId";
+    public static final String GET_GROUP_DTO_BY_ID = "SELECT groups.id, nummerGroup, nummerCourse, name, courses.id course_id, faculties.id faculty_id " +
+            "FROM groups INNER JOIN courses ON courseId = courses.id INNER JOIN faculties on faculties.id = courses.facultyId WHERE groups.id = ?";
 
     @Override
     public Group save(Group group) {
@@ -136,4 +144,22 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
     @Override
     public void update(Group group) {
     }
+
+    public List<GroupInfoDto> getAllGroupsDto() {
+        log.debug("getAllGroupsDto() called");
+        List<GroupInfoDto> result = jdbcTemplate.query(GET_ALL_GROUPS_DTO, groupInfoDtoMapper);
+        result.stream()
+                .forEach(groupInfoDto -> groupInfoDto.setStudents(getStudentsOneGroup(groupInfoDto.getId())));
+        log.debug("getAllGroupsDto() returned '{}'", result);
+        return result;
+    }
+
+    public GroupInfoDto getGroupDto(Integer groupId) {
+        log.debug("getAllGroupsDto('{}') called", groupId);
+        GroupInfoDto result = jdbcTemplate.queryForObject(GET_GROUP_DTO_BY_ID, groupInfoDtoMapper, groupId);
+        result.setStudents(getStudentsOneGroup(result.getId()));
+        log.debug("getAllGroupsDto('{}') returned '{}'", groupId, result);
+        return result;
+    }
+
 }

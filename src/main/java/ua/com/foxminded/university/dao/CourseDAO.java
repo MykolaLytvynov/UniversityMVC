@@ -7,10 +7,11 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ua.com.foxminded.university.dao.mapper.dto.CourseInfoDtoMapper;
 import ua.com.foxminded.university.dao.mapper.CourseMapper;
 import ua.com.foxminded.university.dao.mapper.GroupMapper;
+import ua.com.foxminded.university.dto.CourseInfoDto;
 import ua.com.foxminded.university.entities.Course;
-import ua.com.foxminded.university.entities.Faculty;
 import ua.com.foxminded.university.entities.Group;
 
 import java.sql.Connection;
@@ -31,6 +32,7 @@ public class CourseDAO implements CrudOperations<Course, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final CourseMapper courseMapper;
     private final GroupMapper groupMapper;
+    private final CourseInfoDtoMapper courseInfoDtoMapper;
 
     private static final String SAVE_COURSE = "INSERT INTO courses (nummerCourse, facultyId) VALUES (?, ?)";
     public static final String FIND_BY_ID = "SELECT * FROM courses WHERE id = ?";
@@ -41,6 +43,10 @@ public class CourseDAO implements CrudOperations<Course, Integer> {
     public static final String DELETE_ALL = "DELETE FROM courses";
 
     public static final String GET_GROUPS_ONE_COURSE = "SELECT * FROM groups WHERE courseId = ?";
+
+    //For Dto
+    public static final String GET_COURSE_DTO_BY_ID = "SELECT courses.id, nummerCourse, facultyId, faculties.name " +
+            "FROM courses INNER JOIN faculties ON courses.facultyId = faculties.id WHERE courses.id = ?";
 
     @Override
     public Course save(Course course) {
@@ -137,5 +143,12 @@ public class CourseDAO implements CrudOperations<Course, Integer> {
 
     @Override
     public void update(Course course) {
+    }
+
+    public CourseInfoDto getCourseDtoById(Integer courseId) {
+        log.debug("getCourseDtoById('{}') called", courseId);
+        CourseInfoDto result = jdbcTemplate.queryForObject(GET_COURSE_DTO_BY_ID, courseInfoDtoMapper, courseId);
+        log.debug("getCourseDtoById('{}') returned '{}'", courseId, result);
+        return result;
     }
 }

@@ -2,15 +2,17 @@ package ua.com.foxminded.university.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ua.com.foxminded.university.dao.mapper.dto.EmployeeDtoMapper;
 import ua.com.foxminded.university.dao.mapper.EmployeeMapper;
+import ua.com.foxminded.university.dao.mapper.dto.TeacherDtoMapper;
+import ua.com.foxminded.university.dto.EmployeeDto;
+import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.entities.person.Employee;
-import ua.com.foxminded.university.entities.person.Teacher;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +20,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
@@ -29,6 +30,8 @@ import static java.util.Optional.ofNullable;
 public class EmployeeDAO implements CrudOperations<Employee, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final EmployeeMapper employeeMapper;
+    private final EmployeeDtoMapper employeeDtoMapper;
+    private final TeacherDtoMapper teacherDtoMapper;
 
     public static final String SAVE_EMPLOYEE = "INSERT INTO employees (name, lastName, positionId, salary) VALUES (?, ?, ?, ?)";
     public static final String FIND_BY_ID = "SELECT * FROM employees WHERE id = ?";
@@ -40,9 +43,14 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer> {
     public static final String GET_ALL_EMPLOYEES_ONE_POSITION = "SELECT * FROM employees WHERE positionId = ?";
     public static final String UPDATE = "UPDATE employees SET name = ?, lastName = ?, positionId = ?, salary = ? WHERE id = ?";
 
-    public static final String GET_ALL_TEACHER = "SELECT DISTINCT employees.id, employees.name, lastname, positionId, salary " +
-            "FROM employees INNER JOIN subjects ON employees.id = subjects.employeeid;";
 
+    //For Dto
+    public static final String GET_ALL_EMPLOYEES_DTO = "SELECT employees.id, employees.name, lastName, positionId, " +
+            "salary, positions.name position_name FROM employees INNER JOIN positions ON employees.positionId = positions.id";
+    public static final String GET_ALL_EMPLOYEES_DTO_BY_ID = "SELECT employees.id, employees.name, lastName, positionId, " +
+            "salary, positions.name position_name FROM employees INNER JOIN positions ON employees.positionId = positions.id WHERE employees.id = ?";
+    public static final String GET_ALL_TEACHER = "SELECT DISTINCT employees.id, employees.name, lastname, positionId, salary, positions.name position_name " +
+            "FROM employees INNER JOIN subjects ON employees.id = subjects.employeeid INNER JOIN positions ON employees.positionId = positions.id";
 
     @Override
     public Employee save(Employee employee) {
@@ -138,10 +146,25 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer> {
         log.debug("update('{}') was success");
     }
 
-    public List<Employee> getAllTeacher() {
+    public List<TeacherDto> getAllTeacher() {
         log.debug("getAllTeacher() called");
-        List<Employee> teachers = jdbcTemplate.query(GET_ALL_TEACHER, employeeMapper);
+        List<TeacherDto> teachers = jdbcTemplate.query(GET_ALL_TEACHER, teacherDtoMapper);
         log.debug("getAllTeacher() returned '{}'", teachers);
         return teachers;
     }
+
+    public List<EmployeeDto> getAllEmployeesDto() {
+        log.debug("getAllEmployeesDto() called");
+        List<EmployeeDto> result = jdbcTemplate.query(GET_ALL_EMPLOYEES_DTO, employeeDtoMapper);
+        log.debug("getAllEmployeesDto() returned '{}'", result);
+        return result;
+    }
+
+    public EmployeeDto getEmployeeDtoByID(Integer employeeId) {
+        log.debug("getEmployeeDtoByID('{}') called", employeeId);
+        EmployeeDto result = jdbcTemplate.queryForObject(GET_ALL_EMPLOYEES_DTO_BY_ID, employeeDtoMapper, employeeId);
+        log.debug("getEmployeeDtoByID('{}') returned '{}'", result, employeeId);
+        return result;
+    }
+
 }

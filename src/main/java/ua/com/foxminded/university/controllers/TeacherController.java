@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ua.com.foxminded.university.entities.Subject;
+import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.entities.person.Employee;
 import ua.com.foxminded.university.entities.person.Teacher;
 import ua.com.foxminded.university.service.EmployeeService;
 import ua.com.foxminded.university.service.PositionService;
 import ua.com.foxminded.university.service.SubjectService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,18 +23,11 @@ public class TeacherController {
 
     @GetMapping
     public String getAll(Model model) {
-        List<Teacher> teacherList = new ArrayList<>();
-        for (Employee teacher : employeeService.getAllTeacher()) {
-            teacherList.add(Teacher.builder().id(teacher.getId())
-                    .name(teacher.getName())
-                    .lastName(teacher.getLastName())
-                    .positionId(teacher.getPositionId())
-                    .salary(teacher.getSalary())
-                    .subjectList(subjectService.getAllSubjectsOneTeacher(teacher.getId()))
-                    .build());
+        List<TeacherDto> teachers = employeeService.getAllTeacher();
+        for(TeacherDto teacherDto : teachers) {
+            teacherDto.setSubjectList(subjectService.getAllSubjectsOneTeacher(teacherDto.getId()));
         }
-        model.addAttribute("teachers", teacherList);
-        model.addAttribute("positions", positionService.findAll());
+        model.addAttribute("teachers", teachers);
         return "/employees/teachers/getAll";
     }
 

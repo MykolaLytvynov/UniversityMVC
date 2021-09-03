@@ -19,15 +19,13 @@ public class EmployeeController {
 
     @GetMapping
     public String getAll(Model model) {
-        model.addAttribute("employees", employeeService.findAll());
-        model.addAttribute("positions", positionService.findAll());
+        model.addAttribute("employeesDto", employeeService.getAllEmployeesDto());
         return "employees/getAll";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("employee", employeeService.findById(id));
-        model.addAttribute("positions", positionService.findAll());
+        model.addAttribute("employeeDto", employeeService.getEmployeeDtoByID(id));
         model.addAttribute("subjectsOneEmployee", subjectService.getAllSubjectsOneTeacher(id));
         return "employees/showOneEmployee";
     }
@@ -62,8 +60,8 @@ public class EmployeeController {
                          @PathVariable("id") int id, Model model) {
         employee.setId(id);
         employeeService.update(employee);
-        model.addAttribute("employee", employee);
-        model.addAttribute("positions", positionService.findAll());
+        model.addAttribute("employeeDto", employeeService.getEmployeeDtoByID(employee.getId()));
+        model.addAttribute("subjectsOneEmployee", subjectService.getAllSubjectsOneTeacher(id));
         return "employees/showOneEmployee";
     }
 
@@ -72,5 +70,4 @@ public class EmployeeController {
         employeeService.deleteById(id);
         return "redirect:/employees/";
     }
-
 }

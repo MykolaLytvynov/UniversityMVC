@@ -32,25 +32,24 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:if="${lessonInfoDtoList.isEmpty()}">
+    <tr th:if="${lessonsDto.isEmpty()}">
         <td colspan="7">No lessons available</td>
     </tr>
-    <tr th:each="lessonInfoDto : ${lessonInfoDtoList}">
-        <td th:text="${lessonInfoDto.id}" scope="row"></td>
-        <td th:text="${lessonInfoDto.getSubject().name}" scope="row"></td>
-
+    <tr th:each="lessonInfoDto : ${lessonsDto}">
+        <td th:text="${lessonInfoDto.lessonId}" scope="row"></td>
+        <td th:text="${lessonInfoDto.subjectName}" scope="row"></td>
         <td th:text="${lessonInfoDto.dateTime}" scope="row"></td>
         <td th:text="${lessonInfoDto.duration}" scope="row"></td>
-        <td th:text="${lessonInfoDto.getClassRoom().name}" scope="row"></td>
+        <td th:text="${lessonInfoDto.classRoomName}" scope="row"></td>
 
         <td>
-            <p th:each="group : ${lessonInfoDto.getGroups()}" th:text="${lessonInfoDto.getFaculty().name + ': ' +
-            lessonInfoDto.getCourse().numberCourse + ' course, ' + group.getNumberGroup() + ' group'}"/>
+            <p th:each="groupDto : ${lessonInfoDto.getGroupsDto()}" th:text="${groupDto.facultyName + ': ' +
+            groupDto.courseNumber + ' course, ' + groupDto.numberGroup + ' group'}"/>
         </td>
 
         <td>
-            <div><a th:href="@{/lessons/{id}(id = ${lessonInfoDto.id})}" type="button" class="btn btn-primary btn-sm">view</a>
-                <a th:href="@{/lessons/{id}/edit(id=${lessonInfoDto.id})}" type="button"
+            <div><a th:href="@{/lessons/{id}(id = ${lessonInfoDto.lessonId})}" type="button" class="btn btn-primary btn-sm">view</a>
+                <a th:href="@{/lessons/{id}/edit(id=${lessonInfoDto.lessonId})}" type="button"
                    class="btn btn-secondary btn-sm">change</a>
             </div>
         </td>

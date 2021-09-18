@@ -43,9 +43,6 @@ public class PositionController {
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
         Position position = positionService.findById(id);
-        if(position != null) {
-            position.setName(position.getName().trim());
-        }
         model.addAttribute("position", position);
         return "position/edit";
     }

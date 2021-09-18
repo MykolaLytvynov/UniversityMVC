@@ -18,13 +18,13 @@ public class SubjectController {
 
     @GetMapping
     public String getAll(Model model) {
-        model.addAttribute("subjectsDto", subjectService.getAllSubjectsDto());
+        model.addAttribute("subjects", subjectService.findAll());
         return "subject/getAll";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("subjectDto", subjectService.getSubjectDtoByID(id));
+        model.addAttribute("subject", subjectService.findById(id));
         return "subject/showOneSubject";
     }
 
@@ -38,19 +38,12 @@ public class SubjectController {
     @PostMapping
     public String create(@ModelAttribute("subject") Subject subject) {
         Subject result = subjectService.save(subject);
-        if (subject.getTeacherId() != null) {
-            subjectService.addSubjectToTeacher(subject.getId(), subject.getTeacherId());
-        }
         return "redirect:/subjects/" + result.getId();
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
         Subject result = subjectService.findById(id);
-        if (result != null) {
-            result.setName(result.getName().trim());
-            result.setDescription(result.getDescription().trim());
-        }
         model.addAttribute("subject", result);
         model.addAttribute("employees", employeeService.findAll());
         return "/subject/edit";
@@ -61,10 +54,7 @@ public class SubjectController {
                          Model model) {
         subject.setId(id);
         subjectService.update(subject);
-        if (subject.getTeacherId() != null) {
-            subjectService.addSubjectToTeacher(subject.getId(), subject.getTeacherId());
-        }
-        model.addAttribute("subjectDto", subjectService.getSubjectDtoByID(id));
+        model.addAttribute("subject", subjectService.findById(id));
         return "/subject/showOneSubject";
     }
 

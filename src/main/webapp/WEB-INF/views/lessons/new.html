@@ -63,7 +63,7 @@
             <label for="groups">Select groups</label>
             <div class="col-sm-6">
                 <select name="lessonForGroups" multiple class="form-control" id="groups">
-                    <option th:each="groupInfoDto : ${groupInfoDtoList}"
+                    <option th:each="groupInfoDto : ${groups}"
                             th:value="${groupInfoDto.id}"
                             th:text="${groupInfoDto.facultyName + ': ' + groupInfoDto.courseNumber
                             + ' course, ' + groupInfoDto.numberGroup + ' group'}"></option>

@@ -3,20 +3,23 @@ package ua.com.foxminded.university.dto;
 import lombok.*;
 import ua.com.foxminded.university.entities.Group;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class CourseInfoDto {
-    @NonNull
+public class LessonDto {
     private Integer id;
     @NonNull
-    private Integer numberCourse;
+    private String dateTime;
     @NonNull
-    private Integer facultyId;
+    private Integer duration;
+    @NonNull
+    private Integer classRoomId;
+    @NonNull
+    private Integer subjectId;
     private List<Group> groups;
-    private String facultyName;
+    private String classRoomName;
+    private String subjectName;
 }

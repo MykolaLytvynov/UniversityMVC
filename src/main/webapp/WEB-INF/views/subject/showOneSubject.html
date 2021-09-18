@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${subjectDto.name}">Title</title>
+    <title th:text="${subject.name}">Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
@@ -13,22 +13,22 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a href="/subjects">Subjects</a></li>
-        <li class="breadcrumb-item active" aria-current="page" th:text="'Subject by id: ' + ${subjectDto.id}"></li>
+        <li class="breadcrumb-item active" aria-current="page" th:text="'Subject by id: ' + ${subject.id}"></li>
     </ol>
 </nav>
 
-<p><strong>ID:</strong> <span th:text="${subjectDto.id}">id</span></p>
-<p><strong>Name:</strong> <span th:text="${subjectDto.name}">name</span></p>
-<p><strong>Description:</strong> <span th:text="${subjectDto.description}">description</span></p>
-<p><strong>Teacher:</strong> <span th:if="${subjectDto.teacherId != 0}"
-                                   th:text="${subjectDto.teacherName} + ' ' + ${subjectDto.teacherLastName}"/>
-    <span th:if="${subjectDto.teacherId == 0}">NO</span></p>
-<p><strong>Amount Lessons:</strong> <span th:text="${subjectDto.amountLessons}">amountLessons</span></p>
+<p><strong>ID:</strong> <span th:text="${subject.id}">id</span></p>
+<p><strong>Name:</strong> <span th:text="${subject.name}">name</span></p>
+<p><strong>Description:</strong> <span th:text="${subject.description}">description</span></p>
+<p><strong>Teacher:</strong> <span th:if="${subject.teacherId != 0}"
+                                   th:text="${subject.teacherName} + ' ' + ${subject.teacherLastName}"/>
+    <span th:if="${subject.teacherId == 0}">NO</span></p>
+<p><strong>Amount Lessons:</strong> <span th:text="${subject.amountLessons}">amountLessons</span></p>
 
-<div class="btn-group"><a th:href="@{/subjects/{id}/edit(id=${subjectDto.id})}" type="button"
+<div class="btn-group"><a th:href="@{/subjects/{id}/edit(id=${subject.id})}" type="button"
                           class="btn btn-primary btn-sm">Edit</a></div>
 <div class="btn-group">
-    <form th:method="DELETE" th:action="@{/subjects/{id}(id=${subjectDto.id})}">
+    <form th:method="DELETE" th:action="@{/subjects/{id}(id=${subject.id})}">
         <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
     </form>
 </div>

@@ -6,9 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.university.dao.mapper.dto.StudentDtoMapper;
 import ua.com.foxminded.university.dao.mapper.StudentMapper;
-import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.entities.person.Student;
 
 import java.sql.PreparedStatement;
@@ -25,22 +23,21 @@ import static java.util.Optional.ofNullable;
 public class StudentDAO implements CrudOperations<Student, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final StudentMapper studentMapper;
-    private final StudentDtoMapper studentDtoMapper;
 
-    public static final String SAVE_STUDENT = "INSERT INTO students(name, lastName, groupId) VALUES (?, ?, ?)";
-    public static final String FIND_BY_ID = "SELECT * FROM students WHERE id = ?";
-    public static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM students WHERE id = ?";
-    public static final String FIND_ALL = "SELECT * FROM students";
-    public static final String COUNT = "SELECT COUNT(*) FROM students";
-    public static final String DELETE_STUDENT = "DELETE FROM students WHERE id = ?";
-    public static final String DELETE_ALL = "DELETE FROM students";
-    public static final String UPDATE_STUDENT = "UPDATE students SET name = ?, lastName = ?, groupId = ? WHERE id = ?";
-
-    //For Dto
-    public static final String GET_STUDENT_DTO_BY_ID = "SELECT students.id, students.name, lastName, groupId, " +
+    private static final String SAVE_STUDENT = "INSERT INTO students(name, lastName, groupId) VALUES (?, ?, ?)";
+    private static final String FIND_BY_ID = "SELECT students.id, students.name, lastName, groupId, " +
             "nummerGroup, nummerCourse, faculties.name faculty_name, courses.id course_id, faculties.id faculty_id FROM students " +
             "INNER JOIN groups ON students.groupId = groups.id INNER JOIN courses ON groups.courseId = courses.id " +
             "INNER JOIN faculties ON courses.facultyId = faculties.id WHERE students.id = ?";
+    private static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM students WHERE id = ?";
+    private static final String FIND_ALL = "SELECT students.id, students.name, lastName, groupId, " +
+            "nummerGroup, nummerCourse, faculties.name faculty_name, courses.id course_id, faculties.id faculty_id FROM students " +
+            "INNER JOIN groups ON students.groupId = groups.id INNER JOIN courses ON groups.courseId = courses.id " +
+            "INNER JOIN faculties ON courses.facultyId = faculties.id";
+    private static final String COUNT = "SELECT COUNT(*) FROM students";
+    private static final String DELETE_STUDENT = "DELETE FROM students WHERE id = ?";
+    private static final String DELETE_ALL = "DELETE FROM students";
+    private static final String UPDATE_STUDENT = "UPDATE students SET name = ?, lastName = ?, groupId = ? WHERE id = ?";
 
     @Override
     public Student save(Student student) {
@@ -126,10 +123,4 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
         log.info("update('{}') was success", student);
     }
 
-    public StudentDto getStudentDtoById(Integer studentId) {
-        log.info("getStudentDtoById('{}') called", studentId);
-        StudentDto result = jdbcTemplate.queryForObject(GET_STUDENT_DTO_BY_ID, studentDtoMapper, studentId);
-        log.info("getStudentDtoById('{}') returned '{}'", studentId, result);
-        return result;
-    }
 }

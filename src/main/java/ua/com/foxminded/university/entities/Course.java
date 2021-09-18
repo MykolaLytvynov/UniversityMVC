@@ -2,9 +2,7 @@ package ua.com.foxminded.university.entities;
 
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
-
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -16,6 +14,6 @@ public class Course {
     private Integer numberCourse;
     @NonNull
     private Integer facultyId;
-    private List<Group> groups = new ArrayList<>();
-
+    private List<Group> groups;
+    private String facultyName;
 }

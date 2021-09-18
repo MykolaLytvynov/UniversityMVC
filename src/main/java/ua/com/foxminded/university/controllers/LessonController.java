@@ -5,7 +5,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ua.com.foxminded.university.FormatterGroup;
 import ua.com.foxminded.university.entities.Lesson;
 import ua.com.foxminded.university.service.*;
 
@@ -20,21 +19,18 @@ public class LessonController {
     private final SubjectService subjectService;
     private final ClassRoomService classRoomService;
     private final GroupService groupService;
-    private final FormatterGroup formatterGroup;
     private final EmployeeService employeeService;
-    private final CourseService courseService;
-    private final FacultyService facultyService;
 
 
     @GetMapping
     public String getAll(Model model) {
-        model.addAttribute("lessonsDto", lessonService.getAllLessonWithInfo());
+        model.addAttribute("lessons", lessonService.findAll());
         return "lessons/getAll";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("lessonInfoDto", lessonService.getLessonWithInfo(id));
+        model.addAttribute("lessonDto", lessonService.findLessonDtoById(id));
         return "/lessons/ShowOneLesson";
     }
 
@@ -42,7 +38,7 @@ public class LessonController {
     public String newLesson(Model model) {
         model.addAttribute("subjects", subjectService.findAll());
         model.addAttribute("classrooms", classRoomService.findAll());
-        model.addAttribute("groupInfoDtoList", groupService.getAllGroupsDto());
+        model.addAttribute("groups", groupService.findAll());
         return "/lessons/new";
     }
 
@@ -53,19 +49,16 @@ public class LessonController {
                          @RequestParam("duration") Integer duration,
                          @RequestParam("classRoomId") Integer classRoomId,
                          @RequestParam("lessonForGroups") List<Integer> lessonForGroups) {
-        Lesson result = lessonService.save(new Lesson(subjectId, localDateTime, duration, classRoomId));
-        for (Integer groupId : lessonForGroups) {
-            lessonService.addGroupsToLesson(groupId, result.getId());
-        }
+        Lesson result = lessonService.save(new Lesson(localDateTime, duration, classRoomId, subjectId));
         return "redirect:/lessons/" + result.getId();
     }
 
     @GetMapping("/{idLesson}/edit")
     public String edit(@PathVariable("idLesson") Integer idLesson, Model model) {
-        model.addAttribute("lessonDto", lessonService.getLessonWithInfo(idLesson));
+        model.addAttribute("lesson", lessonService.findLessonDtoById(idLesson));
         model.addAttribute("subjects", subjectService.findAll());
         model.addAttribute("classrooms", classRoomService.findAll());
-        model.addAttribute("groupInfoDtoList", groupService.getAllGroupsDto());
+        model.addAttribute("groups", groupService.findAll());
         return "/lessons/edit";
     }
 
@@ -77,15 +70,9 @@ public class LessonController {
                          @RequestParam("classRoomId") Integer classRoomId,
                          @RequestParam("lessonForGroups") List<Integer> lessonForGroups,
                          @PathVariable("idLesson") Integer idLesson) {
-        Lesson lesson = new Lesson(subjectId, localDateTime, duration, classRoomId);
+        Lesson lesson = new Lesson(localDateTime, duration, classRoomId, subjectId);
         lesson.setId(idLesson);
-        lessonService.update(lesson);
-        if (!lessonForGroups.isEmpty()) {
-            lessonService.deleteGroupsFromLesson(idLesson);
-            for (Integer groupId : lessonForGroups) {
-                lessonService.addGroupsToLesson(groupId, idLesson);
-            }
-        }
+        lessonService.update(lesson, lessonForGroups);
         return "redirect:/lessons/" + idLesson;
     }
 

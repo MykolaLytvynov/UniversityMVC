@@ -20,7 +20,7 @@ public class GroupController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("groupDto", groupService.getGroupDto(id));
+        model.addAttribute("group", groupService.findById(id));
         return "/groups/showOneGroup";
     }
 

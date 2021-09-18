@@ -9,8 +9,6 @@ import ua.com.foxminded.university.entities.Faculty;
 import ua.com.foxminded.university.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -18,6 +16,7 @@ import java.util.stream.Collectors;
 public class FacultyService {
 
     private final FacultyDAO facultyDAO;
+    private final CourseService courseService;
 
     public Faculty save(Faculty faculty) {
         log.debug("save('{}') called", faculty);
@@ -30,6 +29,12 @@ public class FacultyService {
         log.debug("findById('{}') called");
         Faculty result = facultyDAO.findById(id)
                 .orElseThrow(() -> new NotFoundException("Faculty not found by id = " + id));
+        if (result != null) {
+            result.setName(result.getName().trim());
+            result.setDescription(result.getDescription().trim());
+            result.getCourses().stream()
+                    .forEach(course -> course.setGroups(courseService.getGroupsOneCourse(course.getId())));
+        }
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }

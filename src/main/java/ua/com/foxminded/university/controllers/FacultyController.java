@@ -26,9 +26,6 @@ public class FacultyController {
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") int id, Model model) {
         Faculty faculty = facultyService.findById(id);
-        faculty.getCourses()
-                .stream()
-                .forEach(course -> course.setGroups(courseService.findById(course.getId()).getGroups()));
         model.addAttribute("faculty", faculty);
         return "/faculties/showOneFaculty";
     }
@@ -48,17 +45,13 @@ public class FacultyController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
         Faculty result = facultyService.findById(id);
-        if (result != null) {
-            result.setName(result.getName().trim());
-            result.setDescription(result.getDescription().trim());
-        }
         model.addAttribute("faculty", result);
         return "/faculties/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("faculty") Faculty faculty,
-                         @PathVariable("id") int id, Model model) {
+                         @PathVariable("id") int id) {
         faculty.setId(id);
         facultyService.update(faculty);
         return "redirect:/faculties/{id}";

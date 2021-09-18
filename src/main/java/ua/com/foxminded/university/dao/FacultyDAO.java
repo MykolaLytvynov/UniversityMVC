@@ -2,14 +2,13 @@ package ua.com.foxminded.university.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.university.dao.mapper.CourseMapper;
 import ua.com.foxminded.university.dao.mapper.FacultyMapper;
+import ua.com.foxminded.university.dao.mapper.CourseMapper;
 import ua.com.foxminded.university.entities.Course;
 import ua.com.foxminded.university.entities.Faculty;
 
@@ -41,7 +40,8 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
     private static final String DELETE_ALL = "DELETE FROM faculties";
     private static final String UPDATE_FACULTY = "UPDATE faculties SET name = ?, description = ? WHERE id = ?";
 
-    public static final String GET_COURSES_ONE_FACULTY = "SELECT * FROM courses WHERE facultyId = ?";
+    public static final String GET_COURSES_ONE_FACULTY = "SELECT courses.id, nummerCourse, facultyId, faculties.name " +
+        "FROM courses INNER JOIN faculties ON courses.facultyId = faculties.id WHERE facultyId = ?";
 
     @Override
     public Faculty save(Faculty faculty) {

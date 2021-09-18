@@ -8,11 +8,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.university.dao.mapper.SubjectMapper;
-import ua.com.foxminded.university.dao.mapper.dto.SubjectDtoMapper;
-import ua.com.foxminded.university.dto.EmployeeDto;
-import ua.com.foxminded.university.dto.SubjectDto;
 import ua.com.foxminded.university.entities.Subject;
-import ua.com.foxminded.university.entities.person.Employee;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,25 +26,22 @@ import static java.util.Optional.ofNullable;
 public class SubjectDAO implements CrudOperations<Subject, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final SubjectMapper subjectMapper;
-    private final SubjectDtoMapper subjectDtoMapper;
 
-    public static final String SAVE_SUBJECT = "INSERT INTO subjects (name, description, amountLessons) VALUES (?, ?, ?)";
-    public static final String FIND_BY_ID = "SELECT * FROM subjects WHERE id = ?";
-    public static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM subjects WHERE id = ?";
-    public static final String FIND_ALL = "SELECT * FROM subjects";
-    public static final String COUNT = "SELECT COUNT(*) FROM subjects";
-    public static final String DELETE_SUBJECT = "DELETE FROM subjects WHERE id = ?";
-    public static final String DELETE_ALL = "DELETE FROM subjects";
-    public static final String GET_ALL_SUBJECTS_ONE_TEACHER = "SELECT * FROM subjects WHERE employeeId = ?";
-    public static final String ADD_TEACHER_TO_SUBJECT = "UPDATE subjects SET employeeId = ? WHERE id = ?";
-    public static final String UPDATE_SUBJECT = "UPDATE subjects SET name = ?, description = ?, employeeId = ?, amountLessons = ? WHERE id = ?";
-    public static final String GET_SUBJECTS_WITHOUT_TEACHER = "SELECT * FROM subjects WHERE employeeId IS NULL";
-
-    //For Dto
-    public static final String GET_ALL_SUBJECTS_DTO = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
-            "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id";
-    public static final String GET_SUBJECT_DTO_BY_ID = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
+    private static final String SAVE_SUBJECT = "INSERT INTO subjects (name, description, amountLessons) VALUES (?, ?, ?)";
+    private static final String FIND_BY_ID = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
             "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id WHERE subjects.id = ?";
+    private static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM subjects WHERE id = ?";
+    private static final String FIND_ALL = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
+            "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id";
+    private static final String COUNT = "SELECT COUNT(*) FROM subjects";
+    private static final String DELETE_SUBJECT = "DELETE FROM subjects WHERE id = ?";
+    private static final String DELETE_ALL = "DELETE FROM subjects";
+    private static final String GET_ALL_SUBJECTS_ONE_TEACHER = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
+        "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id WHERE employeeId = ?";
+    private static final String ADD_TEACHER_TO_SUBJECT = "UPDATE subjects SET employeeId = ? WHERE id = ?";
+    private static final String GET_SUBJECTS_WITHOUT_TEACHER = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
+        "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id WHERE employeeId IS NULL";
+    private static final String UPDATE_SUBJECT = "UPDATE subjects SET name = ?, description = ?, employeeId = ?, amountLessons = ? WHERE id = ?";
 
     @Override
     public Subject save(Subject subject) {
@@ -157,17 +150,4 @@ public class SubjectDAO implements CrudOperations<Subject, Integer> {
         return result;
     }
 
-    public List<SubjectDto> getAllSubjectsDto() {
-        log.debug("getAllSubjectsDto() called");
-        List<SubjectDto> result = jdbcTemplate.query(GET_ALL_SUBJECTS_DTO, subjectDtoMapper);
-        log.debug("getAllSubjectsDto() returned '{}'", result);
-        return result;
-    }
-
-    public SubjectDto getSubjectDtoByID(Integer subjectId) {
-        log.debug("getSubjectDtoByID('{}') called", subjectId);
-        SubjectDto result = jdbcTemplate.queryForObject(GET_SUBJECT_DTO_BY_ID, subjectDtoMapper, subjectId);
-        log.debug("getSubjectDtoByID('{}') returned '{}'", result, subjectId);
-        return result;
-    }
 }

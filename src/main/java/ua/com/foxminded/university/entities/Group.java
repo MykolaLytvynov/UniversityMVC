@@ -3,7 +3,6 @@ package ua.com.foxminded.university.entities;
 import lombok.*;
 import ua.com.foxminded.university.entities.person.Student;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -16,7 +15,9 @@ public class Group {
     private Integer numberGroup;
     @NonNull
     private Integer courseId;
-    private List<Student> students = new ArrayList<>();
-
-
+    @NonNull
+    private Integer facultyId;
+    private List<Student> students;
+    private Integer courseNumber;
+    private String facultyName;
 }

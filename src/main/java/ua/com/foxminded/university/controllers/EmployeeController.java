@@ -19,13 +19,13 @@ public class EmployeeController {
 
     @GetMapping
     public String getAll(Model model) {
-        model.addAttribute("employeesDto", employeeService.getAllEmployeesDto());
+        model.addAttribute("employees", employeeService.findAll());
         return "employees/getAll";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("employeeDto", employeeService.getEmployeeDtoByID(id));
+        model.addAttribute("employee", employeeService.findById(id));
         model.addAttribute("subjectsOneEmployee", subjectService.getAllSubjectsOneTeacher(id));
         return "employees/showOneEmployee";
     }
@@ -46,10 +46,6 @@ public class EmployeeController {
     @GetMapping("{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
         Employee employee = employeeService.findById(id);
-        if (employee != null) {
-            employee.setName(employee.getName().trim());
-            employee.setLastName(employee.getLastName().trim());
-        }
         model.addAttribute("employee", employee);
         model.addAttribute("positions", positionService.findAll());
         return "employees/edit";
@@ -60,7 +56,7 @@ public class EmployeeController {
                          @PathVariable("id") int id, Model model) {
         employee.setId(id);
         employeeService.update(employee);
-        model.addAttribute("employeeDto", employeeService.getEmployeeDtoByID(employee.getId()));
+        model.addAttribute("employee", employeeService.findById(employee.getId()));
         model.addAttribute("subjectsOneEmployee", subjectService.getAllSubjectsOneTeacher(id));
         return "employees/showOneEmployee";
     }

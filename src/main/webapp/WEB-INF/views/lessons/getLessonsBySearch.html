@@ -33,7 +33,7 @@
         <td colspan="6">No lessons available</td>
     </tr>
     <tr th:each="LessonInfoDto : ${LessonInfoDtoList}">
-        <td th:text="${LessonInfoDto.lessonId}" scope="row"></td>
+        <td th:text="${LessonInfoDto.getId}" scope="row"></td>
         <td th:text="${LessonInfoDto.subjectName}" scope="row"></td>
 
         <td th:text="${LessonInfoDto.dateTime}" scope="row"></td>
@@ -42,7 +42,7 @@
 
 
         <td>
-            <div><a th:href="@{/lessons/{id}(id = ${LessonInfoDto.lessonId})}" type="button"
+            <div><a th:href="@{/lessons/{id}(id = ${LessonInfoDto.getId})}" type="button"
                     class="btn btn-primary btn-sm">view</a>
             </div>
         </td>

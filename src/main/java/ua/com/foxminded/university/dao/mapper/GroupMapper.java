@@ -11,7 +11,11 @@ import java.sql.SQLException;
 public class GroupMapper implements RowMapper<Group> {
     @Override
     public Group mapRow(ResultSet resultSet, int i) throws SQLException {
-        Group group = new Group(resultSet.getInt("nummerGroup"), resultSet.getInt("courseId"));
+        Group group = new Group(resultSet.getInt("nummerGroup"),
+                resultSet.getInt("course_id"),
+                resultSet.getInt("faculty_id"));
+        group.setCourseNumber(resultSet.getInt("nummercourse"));
+        group.setFacultyName(resultSet.getString("name"));
         group.setId(resultSet.getInt("id"));
         return group;
     }

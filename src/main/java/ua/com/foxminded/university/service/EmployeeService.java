@@ -4,13 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.EmployeeDAO;
-import ua.com.foxminded.university.dto.EmployeeDto;
-import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.entities.person.Employee;
+import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.exception.NotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -18,6 +17,7 @@ import java.util.Optional;
 public class EmployeeService {
 
     private final EmployeeDAO employeeDAO;
+    private final SubjectService subjectService;
 
     public Employee save(Employee employee) {
         log.debug("save('{}') called", employee);
@@ -30,6 +30,10 @@ public class EmployeeService {
         log.debug("findById('{}') called");
         Employee result = employeeDAO.findById(id)
                 .orElseThrow(() -> new NotFoundException("Employee not found by id = " + id));
+        if (result != null) {
+            result.setName(result.getName().trim());
+            result.setLastName(result.getLastName().trim());
+        }
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }
@@ -88,23 +92,18 @@ public class EmployeeService {
 
     public List<TeacherDto> getAllTeacher() {
         log.debug("getAllTeacher() called");
-        List<TeacherDto> teachers = employeeDAO.getAllTeacher();
+        List<Employee> employees = employeeDAO.getAllTeacher();
+        List<TeacherDto> teachers = new ArrayList<>();
+        employees.stream().forEach(employee -> teachers.add(TeacherDto.builder().id(employee.getId())
+                .name(employee.getName())
+                .lastName(employee.getLastName())
+                .positionId(employee.getPositionId())
+                .positionName(employee.getPositionName())
+                .salary(employee.getSalary())
+                .subjectList(subjectService.getAllSubjectsOneTeacher(employee.getId()))
+                .build()));
         log.debug("getAllTeacher() returned '{}'", teachers);
         return teachers;
-    }
-
-    public List<EmployeeDto> getAllEmployeesDto() {
-        log.debug("getAllEmployeesDto() called");
-        List<EmployeeDto> result = employeeDAO.getAllEmployeesDto();
-        log.debug("getAllEmployeesDto() returned '{}'", result);
-        return result;
-    }
-
-    public EmployeeDto getEmployeeDtoByID(Integer employeeId) {
-        log.debug("getEmployeeDtoByID('{}') called", employeeId);
-        EmployeeDto result = employeeDAO.getEmployeeDtoByID(employeeId);
-        log.debug("getEmployeeDtoByID('{}') returned '{}'", result, employeeId);
-        return result;
     }
 
 }

@@ -2,37 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${employeeDto.name} + ' ' + ${employeeDto.lastName}">Title</title>
+    <title th:text="${employee.name} + ' ' + ${employee.lastName}">Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<h3 th:text="${employeeDto.name} + ' ' + ${employeeDto.lastName}"/>
+<h3 th:text="${employee.name} + ' ' + ${employee.lastName}"/>
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a href="/employees">Employees</a></li>
-        <li class="breadcrumb-item active" aria-current="page" th:text="'Employee by id: ' + ${employeeDto.id}"></li>
+        <li class="breadcrumb-item active" aria-current="page" th:text="'Employee by id: ' + ${employee.id}"></li>
     </ol>
 </nav>
 
-<p><strong>ID:</strong> <span th:text="${employeeDto.id}">id</span></p>
-<p><strong>Name:</strong> <span th:text="${employeeDto.name}">name</span></p>
-<p><strong>Last Name:</strong> <span th:text="${employeeDto.lastName}">lastName</span></p>
-<p><strong>Position:</strong> <span th:text="${employeeDto.positionName}">position</span></p>
-<p><strong>Salary:</strong> <span th:text="${employeeDto.salary}">Salary</span> $</p>
+<p><strong>ID:</strong> <span th:text="${employee.id}">id</span></p>
+<p><strong>Name:</strong> <span th:text="${employee.name}">name</span></p>
+<p><strong>Last Name:</strong> <span th:text="${employee.lastName}">lastName</span></p>
+<p><strong>Position:</strong> <span th:text="${employee.positionName}">position</span></p>
+<p><strong>Salary:</strong> <span th:text="${employee.salary}">Salary</span> $</p>
 
 
 <div class="btn-group" th:if="${!subjectsOneEmployee.isEmpty()}"><a
-        th:href="@{/lessons/{idTeacher}/lessons-teacher/search(idTeacher=${employeeDto.id})}" type="button"
+        th:href="@{/lessons/{idTeacher}/lessons-teacher/search(idTeacher=${employee.id})}" type="button"
         class="btn btn-primary btn-sm">Search Lessons</a></div>
 
-<div class="btn-group"><a th:href="@{/employees/{id}/edit(id=${employeeDto.id})}" type="button"
+<div class="btn-group"><a th:href="@{/employees/{id}/edit(id=${employee.id})}" type="button"
                           class="btn btn-primary btn-sm">Edit</a></div>
 
 <div class="btn-group">
-    <form th:method="DELETE" th:action="@{/employees/{id}(id=${employeeDto.id})}">
+    <form th:method="DELETE" th:action="@{/employees/{id}(id=${employee.id})}">
         <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
     </form>
 </div>

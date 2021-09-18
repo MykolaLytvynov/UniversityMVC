@@ -14,14 +14,14 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a href="/faculties">Faculties</a></li>
-        <li class="breadcrumb-item"><a th:href="@{/faculties/{idFaculty}(idFaculty = ${groupDto.facultyId})}"><span
-                th:text="${groupDto.facultyName}">name</span> faculty</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/faculties/{idFaculty}(idFaculty = ${group.facultyId})}"><span
+                th:text="${group.facultyName}">name</span> faculty</a></li>
         <li class="breadcrumb-item"><a
-                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/(idFaculty = ${groupDto.facultyId}, idCourse = ${groupDto.courseId})}"><span
-                th:text="${groupDto.courseNumber}"/> course</a></li>
+                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/(idFaculty = ${group.facultyId}, idCourse = ${group.courseId})}"><span
+                th:text="${group.courseNumber}"/> course</a></li>
         <li class="breadcrumb-item"><a
-                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}(idFaculty = ${groupDto.facultyId}, idCourse = ${groupDto.courseId}, idGroup = ${groupDto.id})}"><span
-                th:text="${groupDto.numberGroup}"/> group</a></li>
+                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}(idFaculty = ${group.facultyId}, idCourse = ${group.courseId}, idGroup = ${group.id})}"><span
+                th:text="${group.numberGroup}"/> group</a></li>
         <li class="breadcrumb-item active" aria-current="page">New student</li>
     </ol>
 </nav>
@@ -31,15 +31,15 @@
 <div class="ml-5">
     <form th:method="POST"
           th:action="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/
-          (idFaculty = ${groupDto.facultyId}, idCourse = ${groupDto.courseId}, idGroup = ${groupDto.id})}"
+          (idFaculty = ${group.facultyId}, idCourse = ${group.courseId}, idGroup = ${group.id})}"
           th:object="${student}">
 
         <div class="form-group row">
             <label for="idGroup">Student data:</label>
             <div class="col-sm-6">
                 <select class="form-control" id="idGroup" th:field="*{groupId}" required>
-                    <option th:value="${groupDto.id}"
-                            th:text="'Faculty: ' + ${groupDto.facultyName} + ', ' + ${groupDto.courseNumber} + ' course, ' + ${groupDto.numberGroup} + ' group'"></option>
+                    <option th:value="${group.id}"
+                            th:text="'Faculty: ' + ${group.facultyName} + ', ' + ${group.courseNumber} + ' course, ' + ${group.numberGroup} + ' group'"></option>
                 </select>
             </div>
         </div>

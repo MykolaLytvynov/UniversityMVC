@@ -47,10 +47,6 @@ public class ClassRoomController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
         ClassRoom result = classRoomService.findById(id);
-        if(result != null) {
-            result.setName(result.getName().trim());
-            result.setDescription(result.getDescription().trim());
-        }
         model.addAttribute("classroom", result);
         return "classrooms/edit";
     }

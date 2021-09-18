@@ -17,7 +17,7 @@ public class CourseController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("courseDto", courseService.getCourseDtoById(id));
+        model.addAttribute("course", courseService.findById(id));
         return "/courses/showOneCourse";
     }
 

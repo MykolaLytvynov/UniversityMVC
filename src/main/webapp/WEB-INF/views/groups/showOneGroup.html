@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Group id: ' + ${group.id}">Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<h3 th:text="${group.courseNumber} + ' course ' + ${group.numberGroup} + ' group'"></h3>
+
+<nav aria-label=" breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/faculties">Faculties</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/faculties/{idFaculty}(idFaculty = ${group.facultyId})}"><span
+                th:text="${group.facultyName}">name</span> faculty</a></li>
+        <li class="breadcrumb-item"><a
+                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/(idFaculty = ${group.facultyId}, idCourse = ${group.courseId})}"><span
+                th:text="${group.courseNumber}"/> course</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><span th:text="${group.numberGroup}"/> group</li>
+    </ol>
+</nav>
+
+<form th:method="DELETE"
+      th:action="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}(idFaculty = ${group.facultyId}, idCourse = ${group.courseId}, idGroup = ${group.id})}">
+    <input type="submit" value="Delete" class="btn btn-secondary btn-sm">
+</form>
+<p><strong>ID: </strong> <span th:text="${group.id}"></span></p>
+<p><strong>Number group: </strong> <span th:text="${group.numberGroup}"></span></p>
+<a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/new(idFaculty = ${group.facultyId}, idCourse = ${group.courseId}, idGroup = ${group.id})}">NEW
+    STUDENT</a>
+<p><strong>Students:</strong> <span th:text="${group.students.size()}"></span></p>
+
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${group.students.isEmpty()}">
+        <td colspan="3">No students</td>
+    <tr th:each="student : ${group.students}" }>
+        <td scope="row" th:text="${student.id}"></td>
+        <td scope="row" th:text="${student.name}"></td>
+        <td scope="row" th:text="${student.lastName}"></td>
+        <td scope="row">
+            <div>
+                <a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}
+                (idFaculty = ${group.facultyId}, idCourse = ${group.courseId}, idGroup = ${group.id}, idStudent = ${student.id})}"
+                   type="button" class="btn btn-primary btn-sm">view</a>
+                <a th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/{idStudent}/edit
+                (idFaculty = ${group.facultyId}, idCourse = ${group.courseId}, idGroup = ${group.id}, idStudent = ${student.id})}"
+                   type="button" class="btn btn-primary btn-sm">change</a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>

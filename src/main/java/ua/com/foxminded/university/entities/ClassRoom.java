@@ -1,9 +1,11 @@
 package ua.com.foxminded.university.entities;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
-@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@Setter
 public class ClassRoom {
     private Integer id;
     @NonNull

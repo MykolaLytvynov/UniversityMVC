@@ -4,26 +4,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.SubjectDAO;
-import ua.com.foxminded.university.dao.mapper.SubjectMapper;
 import ua.com.foxminded.university.entities.Subject;
-import ua.com.foxminded.university.entities.person.Employee;
 import ua.com.foxminded.university.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.Optional.ofNullable;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class SubjectService {
-
     private final SubjectDAO subjectDAO;
 
     public Subject save(Subject subject) {
         log.debug("save('{}') called", subject);
         Subject result = subjectDAO.save(subject);
+        if (subject.getTeacherId() != null) {
+            subjectDAO.addSubjectToTeacher(result.getId(), subject.getTeacherId());
+        }
         log.debug("save('{}') returned '{}'", subject, result);
         return result;
     }
@@ -32,6 +29,10 @@ public class SubjectService {
         log.debug("findById('{}') called", id);
         Subject result = subjectDAO.findById(id)
                 .orElseThrow(() -> new NotFoundException("Subject not found by id = " + id));
+        if (result != null) {
+            result.setName(result.getName().trim());
+            result.setDescription(result.getDescription().trim());
+        }
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }
@@ -75,11 +76,10 @@ public class SubjectService {
         log.debug("deleteAll() was success");
     }
 
-
-    public void addSubjecctToTeacher(Subject subject, Employee employee) {
-        log.debug("addSubjecctToTeacher('{}', '{}') called", subject, employee);
-        subjectDAO.addSubjecctToTeacher(subject, employee);
-        log.debug("addSubjecctToTeacher('{}', '{}') was success", subject, employee);
+    public void addSubjectToTeacher(Integer subjectId, Integer TeacherId) {
+        log.debug("addSubjecctToTeacher('{}', '{}') called", subjectId, TeacherId);
+        subjectDAO.addSubjectToTeacher(subjectId, TeacherId);
+        log.debug("addSubjecctToTeacher('{}', '{}') was success", subjectId, TeacherId);
     }
 
     public List<Subject> getAllSubjectsOneTeacher(Integer teacherId) {
@@ -88,4 +88,19 @@ public class SubjectService {
         log.debug("getAllSubjectsOneTeacher('{}') returned '{}'", teacherId, result);
         return result;
     }
+
+    public void update(Subject subject) {
+        log.debug("update('{}') called", subject);
+        subjectDAO.update(subject);
+        subjectDAO.addSubjectToTeacher(subject.getId(), subject.getTeacherId());
+        log.debug("update('{}') was success", subject);
+    }
+
+    public List<Subject> getSubjectsWithoutTeacher() {
+        log.debug("getSubjectsWithoutTeacher() called");
+        List<Subject> result = subjectDAO.getSubjectsWithoutTeacher();
+        log.debug("getSubjectsWithoutTeacher() returned '{}', result");
+        return result;
+    }
+
 }

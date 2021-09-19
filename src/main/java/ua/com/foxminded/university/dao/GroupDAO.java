@@ -2,9 +2,6 @@ package ua.com.foxminded.university.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,7 +9,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.university.dao.mapper.GroupMapper;
 import ua.com.foxminded.university.dao.mapper.StudentMapper;
-import ua.com.foxminded.university.entities.Course;
 import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.person.Student;
 
@@ -32,19 +28,25 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class GroupDAO implements CrudOperations<Group, Integer> {
     private final JdbcTemplate jdbcTemplate;
-    private final GroupMapper groupMapper;
     private final StudentMapper studentMapper;
+    private final GroupMapper groupMapper;
 
-    public static final String SAVE_GROUP = "INSERT INTO groups (nummerGroup) VALUES (?)";
-    public static final String FIND_BY_ID = "SELECT * FROM groups WHERE id = ?";
-    public static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM groups WHERE id = ?";
-    public static final String FIND_ALL = "SELECT * FROM groups";
-    public static final String COUNT = "SELECT COUNT(*) FROM groups";
-    public static final String DELETE_GROUP = "DELETE FROM groups WHERE id = ?";
-    public static final String DELETE_ALL = "DELETE FROM groups";
-    public static final String ADD_GROUP_TO_COURSE = "UPDATE groups SET courseId = ? WHERE id = ?";
+    private static final String SAVE_GROUP = "INSERT INTO groups (nummerGroup, courseId) VALUES (?, ?)";
+    private static final String FIND_BY_ID = "SELECT groups.id, nummerGroup, nummerCourse, name, courses.id course_id, faculties.id faculty_id " +
+            "FROM groups INNER JOIN courses ON courseId = courses.id INNER JOIN faculties on faculties.id = courses.facultyId WHERE groups.id = ?";
+    private static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM groups WHERE id = ?";
+    private static final String FIND_ALL = "SELECT groups.id, nummerGroup, nummerCourse, name, courses.id course_id, faculties.id faculty_id " +
+            "FROM groups INNER JOIN courses ON courseId = courses.id INNER JOIN faculties on faculties.id = courses.facultyId";
+    private static final String COUNT = "SELECT COUNT(*) FROM groups";
+    private static final String DELETE_GROUP = "DELETE FROM groups WHERE id = ?";
+    private static final String DELETE_ALL = "DELETE FROM groups";
 
-    public static final String GET_STUDENTS_ONE_GROUP = "SELECT * FROM students WHERE groupId = ?";
+    private static final String GET_STUDENTS_ONE_GROUP = "SELECT students.id, students.name, lastName, groupId, " +
+        "nummerGroup, nummerCourse, faculties.name faculty_name, courses.id course_id, faculties.id faculty_id FROM students " +
+        "INNER JOIN groups ON students.groupId = groups.id INNER JOIN courses ON groups.courseId = courses.id " +
+        "INNER JOIN faculties ON courses.facultyId = faculties.id WHERE students.groupId = ?";
+
+
 
     @Override
     public Group save(Group group) {
@@ -54,7 +56,8 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
         jdbcTemplate.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(SAVE_GROUP, Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, group.getNummerGroup());
+                ps.setInt(1, group.getNumberGroup());
+                ps.setInt(2, group.getCourseId());
                 return ps;
             }
         }, keyHolder);
@@ -128,11 +131,6 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
         log.debug("deleteAll() was success");
     }
 
-    public void addGroupToCourse(Course course, Group group) {
-        log.debug("addGroupToCourse('{}','{}') called", course, group);
-        jdbcTemplate.update(ADD_GROUP_TO_COURSE, course.getId(), group.getId());
-        log.debug("addGroupToCourse('{}','{}') was success", course, group);
-    }
 
     public List<Student> getStudentsOneGroup(Integer groupId) {
         log.debug("getStudentsOneGroup('{}') called", groupId);
@@ -140,4 +138,9 @@ public class GroupDAO implements CrudOperations<Group, Integer> {
         log.debug("getStudentsOneGroup('{}') returned '{}'", groupId, result);
         return result;
     }
+
+    @Override
+    public void update(Group group) {
+    }
+
 }

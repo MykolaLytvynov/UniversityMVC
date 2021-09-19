@@ -2,7 +2,6 @@ package ua.com.foxminded.university.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -17,7 +16,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
@@ -29,15 +27,22 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final EmployeeMapper employeeMapper;
 
-    public static final String SAVE_EMPLOYEE = "INSERT INTO employees (name, lastName, positionId, salary) VALUES (?, ?, ?, ?)";
-    public static final String FIND_BY_ID = "SELECT * FROM employees WHERE id = ?";
-    public static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM employees WHERE id = ?";
-    public static final String FIND_ALL = "SELECT * FROM employees";
-    public static final String COUNT = "SELECT COUNT(*) FROM employees";
-    public static final String DELETE_GROUP = "DELETE FROM employees WHERE id = ?";
-    public static final String DELETE_ALL = "DELETE FROM employees";
-    public static final String GET_ALL_EMPLOEES_ONE_POSITION = "SELECT * FROM employees WHERE positionId = ?";
+    private static final String SAVE_EMPLOYEE = "INSERT INTO employees (name, lastName, positionId, salary) VALUES (?, ?, ?, ?)";
+    private static final String FIND_BY_ID = "SELECT employees.id, employees.name, lastName, positionId, salary, positions.name position_name " +
+            "FROM employees INNER JOIN positions ON employees.positionId = positions.id WHERE employees.id = ?";
+    private static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM employees WHERE id = ?";
+    private static final String FIND_ALL = "SELECT employees.id, employees.name, lastName, positionId, " +
+            "salary, positions.name position_name FROM employees INNER JOIN positions ON employees.positionId = positions.id";
+    private static final String COUNT = "SELECT COUNT(*) FROM employees";
+    private static final String DELETE_GROUP = "DELETE FROM employees WHERE id = ?";
+    private static final String DELETE_ALL = "DELETE FROM employees";
+    private static final String GET_ALL_EMPLOYEES_ONE_POSITION = "SELECT employees.id, employees.name, lastName, positionId, salary, positions.name position_name " +
+            "FROM employees INNER JOIN positions ON employees.positionId = positions.id WHERE positionId = ?";
+    private static final String UPDATE = "UPDATE employees SET name = ?, lastName = ?, positionId = ?, salary = ? WHERE id = ?";
 
+    //For Dto
+    private static final String GET_ALL_TEACHER = "SELECT DISTINCT employees.id, employees.name, lastname, positionId, salary, positions.name position_name " +
+            "FROM employees INNER JOIN subjects ON employees.id = subjects.employeeid INNER JOIN positions ON employees.positionId = positions.id";
 
     @Override
     public Employee save(Employee employee) {
@@ -120,8 +125,23 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer> {
 
     public List<Employee> getAllEmploeesOnePosition(Integer positionId) {
         log.debug("getAllEmploeesOnePosition('{}') called", positionId);
-        List<Employee> result = jdbcTemplate.query(GET_ALL_EMPLOEES_ONE_POSITION, employeeMapper, positionId);
+        List<Employee> result = jdbcTemplate.query(GET_ALL_EMPLOYEES_ONE_POSITION, employeeMapper, positionId);
         log.debug("getAllEmploeesOnePosition('{}') returned '{}'", positionId, result);
         return result;
+    }
+
+    @Override
+    public void update(Employee employee) {
+        log.debug("update('{}') called", employee);
+        jdbcTemplate.update(UPDATE, employee.getName(), employee.getLastName(),
+                employee.getPositionId(), employee.getSalary(), employee.getId());
+        log.debug("update('{}') was success");
+    }
+
+    public List<Employee> getAllTeacher() {
+        log.debug("getAllTeacher() called");
+        List<Employee> teachers = jdbcTemplate.query(GET_ALL_TEACHER, employeeMapper);
+        log.debug("getAllTeacher() returned '{}'", teachers);
+        return teachers;
     }
 }

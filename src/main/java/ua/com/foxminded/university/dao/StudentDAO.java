@@ -24,13 +24,20 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final StudentMapper studentMapper;
 
-    public static final String SAVE_STUDENT = "INSERT INTO students(name, lastName) VALUES (?, ?)";
-    public static final String FIND_BY_ID = "SELECT * FROM students WHERE id = ?";
-    public static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM students WHERE id = ?";
-    public static final String FIND_ALL = "SELECT * FROM students";
-    public static final String COUNT = "SELECT COUNT(*) FROM students";
-    public static final String DELETE_GROUP = "DELETE FROM students WHERE id = ?";
-    public static final String DELETE_ALL = "DELETE FROM students";
+    private static final String SAVE_STUDENT = "INSERT INTO students(name, lastName, groupId) VALUES (?, ?, ?)";
+    private static final String FIND_BY_ID = "SELECT students.id, students.name, lastName, groupId, " +
+            "nummerGroup, nummerCourse, faculties.name faculty_name, courses.id course_id, faculties.id faculty_id FROM students " +
+            "INNER JOIN groups ON students.groupId = groups.id INNER JOIN courses ON groups.courseId = courses.id " +
+            "INNER JOIN faculties ON courses.facultyId = faculties.id WHERE students.id = ?";
+    private static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM students WHERE id = ?";
+    private static final String FIND_ALL = "SELECT students.id, students.name, lastName, groupId, " +
+            "nummerGroup, nummerCourse, faculties.name faculty_name, courses.id course_id, faculties.id faculty_id FROM students " +
+            "INNER JOIN groups ON students.groupId = groups.id INNER JOIN courses ON groups.courseId = courses.id " +
+            "INNER JOIN faculties ON courses.facultyId = faculties.id";
+    private static final String COUNT = "SELECT COUNT(*) FROM students";
+    private static final String DELETE_STUDENT = "DELETE FROM students WHERE id = ?";
+    private static final String DELETE_ALL = "DELETE FROM students";
+    private static final String UPDATE_STUDENT = "UPDATE students SET name = ?, lastName = ?, groupId = ? WHERE id = ?";
 
     @Override
     public Student save(Student student) {
@@ -41,6 +48,7 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
             PreparedStatement ps = connection.prepareStatement(SAVE_STUDENT, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, student.getName());
             ps.setString(2, student.getLastName());
+            ps.setInt(3, student.getGroupId());
             return ps;
         }, keyHolder);
 
@@ -89,15 +97,15 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
 
     @Override
     public void deleteById(Integer id) {
-        log.debug("deleteById({}) called", id);
-        jdbcTemplate.update(DELETE_GROUP, id);
+        log.debug("deleteById('{}') called", id);
+        jdbcTemplate.update(DELETE_STUDENT, id);
         log.debug("deleteById('{}') was success", id);
     }
 
     @Override
     public void delete(Student student) {
-        log.debug("delete({}) called", student);
-        jdbcTemplate.update(DELETE_GROUP, student.getId());
+        log.debug("delete('{}') called", student);
+        jdbcTemplate.update(DELETE_STUDENT, student.getId());
         log.debug("delete('{}') was success", student);
     }
 
@@ -107,4 +115,12 @@ public class StudentDAO implements CrudOperations<Student, Integer> {
         jdbcTemplate.update(DELETE_ALL);
         log.debug("deleteAll() was success");
     }
+
+    @Override
+    public void update(Student student) {
+        log.info("update('{}') called", student);
+        jdbcTemplate.update(UPDATE_STUDENT, student.getName(), student.getLastName(), student.getGroupId(), student.getId());
+        log.info("update('{}') was success", student);
+    }
+
 }

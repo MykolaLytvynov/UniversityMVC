@@ -28,6 +28,10 @@ public class ClassRoomService {
         log.debug("findById('{}') called", id);
         ClassRoom result = classRoomDAO.findById(id)
                 .orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
+        if(result != null) {
+            result.setName(result.getName().trim());
+            result.setDescription(result.getDescription().trim());
+        }
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }
@@ -69,5 +73,9 @@ public class ClassRoomService {
         log.debug("deleteAll() called");
         classRoomDAO.deleteAll();
         log.debug("deleteAll() was success");
+    }
+
+    public void update(ClassRoom classRoom) {
+        classRoomDAO.update(classRoom);
     }
 }

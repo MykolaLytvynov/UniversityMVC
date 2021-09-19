@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.PositionDAO;
-import ua.com.foxminded.university.entities.Lesson;
 import ua.com.foxminded.university.entities.Position;
 import ua.com.foxminded.university.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -29,6 +27,9 @@ public class PositionService {
         log.debug("findById('{}') called", id);
         Position result = positionDAO.findById(id)
                 .orElseThrow(() -> new NotFoundException("Position not found by id = " + id));
+        if (result != null) {
+            result.setName(result.getName().trim());
+        }
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }
@@ -70,5 +71,11 @@ public class PositionService {
         log.debug("deleteAll() called");
         positionDAO.deleteAll();
         log.debug("deleteAll() was success");
+    }
+
+    public void update(Position position) {
+        log.debug("update('{}') called", position);
+        positionDAO.update(position);
+        log.debug("update('{}') was success", position);
     }
 }

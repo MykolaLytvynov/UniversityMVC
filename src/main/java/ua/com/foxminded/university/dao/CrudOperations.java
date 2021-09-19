@@ -20,4 +20,6 @@ public interface CrudOperations <T, ID>{
     void delete(T entity);
 
     void deleteAll();
+
+    void update(T entity);
 }

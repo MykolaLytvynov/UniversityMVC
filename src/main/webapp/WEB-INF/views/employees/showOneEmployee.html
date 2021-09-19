@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${employee.name} + ' ' + ${employee.lastName}">Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<h3 th:text="${employee.name} + ' ' + ${employee.lastName}"/>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/employees">Employees</a></li>
+        <li class="breadcrumb-item active" aria-current="page" th:text="'Employee by id: ' + ${employee.id}"></li>
+    </ol>
+</nav>
+
+<p><strong>ID:</strong> <span th:text="${employee.id}">id</span></p>
+<p><strong>Name:</strong> <span th:text="${employee.name}">name</span></p>
+<p><strong>Last Name:</strong> <span th:text="${employee.lastName}">lastName</span></p>
+<p><strong>Position:</strong> <span th:text="${employee.positionName}">position</span></p>
+<p><strong>Salary:</strong> <span th:text="${employee.salary}">Salary</span> $</p>
+
+
+<div class="btn-group" th:if="${!subjectsOneEmployee.isEmpty()}"><a
+        th:href="@{/lessons/{idTeacher}/lessons-teacher/search(idTeacher=${employee.id})}" type="button"
+        class="btn btn-primary btn-sm">Search Lessons</a></div>
+
+<div class="btn-group"><a th:href="@{/employees/{id}/edit(id=${employee.id})}" type="button"
+                          class="btn btn-primary btn-sm">Edit</a></div>
+
+<div class="btn-group">
+    <form th:method="DELETE" th:action="@{/employees/{id}(id=${employee.id})}">
+        <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
+    </form>
+</div>
+
+<h4 th:if="${!subjectsOneEmployee.isEmpty()}">Subjects:</h4>
+<table class="table table-hover" th:if="${!subjectsOneEmployee.isEmpty()}">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Amount Lessons</th>
+        <th scope="col">Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="subject : ${subjectsOneEmployee}">
+        <td th:text="${subject.id}" scope="row"></td>
+        <td th:text="${subject.name}" scope="row"></td>
+        <td th:text="${subject.description}" scope="row"></td>
+        <td th:text="${subject.amountLessons}" scope="row"></td>
+        <td>
+            <div><a th:href="@{/subjects/{id}(id = ${subject.id})}" type="button"
+                    class="btn btn-primary btn-sm">view</a>
+                <a th:href="@{/subjects/{id}/edit(id=${subject.id})}" type="button"
+                   class="btn btn-secondary btn-sm">change</a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+
+</body>
+</html>

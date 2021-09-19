@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All subjects</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<h3>List of subjects</h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Subjects</li>
+    </ol>
+</nav>
+
+<a href="/subjects/new">Add new subject</a>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Teacher</th>
+        <th scope="col">Amount Lessons</th>
+        <th scope="col">Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${subjects.isEmpty()}">
+        <td colspan="6">No subjects available</td>
+    </tr>
+    <tr th:each="subjectDto : ${subjects}">
+        <td th:text="${subjectDto.id}" scope="row"></td>
+        <td th:text="${subjectDto.name}" scope="row"></td>
+        <td th:text="${subjectDto.description}" scope="row"></td>
+        <td th:if="${subjectDto.teacherId == 0}">No teacher</td>
+        <td th:if="${subjectDto.teacherId != 0}"><a th:href="@{employees/{id}(id = ${subjectDto.teacherId})}"
+               th:text="${subjectDto.teacherName} + ' ' + ${subjectDto.teacherLastName}"/></td>
+        <td th:text="${subjectDto.amountLessons}" scope="row"></td>
+        <td>
+            <div><a th:href="@{/subjects/{id}(id = ${subjectDto.id})}" type="button"
+                    class="btn btn-primary btn-sm">view</a>
+                <a th:href="@{/subjects/{id}/edit(id=${subjectDto.id})}" type="button"
+                   class="btn btn-secondary btn-sm">change</a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>

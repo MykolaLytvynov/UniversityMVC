@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${position.name}"></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<h3>Position data:</h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/position">Positions</a></li>
+        <li class="breadcrumb-item active" aria-current="page" th:text="'Position by id: ' + ${position.id}"></li>
+    </ol>
+</nav>
+
+<p><strong>ID:</strong> <span th:text="${position.id}">id</span></p>
+<p><strong>Name:</strong> <span th:text="${position.name}">name</span></p>
+
+<div class="btn-group"><a th:href="@{/position/{id}/edit(id=${position.id})}" type="button"
+                          class="btn btn-primary btn-sm">Edit</a></div>
+<div class="btn-group">
+    <form th:method="DELETE" th:action="@{/position/{id}(id=${position.id})}">
+        <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
+    </form>
+</div>
+
+<h4>Employees:</h4>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Salary</th>
+        <th scope="col">Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${employeesOnePosition.isEmpty()}">
+        <td colspan="5">No employees</td>
+    </tr>
+    <tr th:each="employee : ${employeesOnePosition}">
+        <td th:text="${employee.id}" scope="row"></td>
+        <td th:text="${employee.name}" scope="row"></td>
+        <td th:text="${employee.lastName}" scope="row"></td>
+        <td th:text="${employee.salary} + ' $'" scope="row"></td>
+        <td>
+            <div><a th:href="@{/employees/{id}(id = ${employee.id})}" type="button"
+                    class="btn btn-primary btn-sm">view</a>
+                <a th:href="@{/employees/{id}/edit(id=${employee.id})}" type="button"
+                   class="btn btn-secondary btn-sm">change</a>
+            </div>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

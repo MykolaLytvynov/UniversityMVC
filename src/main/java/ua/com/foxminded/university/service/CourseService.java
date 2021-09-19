@@ -2,18 +2,13 @@ package ua.com.foxminded.university.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.CourseDAO;
-import ua.com.foxminded.university.dao.mapper.GroupMapper;
 import ua.com.foxminded.university.entities.Course;
-import ua.com.foxminded.university.entities.Faculty;
 import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -76,16 +71,11 @@ public class CourseService {
         log.debug("deleteAll() was success");
     }
 
-    public void addCourseToFaculty(Course course, Faculty faculty) {
-        log.debug("addCourseToFaculty('{}', '{}') called", course, faculty);
-        courseDAO.addCourseToFaculty(course, faculty);
-        log.debug("addCourseToFaculty('{}', '{}') was success", course, faculty);
-    }
-
     public List<Group> getGroupsOneCourse(Integer courseId) {
         log.debug("getGroupsOneCourse('{}') called", courseId);
         List<Group> result = courseDAO.getGroupsOneCourse(courseId);
         log.debug("getGroupsOneCourse('{}') returned '{}'", courseId, result);
         return result;
     }
+
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>New Classroom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<h3>Fill data below</h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/classrooms">Classrooms</a></li>
+        <li class="breadcrumb-item active" aria-current="page">New Classroom</li>
+    </ol>
+</nav>
+
+<div class="ml-5">
+    <form th:method="POST" th:action="@{/classrooms}" th:object="${classroom}">
+
+        <div class="form-group row">
+            <label for="name">Enter name: </label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{name}" id="name" class="form-control"
+                       placeholder="Enter name for Classroom"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="description">Enter description: </label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{description}" id="description" class="form-control"
+                       placeholder="Enter description for Classroom"/>
+            </div>
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="Create Classroom"/>
+    </form>
+</div>
+</body>
+</html>

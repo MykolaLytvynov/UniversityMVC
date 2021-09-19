@@ -2,14 +2,13 @@ package ua.com.foxminded.university.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.university.dao.mapper.CourseMapper;
 import ua.com.foxminded.university.dao.mapper.FacultyMapper;
+import ua.com.foxminded.university.dao.mapper.CourseMapper;
 import ua.com.foxminded.university.entities.Course;
 import ua.com.foxminded.university.entities.Faculty;
 
@@ -39,8 +38,10 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
     private static final String COUNT = "SELECT COUNT(id) FROM faculties";
     private static final String DELETE_FACULTY = "DELETE FROM faculties WHERE id = ?";
     private static final String DELETE_ALL = "DELETE FROM faculties";
+    private static final String UPDATE_FACULTY = "UPDATE faculties SET name = ?, description = ? WHERE id = ?";
 
-    public static final String GET_COURSES_ONE_FACULTY = "SELECT * FROM courses WHERE facultyId = ?";
+    public static final String GET_COURSES_ONE_FACULTY = "SELECT courses.id, nummerCourse, facultyId, faculties.name " +
+        "FROM courses INNER JOIN faculties ON courses.facultyId = faculties.id WHERE facultyId = ?";
 
     @Override
     public Faculty save(Faculty faculty) {
@@ -69,7 +70,7 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
     public Optional<Faculty> findById(Integer id) {
         log.debug("findById('{}') called", id);
         Faculty result = jdbcTemplate.queryForObject(FIND_BY_ID, facultyMapper, id);
-        if(result != null) {
+        if (result != null) {
             result.setCourses(getCoursesOneFaculty(result.getId()));
         }
         log.debug("findById('{}') returned '{}'", id, result);
@@ -88,7 +89,7 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
     @Override
     public List<Faculty> findAll() {
         log.debug("findAll() called");
-        List<Faculty> result =  jdbcTemplate.query(FIND_ALL, facultyMapper)
+        List<Faculty> result = jdbcTemplate.query(FIND_ALL, facultyMapper)
                 .stream()
                 .peek(faculty -> faculty.setCourses(getCoursesOneFaculty(faculty.getId())))
                 .collect(Collectors.toList());
@@ -131,5 +132,12 @@ public class FacultyDAO implements CrudOperations<Faculty, Integer> {
         List<Course> result = jdbcTemplate.query(GET_COURSES_ONE_FACULTY, courseMapper, facultyId);
         log.debug("getCoursesOneFaculty('{}') returned '{}'", facultyId, result);
         return result;
+    }
+
+    @Override
+    public void update(Faculty faculty) {
+        log.debug("update('{}') called", faculty);
+        jdbcTemplate.update(UPDATE_FACULTY, faculty.getName(), faculty.getDescription(), faculty.getId());
+        log.debug("update('{}') was success", faculty);
     }
 }

@@ -4,14 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.GroupDAO;
-import ua.com.foxminded.university.entities.Course;
 import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.person.Student;
 import ua.com.foxminded.university.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -72,12 +69,6 @@ public class GroupService {
         log.debug("deleteAll() called");
         groupDAO.deleteAll();
         log.debug("deleteAll() was success");
-    }
-
-    public void addGroupToCourse(Course course, Group group) {
-        log.debug("addGroupToCourse('{}','{}') called", course, group);
-        groupDAO.addGroupToCourse(course, group);
-        log.debug("addGroupToCourse('{}','{}') was success", course, group);
     }
 
     public List<Student> getStudentsOneGroup(Integer groupId) {

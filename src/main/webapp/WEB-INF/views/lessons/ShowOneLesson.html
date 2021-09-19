@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Lesson by id: ' + ${lessonDto.id}">Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<h3>Lesson data:</h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/lessons">Lessons</a></li>
+        <li class="breadcrumb-item active" aria-current="page"
+            th:text="'Lesson by id: ' + ${lessonDto.id}"></li>
+    </ol>
+</nav>
+
+<p><strong>ID:</strong> <span th:text="${lessonDto.id}">id</span></p>
+<p><strong>Subject:</strong> <span th:text="${lessonDto.subjectName}"/></p>
+<p><strong>Date/Time:</strong> <span th:text="${lessonDto.dateTime}"/></p>
+<p><strong>Duration:</strong> <span th:text="${lessonDto.duration}"/></p>
+<p><strong>Classroom:</strong> <span th:text="${lessonDto.classRoomName}"/></p>
+
+<div class="btn-group"><a th:href="@{/lessons/{id}/edit(id=${lessonDto.id})}" type="button"
+                          class="btn btn-primary btn-sm">Edit</a>
+</div>
+<div class="btn-group">
+    <form th:method="DELETE" th:action="@{/lessons/{id}(id=${lessonDto.id})}">
+        <input type="submit" value="Delete" class="btn btn-secondary btn-sm"/>
+    </form>
+</div>
+
+<h3>Lesson for:</h3>
+<ul>
+    <li th:each="group : ${lessonDto.groups}" th:text="${group.facultyName + ': ' +
+    group.courseNumber + ' course, ' + group.numberGroup + ' group'}"/>
+</ul>
+
+</body>
+</html>

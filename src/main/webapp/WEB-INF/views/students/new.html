@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New student</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<h3>Fill data below</h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/faculties">Faculties</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/faculties/{idFaculty}(idFaculty = ${group.facultyId})}"><span
+                th:text="${group.facultyName}">name</span> faculty</a></li>
+        <li class="breadcrumb-item"><a
+                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/(idFaculty = ${group.facultyId}, idCourse = ${group.courseId})}"><span
+                th:text="${group.courseNumber}"/> course</a></li>
+        <li class="breadcrumb-item"><a
+                th:href="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}(idFaculty = ${group.facultyId}, idCourse = ${group.courseId}, idGroup = ${group.id})}"><span
+                th:text="${group.numberGroup}"/> group</a></li>
+        <li class="breadcrumb-item active" aria-current="page">New student</li>
+    </ol>
+</nav>
+
+<h3>Create new student</h3>
+
+<div class="ml-5">
+    <form th:method="POST"
+          th:action="@{/faculties/{idFaculty}/courses/{idCourse}/groups/{idGroup}/student/
+          (idFaculty = ${group.facultyId}, idCourse = ${group.courseId}, idGroup = ${group.id})}"
+          th:object="${student}">
+
+        <div class="form-group row">
+            <label for="idGroup">Student data:</label>
+            <div class="col-sm-6">
+                <select class="form-control" id="idGroup" th:field="*{groupId}" required>
+                    <option th:value="${group.id}"
+                            th:text="'Faculty: ' + ${group.facultyName} + ', ' + ${group.courseNumber} + ' course, ' + ${group.numberGroup} + ' group'"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="name">Name</label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{name}" id="name" class="form-control"
+                       placeholder="Enter name"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lastName">Last name</label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{lastName}" id="lastName" class="form-control"
+                       placeholder="Enter last name"/>
+            </div>
+            <br>
+
+            <input class="btn btn-primary" type="submit" value="Create student"/>
+        </div>
+    </form>
+</div>
+
+
+</body>
+</html>

@@ -1,22 +1,26 @@
 package ua.com.foxminded.university.entities;
 
-import lombok.Data;
-import lombok.NonNull;
-import ua.com.foxminded.university.entities.person.Teacher;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@Setter
 public class Lesson {
     private Integer id;
-    @NonNull
-    private Integer subjectId;
     @NonNull
     private LocalDateTime dateTime;
     @NonNull
     private Integer duration;
     @NonNull
     private Integer classRoomId;
-    private List<Group> lessonForGroups;
+    @NonNull
+    private Integer subjectId;
+    private List<Group> groups;
+    private String classRoomName;
+    private String subjectName;
 }

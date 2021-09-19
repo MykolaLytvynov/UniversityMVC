@@ -1,17 +1,23 @@
 package ua.com.foxminded.university.entities;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 import ua.com.foxminded.university.entities.person.Student;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@Setter
 public class Group {
     private Integer id;
     @NonNull
-    private Integer nummerGroup;
-    private List<Student> students = new ArrayList<>();
-
+    private Integer numberGroup;
+    @NonNull
+    private Integer courseId;
+    @NonNull
+    private Integer facultyId;
+    private List<Student> students;
+    private Integer courseNumber;
+    private String facultyName;
 }

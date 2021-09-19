@@ -1,17 +1,20 @@
 package ua.com.foxminded.university.entities;
 
-import lombok.Data;
-import lombok.NonNull;
-import ua.com.foxminded.university.entities.person.Teacher;
+import lombok.*;
 
-@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@Setter
 public class Subject {
     private Integer id;
     @NonNull
     private String name;
     @NonNull
     private String description;
-    private Integer teacherId;
     @NonNull
     private Integer amountLessons;
+    private Integer teacherId;
+    private String teacherName;
+    private String teacherLastName;
 }

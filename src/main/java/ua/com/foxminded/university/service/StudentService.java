@@ -27,6 +27,11 @@ public class StudentService {
         log.debug("findById('{}') called", id);
         Student result = studentDAO.findById(id)
                 .orElseThrow(() -> new NotFoundException("Student not found by id = " + id));
+        if (result != null) {
+            result.setName(result.getName().trim());
+            result.setLastName(result.getLastName().trim());
+            result.setFacultyName(result.getFacultyName().trim());
+        }
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }
@@ -69,4 +74,11 @@ public class StudentService {
         studentDAO.deleteAll();
         log.debug("deleteAll() was success");
     }
+
+    public void update(Student student) {
+        log.info("update({}) called", student);
+        studentDAO.update(student);
+        log.info("update({}) was success", student);
+    }
+
 }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New subject</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<h3>Fill data below</h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/subjects">Subjects</a></li>
+        <li class="breadcrumb-item active" aria-current="page">New subject</li>
+    </ol>
+</nav>
+
+<div class="ml-5">
+    <form th:method="POST" th:action="@{/subjects}" th:object="${subject}">
+        <div class="form-group row">
+            <label for="name">Enter name: </label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{name}" id="name" class="form-control"
+                       placeholder="Enter name for subject"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="description">Enter description: </label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{description}" id="description" class="form-control"
+                       placeholder="Enter description for subject"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="teacherId">Select teacher: </label>
+            <div class="col-sm-6">
+                <select class="form-control" id="teacherId" th:field="*{teacherId}">
+                    <option th:value="${null}">No Teacher</option>
+                    <option th:each="employee : ${employees}"
+                            th:value="${employee.id}"
+                            th:text="${employee.name} + ' ' + ${employee.lastName}"/>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label for="amountLessons">Enter amount lessons: </label>
+            <div class="col-sm-6">
+                <input type="text" th:field="*{amountLessons}" id="amountLessons" class="form-control"
+                       placeholder="Enter amount lessons for subject"/>
+            </div>
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="Create subject"/>
+    </form>
+</div>
+
+
+</body>
+</html>

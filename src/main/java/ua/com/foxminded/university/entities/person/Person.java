@@ -1,9 +1,11 @@
 package ua.com.foxminded.university.entities.person;
 
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 @SuperBuilder
 public class Person {
     private Integer id;

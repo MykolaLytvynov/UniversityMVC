@@ -2,14 +2,12 @@ package ua.com.foxminded.university.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.university.dao.mapper.PositionMapper;
-import ua.com.foxminded.university.entities.Lesson;
 import ua.com.foxminded.university.entities.Position;
 
 import java.sql.Connection;
@@ -18,7 +16,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
@@ -31,14 +28,15 @@ public class PositionDAO implements CrudOperations<Position, Integer> {
     private final PositionMapper positionMapper;
 
 
-    public static final String SAVE_POSITION = "INSERT INTO positions (name) VALUES (?)";
-    public static final String FIND_BY_ID = "SELECT * FROM positions WHERE id = ?";
-    public static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM positions WHERE id = ?";
-    public static final String FIND_ALL = "SELECT * FROM positions";
-    public static final String COUNT = "SELECT COUNT(*) FROM positions";
-    public static final String DELETE_POSITION = "DELETE FROM positions WHERE id = ?";
-    public static final String DELETE_ALL = "DELETE FROM positions";
+    private static final String SAVE_POSITION = "INSERT INTO positions (name) VALUES (?)";
+    private static final String FIND_BY_ID = "SELECT * FROM positions WHERE id = ?";
+    private static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM positions WHERE id = ?";
+    private static final String FIND_ALL = "SELECT * FROM positions";
+    private static final String COUNT = "SELECT COUNT(*) FROM positions";
+    private static final String DELETE_POSITION = "DELETE FROM positions WHERE id = ?";
+    private static final String DELETE_ALL = "DELETE FROM positions";
 
+    private static final String UPDATE = "UPDATE positions SET name = ? WHERE id = ?";
 
     @Override
     public Position save(Position position) {
@@ -113,5 +111,12 @@ public class PositionDAO implements CrudOperations<Position, Integer> {
         log.debug("deleteAll() called");
         jdbcTemplate.update(DELETE_ALL);
         log.debug("deleteAll() was success");
+    }
+
+    @Override
+    public void update(Position position) {
+        log.debug("update('{}') called", position);
+        jdbcTemplate.update(UPDATE, position.getName(), position.getId());
+        log.debug("update('{}') was success", position);
     }
 }

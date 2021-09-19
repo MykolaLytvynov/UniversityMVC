@@ -9,7 +9,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.university.dao.mapper.SubjectMapper;
 import ua.com.foxminded.university.entities.Subject;
-import ua.com.foxminded.university.entities.person.Employee;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,15 +27,21 @@ public class SubjectDAO implements CrudOperations<Subject, Integer> {
     private final JdbcTemplate jdbcTemplate;
     private final SubjectMapper subjectMapper;
 
-    public static final String SAVE_SUBJECT = "INSERT INTO subjects (name, description, amountLessons) VALUES (?, ?, ?)";
-    public static final String FIND_BY_ID = "SELECT * FROM subjects WHERE id = ?";
-    public static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM subjects WHERE id = ?";
-    public static final String FIND_ALL = "SELECT * FROM subjects";
-    public static final String COUNT = "SELECT COUNT(*) FROM subjects";
-    public static final String DELETE_SUBJECT = "DELETE FROM subjects WHERE id = ?";
-    public static final String DELETE_ALL = "DELETE FROM subjects";
-    public static final String ADD_TEACHER_TO_SUBJECT = "UPDATE subjects SET employeeId = ? WHERE id = ?";
-    public static final String GET_ALL_SUBJECTS_ONE_TEACHER = "SELECT * FROM subjects WHERE employeeId = ?";
+    private static final String SAVE_SUBJECT = "INSERT INTO subjects (name, description, amountLessons) VALUES (?, ?, ?)";
+    private static final String FIND_BY_ID = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
+            "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id WHERE subjects.id = ?";
+    private static final String EXISTS_BY_ID = "SELECT COUNT(*) FROM subjects WHERE id = ?";
+    private static final String FIND_ALL = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
+            "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id";
+    private static final String COUNT = "SELECT COUNT(*) FROM subjects";
+    private static final String DELETE_SUBJECT = "DELETE FROM subjects WHERE id = ?";
+    private static final String DELETE_ALL = "DELETE FROM subjects";
+    private static final String GET_ALL_SUBJECTS_ONE_TEACHER = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
+        "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id WHERE employeeId = ?";
+    private static final String ADD_TEACHER_TO_SUBJECT = "UPDATE subjects SET employeeId = ? WHERE id = ?";
+    private static final String GET_SUBJECTS_WITHOUT_TEACHER = "SELECT subjects.id, subjects.name, description, amountLessons, employeeId, " +
+        "employees.name teacher_name, lastName FROM subjects LEFT JOIN employees ON subjects.employeeId = employees.id WHERE employeeId IS NULL";
+    private static final String UPDATE_SUBJECT = "UPDATE subjects SET name = ?, description = ?, employeeId = ?, amountLessons = ? WHERE id = ?";
 
     @Override
     public Subject save(Subject subject) {
@@ -117,10 +122,10 @@ public class SubjectDAO implements CrudOperations<Subject, Integer> {
     }
 
 
-    public void addSubjecctToTeacher(Subject subject, Employee employee) {
-        log.debug("addSubjecctToTeacher('{}', '{}') called", subject, employee);
-        jdbcTemplate.update(ADD_TEACHER_TO_SUBJECT, employee.getId(), subject.getId());
-        log.debug("addSubjecctToTeacher('{}', '{}') was success", subject, employee);
+    public void addSubjectToTeacher(Integer subjectId, Integer teacherId) {
+        log.debug("addSubjecctToTeacher('{}', '{}') called", subjectId, teacherId);
+        jdbcTemplate.update(ADD_TEACHER_TO_SUBJECT, teacherId, subjectId);
+        log.debug("addSubjecctToTeacher('{}', '{}') was success", subjectId, teacherId);
     }
 
     public List<Subject> getAllSubjectsOneTeacher(Integer teacherId) {
@@ -129,4 +134,20 @@ public class SubjectDAO implements CrudOperations<Subject, Integer> {
         log.debug("getAllSubjectsOneTeacher('{}') returned '{}'", teacherId, result);
         return result;
     }
+
+    @Override
+    public void update(Subject subject) {
+        log.debug("update('{}') called", subject);
+        jdbcTemplate.update(UPDATE_SUBJECT, subject.getName(), subject.getDescription(),
+                subject.getTeacherId(), subject.getAmountLessons(), subject.getId());
+        log.debug("update('{}') was success", subject);
+    }
+
+    public List<Subject> getSubjectsWithoutTeacher() {
+        log.debug("getSubjectsWithoutTeacher() called");
+        List<Subject> result = jdbcTemplate.query(GET_SUBJECTS_WITHOUT_TEACHER, subjectMapper);
+        log.debug("getSubjectsWithoutTeacher() returned '{}', result");
+        return result;
+    }
+
 }

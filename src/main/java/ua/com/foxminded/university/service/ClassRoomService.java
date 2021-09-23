@@ -76,6 +76,8 @@ public class ClassRoomService {
     }
 
     public void update(ClassRoom classRoom) {
+        log.debug("update('{}') called", classRoom);
         classRoomDAO.update(classRoom);
+        log.debug("update('{}') was success", classRoom);
     }
 }

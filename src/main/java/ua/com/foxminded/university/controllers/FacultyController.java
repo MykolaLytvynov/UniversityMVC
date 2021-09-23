@@ -9,6 +9,8 @@ import ua.com.foxminded.university.entities.Faculty;
 import ua.com.foxminded.university.service.FacultyService;
 import ua.com.foxminded.university.service.CourseService;
 
+import java.util.List;
+
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -19,47 +21,63 @@ public class FacultyController {
 
     @GetMapping
     public String getAll(Model model) {
-        model.addAttribute("faculty", facultyService.findAll());
+        log.info("getAll() called");
+        List<Faculty> result = facultyService.findAll();
+        model.addAttribute("faculty", result);
+        log.info("Exit: {}", result);
         return "/faculties/getAll";
     }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") int id, Model model) {
-        Faculty faculty = facultyService.findById(id);
-        model.addAttribute("faculty", faculty);
+        log.info("Enter: findById('{}')", id);
+        Faculty result = facultyService.findById(id);
+        model.addAttribute("faculty", result);
+        log.info("Exit: {}", result);
         return "/faculties/showOneFaculty";
     }
 
     @GetMapping("/new")
-    public String newFaculty(Model model) {
+    public String getPageCreateFaculty(Model model) {
+        log.info("getPageCreateEmployee() called");
         model.addAttribute("faculty", new Faculty());
         return "/faculties/new";
     }
 
     @PostMapping()
     public String createFaculty(@ModelAttribute("faculty") Faculty faculty) {
+        log.info("Enter: createFaculty('{}')", faculty);
         Faculty result = facultyService.save(faculty);
+        log.info("Exit: {}", result);
         return "redirect:/faculties/" + result.getId();
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String getPageEdit(Model model, @PathVariable("id") int id) {
+        log.info("Enter: getPageEdit('{}')", id);
         Faculty result = facultyService.findById(id);
         model.addAttribute("faculty", result);
+        log.info("Exit: {}", result);
         return "/faculties/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("faculty") Faculty faculty,
-                         @PathVariable("id") int id) {
+                         @PathVariable("id") int id, Model model) {
+        log.info("Enter: update('{}', '{}')", faculty, id);
         faculty.setId(id);
         facultyService.update(faculty);
-        return "redirect:/faculties/{id}";
+        Faculty result = facultyService.findById(faculty.getId());
+        model.addAttribute("faculty", result);
+        log.info("Exit: {}", result);
+        return "/faculties/showOneFaculty";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
+        log.info("Enter: delete('{}')", id);
         facultyService.deleteById(id);
+        log.info("delete('{}') was success", id);
         return "redirect:/faculties";
     }
 

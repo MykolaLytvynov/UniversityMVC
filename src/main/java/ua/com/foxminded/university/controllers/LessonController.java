@@ -1,17 +1,24 @@
 package ua.com.foxminded.university.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ua.com.foxminded.university.dto.LessonDto;
+import ua.com.foxminded.university.entities.ClassRoom;
+import ua.com.foxminded.university.entities.Group;
 import ua.com.foxminded.university.entities.Lesson;
+import ua.com.foxminded.university.entities.Subject;
+import ua.com.foxminded.university.entities.person.Employee;
 import ua.com.foxminded.university.service.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/lessons")
 public class LessonController {
@@ -24,21 +31,32 @@ public class LessonController {
 
     @GetMapping
     public String getAll(Model model) {
-        model.addAttribute("lessons", lessonService.findAll());
+        log.info("getAll() called");
+        List<LessonDto> result = lessonService.findAll();
+        model.addAttribute("lessons", result);
+        log.info("Exit: {}", result);
         return "lessons/getAll";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("lessonDto", lessonService.findLessonDtoById(id));
+        log.info("Enter: getById('{}')", id);
+        LessonDto result = lessonService.findLessonDtoById(id);
+        model.addAttribute("lessonDto", result);
+        log.info("Exit: {}", result);
         return "/lessons/ShowOneLesson";
     }
 
     @GetMapping("/new")
-    public String newLesson(Model model) {
-        model.addAttribute("subjects", subjectService.findAll());
-        model.addAttribute("classrooms", classRoomService.findAll());
-        model.addAttribute("groups", groupService.findAll());
+    public String getPageCreateLesson(Model model) {
+        log.info("getPageCreateEmployee() called");
+        List<Subject> allSubjects = subjectService.findAll();
+        model.addAttribute("subjects", allSubjects);
+        List<ClassRoom> allClassrooms = classRoomService.findAll();
+        model.addAttribute("classrooms", allClassrooms);
+        List<Group> allGroups = groupService.findAll();
+        model.addAttribute("groups", allGroups);
+        log.info("Exit: {}, {}, {}", allSubjects, allClassrooms, allGroups);
         return "/lessons/new";
     }
 
@@ -48,17 +66,26 @@ public class LessonController {
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime,
                          @RequestParam("duration") Integer duration,
                          @RequestParam("classRoomId") Integer classRoomId,
-                         @RequestParam("lessonForGroups") List<Integer> lessonForGroups) {
+                         @RequestParam("lessonForGroups") List<Integer> lessonForGroups, Model model) {
+        log.info("Enter: create('{}', '{}', '{}', '{}', '{}')", subjectId, localDateTime, duration, classRoomId, lessonForGroups);
         Lesson result = lessonService.save(new Lesson(localDateTime, duration, classRoomId, subjectId));
-        return "redirect:/lessons/" + result.getId();
+        model.addAttribute("lessonDto", result);
+        log.info("Exit: {}", result);
+        return "/lessons/ShowOneLesson";
     }
 
     @GetMapping("/{idLesson}/edit")
-    public String edit(@PathVariable("idLesson") Integer idLesson, Model model) {
-        model.addAttribute("lesson", lessonService.findLessonDtoById(idLesson));
-        model.addAttribute("subjects", subjectService.findAll());
-        model.addAttribute("classrooms", classRoomService.findAll());
-        model.addAttribute("groups", groupService.findAll());
+    public String getPageEdit(@PathVariable("idLesson") Integer idLesson, Model model) {
+        log.info("Enter: getPageEdit('{}')", idLesson);
+        LessonDto lesson = lessonService.findLessonDtoById(idLesson);
+        model.addAttribute("lesson", lesson);
+        List<Subject> allSubjects = subjectService.findAll();
+        model.addAttribute("subjects", allSubjects);
+        List<ClassRoom> allClassrooms = classRoomService.findAll();
+        model.addAttribute("classrooms", allClassrooms);
+        List<Group> allGroups = groupService.findAll();
+        model.addAttribute("groups", allGroups);
+        log.info("Exit: {}, {}, {}, {}", lesson, allSubjects, allClassrooms, allGroups);
         return "/lessons/edit";
     }
 
@@ -70,21 +97,28 @@ public class LessonController {
                          @RequestParam("classRoomId") Integer classRoomId,
                          @RequestParam("lessonForGroups") List<Integer> lessonForGroups,
                          @PathVariable("idLesson") Integer idLesson) {
+        log.info("Enter: update('{}', '{}', '{}', '{}', '{}')", subjectId, localDateTime, duration, classRoomId, lessonForGroups, idLesson);
         Lesson lesson = new Lesson(localDateTime, duration, classRoomId, subjectId);
         lesson.setId(idLesson);
         lessonService.update(lesson, lessonForGroups);
+        log.info("update lesson was success");
         return "redirect:/lessons/" + idLesson;
     }
 
     @DeleteMapping("/{idLesson}")
     public String delete(@PathVariable("idLesson") Integer idLesson) {
+        log.info("Enter: delete('{}')", idLesson);
         lessonService.deleteById(idLesson);
+        log.info("delete('{}') was success", idLesson);
         return "redirect:/lessons";
     }
 
     @GetMapping("/{idGroup}/lessons-group/search")
-    public String searchLessonsForGroup(@PathVariable("idGroup") Integer idGroup, Model model) {
-        model.addAttribute("group", groupService.findById(idGroup));
+    public String getPageSearchLessonsForGroup(@PathVariable("idGroup") Integer idGroup, Model model) {
+        log.info("Enter: getPageSearchLessonsForGroup('{}')", idGroup);
+        Group group = groupService.findById(idGroup);
+        model.addAttribute("group", group);
+        log.info("Exit: {}", group);
         return "/lessons/searchLessonsForGroup";
     }
 
@@ -95,13 +129,19 @@ public class LessonController {
                                      @RequestParam("endTime")
                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
                                      Model model) {
-        model.addAttribute("LessonInfoDtoList", lessonService.getLessonsBetweenDatesForGroup(startTime, endTime, idGroup));
+        log.info("Enter: getLessonsForGroup('{}', '{}', '{}')", idGroup, startTime, endTime);
+        List<LessonDto> result = lessonService.getLessonsBetweenDatesForGroup(startTime, endTime, idGroup);
+        model.addAttribute("LessonInfoDtoList", result);
+        log.info("Exit: {}", result);
         return "lessons/getLessonsBySearch";
     }
 
     @GetMapping("/{idTeacher}/lessons-teacher/search")
-    public String searchLessonsForTeacher(@PathVariable("idTeacher") Integer idTeacher, Model model) {
-        model.addAttribute("teacher", employeeService.findById(idTeacher));
+    public String getPageSearchLessonsForTeacher(@PathVariable("idTeacher") Integer idTeacher, Model model) {
+        log.info("Enter: getPageSearchLessonsForTeacher('{}')", idTeacher);
+        Employee employee = employeeService.findById(idTeacher);
+        model.addAttribute("teacher", employee);
+        log.info("Exit: {}", employee);
         return "/lessons/searchLessonsForTeacher";
     }
 
@@ -112,7 +152,10 @@ public class LessonController {
                                        @RequestParam("endTime")
                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
                                        Model model) {
-        model.addAttribute("LessonInfoDtoList", lessonService.getLessonsBetweenDatesForTeacher(startTime, endTime, idTeacher));
+        log.info("Enter: getLessonsForGroup('{}', '{}', '{}')", idTeacher, startTime, endTime);
+        List<LessonDto> result = lessonService.getLessonsBetweenDatesForTeacher(startTime, endTime, idTeacher);
+        model.addAttribute("LessonInfoDtoList", result);
+        log.info("Exit: {}", result);
         return "lessons/getLessonsBySearch";
     }
 

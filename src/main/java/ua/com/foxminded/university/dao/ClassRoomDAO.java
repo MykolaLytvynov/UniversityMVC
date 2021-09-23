@@ -113,6 +113,8 @@ public class ClassRoomDAO implements CrudOperations<ClassRoom, Integer> {
 
     @Override
     public void update(ClassRoom classRoom) {
+        log.debug("update('{}') called", classRoom);
         jdbcTemplate.update(UPDATE, classRoom.getName(), classRoom.getDescription(), classRoom.getId());
+        log.debug("update('{}') was success", classRoom);
     }
 }

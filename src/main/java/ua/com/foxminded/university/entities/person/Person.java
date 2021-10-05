@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @SuperBuilder
 public class Person {
     private Integer id;

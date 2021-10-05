@@ -4,10 +4,9 @@ import lombok.*;
 
 import java.util.List;
 
+@Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Getter
-@Setter
 public class Course {
     private Integer id;
     @NonNull

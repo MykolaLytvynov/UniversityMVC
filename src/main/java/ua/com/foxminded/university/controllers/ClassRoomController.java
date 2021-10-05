@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.com.foxminded.university.entities.ClassRoom;
+import ua.com.foxminded.university.exception.NotFoundException;
 import ua.com.foxminded.university.service.ClassRoomService;
 
 import java.util.List;
@@ -30,11 +31,13 @@ public class ClassRoomController {
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") int id, Model model) {
         log.info("Enter: findById('{}')", id);
-        ClassRoom result = classRoomService.findById(id);
+        ClassRoom result = classRoomService.findById(id)
+                .orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
         model.addAttribute("classroom", result);
         log.info("Exit: {}", result);
         return "classrooms/showOneClassroom";
     }
+//    .orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
 
     @GetMapping("/new")
     public String getPageCreateClassroom(Model model) {
@@ -54,7 +57,8 @@ public class ClassRoomController {
     @GetMapping("/{id}/edit")
     public String getPageEdit(Model model, @PathVariable("id") int id) {
         log.info("Enter: getPageEdit('{}')", id);
-        ClassRoom result = classRoomService.findById(id);
+        ClassRoom result = classRoomService.findById(id)
+                .orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
         model.addAttribute("classroom", result);
         log.info("Exit: {}", result);
         return "classrooms/edit";
@@ -62,10 +66,11 @@ public class ClassRoomController {
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("classroom") ClassRoom classRoom,
-                         @PathVariable("id") int id) {
+                         @PathVariable("id") int id, Model model) {
         log.info("Enter: update('{}', '{}')", classRoom, id);
         classRoom.setId(id);
         classRoomService.update(classRoom);
+        model.addAttribute("classroom", classRoom);
         log.info("Update('{}') was success", classRoom);
         return "classrooms/showOneClassroom";
     }

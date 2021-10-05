@@ -10,6 +10,8 @@ import ua.com.foxminded.university.exception.NotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,16 +26,16 @@ public class ClassRoomService {
         return result;
     }
 
-    public ClassRoom findById(Integer id) {
+    public Optional<ClassRoom> findById(Integer id) {
         log.debug("findById('{}') called", id);
         ClassRoom result = classRoomDAO.findById(id)
-                .orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
+                .orElse(null);
         if(result != null) {
             result.setName(result.getName().trim());
             result.setDescription(result.getDescription().trim());
         }
         log.debug("findById('{}') returned '{}'", id, result);
-        return result;
+        return ofNullable(result);
     }
 
     public boolean existsById(Integer id) {

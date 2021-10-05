@@ -9,6 +9,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter
+@ToString
 public class LessonDto {
     private Integer id;
     @NonNull

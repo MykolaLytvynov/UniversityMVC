@@ -5,10 +5,9 @@ import ua.com.foxminded.university.entities.person.Student;
 
 import java.util.List;
 
+@Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Getter
-@Setter
 public class Group {
     private Integer id;
     @NonNull

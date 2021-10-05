@@ -1,13 +1,14 @@
 package ua.com.foxminded.university.configuration;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 @Configuration
 @ComponentScan("ua.com.foxminded.university")
@@ -73,6 +74,13 @@ public class ApplicationConfig {
     @Bean
     public JdbcTemplate jdbcTemplateForTest() {
         return new JdbcTemplate(dataSourceForTest());
+    }
+
+    @Bean
+    public FilterRegistrationBean hiddenHttpMethodFilter() {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(new HiddenHttpMethodFilter());
+        filterRegistrationBean.setUrlPatterns(Arrays.asList("/*"));
+        return filterRegistrationBean;
     }
 
 }

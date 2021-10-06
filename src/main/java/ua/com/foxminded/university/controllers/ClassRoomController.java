@@ -31,13 +31,11 @@ public class ClassRoomController {
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") int id, Model model) {
         log.info("Enter: findById('{}')", id);
-        ClassRoom result = classRoomService.findById(id)
-                .orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
+        ClassRoom result = classRoomService.findById(id);
         model.addAttribute("classroom", result);
         log.info("Exit: {}", result);
         return "classrooms/showOneClassroom";
     }
-//    .orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
 
     @GetMapping("/new")
     public String getPageCreateClassroom(Model model) {
@@ -57,8 +55,7 @@ public class ClassRoomController {
     @GetMapping("/{id}/edit")
     public String getPageEdit(Model model, @PathVariable("id") int id) {
         log.info("Enter: getPageEdit('{}')", id);
-        ClassRoom result = classRoomService.findById(id)
-                .orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
+        ClassRoom result = classRoomService.findById(id);
         model.addAttribute("classroom", result);
         log.info("Exit: {}", result);
         return "classrooms/edit";

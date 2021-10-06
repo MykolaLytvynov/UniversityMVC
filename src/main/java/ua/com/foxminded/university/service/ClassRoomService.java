@@ -8,9 +8,7 @@ import ua.com.foxminded.university.entities.ClassRoom;
 import ua.com.foxminded.university.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
 
 @Slf4j
 @Service
@@ -26,16 +24,16 @@ public class ClassRoomService {
         return result;
     }
 
-    public Optional<ClassRoom> findById(Integer id) {
+    public ClassRoom findById(Integer id) {
         log.debug("findById('{}') called", id);
         ClassRoom result = classRoomDAO.findById(id)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
         if(result != null) {
             result.setName(result.getName().trim());
             result.setDescription(result.getDescription().trim());
         }
         log.debug("findById('{}') returned '{}'", id, result);
-        return ofNullable(result);
+        return result;
     }
 
     public boolean existsById(Integer id) {

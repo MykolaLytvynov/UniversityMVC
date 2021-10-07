@@ -76,9 +76,9 @@ public class StudentService {
     }
 
     public void update(Student student) {
-        log.info("update({}) called", student);
+        log.debug("update({}) called", student);
         studentDAO.update(student);
-        log.info("update({}) was success", student);
+        log.debug("update({}) was success", student);
     }
 
 }

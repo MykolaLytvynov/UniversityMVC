@@ -2,7 +2,6 @@ package ua.com.foxminded.university.configuration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,15 +9,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
-
-@Configuration
-@ComponentScan("ua.com.foxminded.university")
+@Slf4j
 @EnableWebMvc
+@Configuration
 @RequiredArgsConstructor
+@ComponentScan("ua.com.foxminded.university")
 public class MyWebMvcConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;

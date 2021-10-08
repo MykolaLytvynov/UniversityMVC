@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="FileAppender" class="ch.qos.logback.core.FileAppender">
+        <file>info.log</file>
+        <append>true</append>
+
+        <encoder>
+            <pattern>%d{ISO8601} [%-5p] [%-16.16t] [%40.40c{-4}] - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.springframework" level="WARN"/>
+
+    <root level="INFO">
+        <appender-ref ref="FileAppender"/>
+    </root>
+
+</configuration>

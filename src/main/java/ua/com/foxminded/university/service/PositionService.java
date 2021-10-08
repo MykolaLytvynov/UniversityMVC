@@ -25,11 +25,10 @@ public class PositionService {
 
     public Position findById(Integer id) {
         log.debug("findById('{}') called", id);
-        Position result = positionDAO.findById(id)
-                .orElseThrow(() -> new NotFoundException("Position not found by id = " + id));
-        if (result != null) {
-            result.setName(result.getName().trim());
-        }
+        NotFoundException notFoundException = new NotFoundException("Position not found by id = " + id);
+        if (!positionDAO.existsById(id)) throw notFoundException;
+        Position result = positionDAO.findById(id).get();
+        result.setName(result.getName().trim());
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }

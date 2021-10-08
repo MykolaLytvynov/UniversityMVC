@@ -55,7 +55,7 @@ public class EmployeeDAO implements CrudOperations<Employee, Integer> {
                 PreparedStatement ps = connection.prepareStatement(SAVE_EMPLOYEE, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, employee.getName());
                 ps.setString(2, employee.getLastName());
-                ps.setInt(3, employee.getPositionId());//FixMe: NullPointerException if no Position received
+                ps.setInt(3, employee.getPositionId());
                 ps.setInt(4, employee.getSalary());
                 return ps;
             }

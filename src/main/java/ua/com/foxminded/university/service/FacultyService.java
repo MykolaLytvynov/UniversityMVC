@@ -27,14 +27,13 @@ public class FacultyService {
 
     public Faculty findById(Integer id) {
         log.debug("findById('{}') called");
-        Faculty result = facultyDAO.findById(id)
-                .orElseThrow(() -> new NotFoundException("Faculty not found by id = " + id));
-        if (result != null) {
-            result.setName(result.getName().trim());
-            result.setDescription(result.getDescription().trim());
-            result.getCourses().stream()
-                    .forEach(course -> course.setGroups(courseService.getGroupsOneCourse(course.getId())));
-        }
+        NotFoundException notFoundException = new NotFoundException("Faculty not found by id = " + id);
+        if (!facultyDAO.existsById(id)) throw notFoundException;
+        Faculty result = facultyDAO.findById(id).get();
+        result.setName(result.getName().trim());
+        result.setDescription(result.getDescription().trim());
+        result.getCourses().stream()
+                .forEach(course -> course.setGroups(courseService.getGroupsOneCourse(course.getId())));
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }

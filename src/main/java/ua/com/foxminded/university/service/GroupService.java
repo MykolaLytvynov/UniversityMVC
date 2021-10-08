@@ -26,8 +26,9 @@ public class GroupService {
 
     public Group findById(Integer id) {
         log.debug("findById('{}') called", id);
-        Group result = groupDAO.findById(id)
-                .orElseThrow(() -> new NotFoundException("Group not found by id = " + id));
+        NotFoundException notFoundException = new NotFoundException("Group not found by id = " + id);
+        if (!groupDAO.existsById(id)) throw notFoundException;
+        Group result = groupDAO.findById(id).get();
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }

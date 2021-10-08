@@ -26,8 +26,9 @@ public class CourseService {
 
     public Course findById(Integer id) {
         log.debug("findById('{}') called", id);
-        Course result = courseDAO.findById(id)
-                .orElseThrow(() -> new NotFoundException("Course not found by id = " + id));
+        NotFoundException notFoundException = new NotFoundException("Course not found by id = " + id);
+        if(!courseDAO.existsById(id)) throw notFoundException;
+        Course result = courseDAO.findById(id).get();
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }

@@ -26,12 +26,11 @@ public class ClassRoomService {
 
     public ClassRoom findById(Integer id) {
         log.debug("findById('{}') called", id);
-        ClassRoom result = classRoomDAO.findById(id)
-                .orElseThrow(() -> new NotFoundException("Class room not found by id = " + id));
-        if(result != null) {
-            result.setName(result.getName().trim());
-            result.setDescription(result.getDescription().trim());
-        }
+        NotFoundException notFoundException = new NotFoundException("Class room not found by id = " + id);
+        if (!classRoomDAO.existsById(id)) throw notFoundException;
+        ClassRoom result = classRoomDAO.findById(id).get();
+        result.setName(result.getName().trim());
+        result.setDescription(result.getDescription().trim());
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }

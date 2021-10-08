@@ -33,12 +33,11 @@ public class LessonService {
 
     public LessonDto findLessonDtoById(Integer id) {
         log.debug("findById('{}') called", id);
-        Lesson result = lessonDAO.findById(id)
-                .orElseThrow(() -> new NotFoundException("Lesson not found by id = " + id));
+        NotFoundException notFoundException = new NotFoundException("Lesson not found by id = " + id);
+        if (!lessonDAO.existsById(id)) throw notFoundException;
+        Lesson result = lessonDAO.findById(id).get();
         LessonDto lessonDto = new LessonDto();
-        if (result != null) {
-            lessonDto = lessonDtoFormatter.getLessonDtoByLesson(result);
-        }
+        lessonDto = lessonDtoFormatter.getLessonDtoByLesson(result);
         log.debug("findById('{}') returned '{}'", id, lessonDto);
         return lessonDto;
     }

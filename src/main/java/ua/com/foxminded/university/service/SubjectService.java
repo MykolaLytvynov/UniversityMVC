@@ -27,12 +27,11 @@ public class SubjectService {
 
     public Subject findById(Integer id) {
         log.debug("findById('{}') called", id);
-        Subject result = subjectDAO.findById(id)
-                .orElseThrow(() -> new NotFoundException("Subject not found by id = " + id));
-        if (result != null) {
-            result.setName(result.getName().trim());
-            result.setDescription(result.getDescription().trim());
-        }
+        NotFoundException notFoundException = new NotFoundException("Subject not found by id = " + id);
+        if (!subjectDAO.existsById(id)) throw notFoundException;
+        Subject result = subjectDAO.findById(id).get();
+        result.setName(result.getName().trim());
+        result.setDescription(result.getDescription().trim());
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }

@@ -25,13 +25,12 @@ public class StudentService {
 
     public Student findById(Integer id) {
         log.debug("findById('{}') called", id);
-        Student result = studentDAO.findById(id)
-                .orElseThrow(() -> new NotFoundException("Student not found by id = " + id));
-        if (result != null) {
-            result.setName(result.getName().trim());
-            result.setLastName(result.getLastName().trim());
-            result.setFacultyName(result.getFacultyName().trim());
-        }
+        NotFoundException notFoundException = new NotFoundException("Student not found by id = " + id);
+        if (!studentDAO.existsById(id)) throw notFoundException;
+        Student result = studentDAO.findById(id).get();
+        result.setName(result.getName().trim());
+        result.setLastName(result.getLastName().trim());
+        result.setFacultyName(result.getFacultyName().trim());
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }

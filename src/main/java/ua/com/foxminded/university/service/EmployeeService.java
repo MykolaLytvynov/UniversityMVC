@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.dao.EmployeeDAO;
-import ua.com.foxminded.university.entities.person.Employee;
 import ua.com.foxminded.university.dto.TeacherDto;
+import ua.com.foxminded.university.entities.person.Employee;
 import ua.com.foxminded.university.exception.NotFoundException;
 
 import java.util.ArrayList;
@@ -27,13 +27,12 @@ public class EmployeeService {
     }
 
     public Employee findById(Integer id) {
-        log.debug("findById('{}') called");
-        Employee result = employeeDAO.findById(id)
-                .orElseThrow(() -> new NotFoundException("Employee not found by id = " + id));
-        if (result != null) {
-            result.setName(result.getName().trim());
-            result.setLastName(result.getLastName().trim());
-        }
+        log.debug("called :: findById('{}')", id);
+        NotFoundException notFoundException = new NotFoundException("Employee not found by id = " + id);
+        if (!employeeDAO.existsById(id)) throw notFoundException;
+        Employee result = employeeDAO.findById(id).get();
+        result.setName(result.getName().trim());
+        result.setLastName(result.getLastName().trim());
         log.debug("findById('{}') returned '{}'", id, result);
         return result;
     }
